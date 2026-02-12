@@ -386,50 +386,71 @@ $$(".chip[data-cmd]").forEach(chip => {
 });
 
 // ====== Audio Player ======
-const bgMusic = $("#bgMusic");
-const btnAudio = $("#btnAudio");
+const bgMusic = $("#bgMusic");     // <audio> (DOM) ou null
+const btnAudio = $("#btnAudio");   // botão (DOM) ou null
+
 let audioPlaying = false;
 
-function toggleAudio() {
+// Se o áudio/botão não existir no HTML, evita quebrar o site
+if (bgMusic && btnAudio) {
+
+  // volume ambiente inicial (10%)
+  bgMusic.volume = 0.10;
+
+  function fadeInAudio(target = 0.10, ms = 800) {
+    bgMusic.volume = 0;
+    const steps = 20;
+    const stepTime = ms / steps;
+    const step = target / steps;
+    let current = 0;
+
+    const t = setInterval(() => {
+      current += step;
+      bgMusic.volume = Math.min(current, target);
+      if (current >= target) clearInterval(t);
+    }, stepTime);
+  }
+
+  function toggleAudio() {
     if (audioPlaying) {
-        bgMusic.pause();
-        btnAudio.classList.remove("playing");
-        audioPlaying = false;
+      bgMusic.pause();
+      btnAudio.classList.remove("playing");
+      audioPlaying = false;
     } else {
-        bgMusic.play().then(() => {
-            btnAudio.classList.add("playing");
-            audioPlaying = true;
-        }).catch(() => {
-            toast("Clique novamente para tocar a música");
-        });
-    }
-}
-
-btnAudio.addEventListener("click", toggleAudio);
-
-// Tenta autoplay ao carregar a página
-function tryAutoplay() {
-    bgMusic.play().then(() => {
+      bgMusic.play().then(() => {
         btnAudio.classList.add("playing");
         audioPlaying = true;
-    }).catch(() => {
-        // Navegadores bloqueiam autoplay — toca no primeiro clique/tecla do usuário
-        const startOnInteraction = () => {
-            if (!audioPlaying) {
-                bgMusic.play().then(() => {
-                    btnAudio.classList.add("playing");
-                    audioPlaying = true;
-                }).catch(() => {});
-            }
-            document.removeEventListener("click", startOnInteraction);
-            document.removeEventListener("keydown", startOnInteraction);
-        };
-        document.addEventListener("click", startOnInteraction, { once: false });
-        document.addEventListener("keydown", startOnInteraction, { once: false });
-    });
-}
+        fadeInAudio(0.10, 800);
+      }).catch(() => {
+        toast("Clique novamente para tocar a música");
+      });
+    }
+  }
 
-// Inicialização
-banner();
-setTimeout(() => { input.focus(); }, 250);
-tryAutoplay();
+  btnAudio.addEventListener("click", toggleAudio);
+
+  function tryAutoplay() {
+    bgMusic.play().then(() => {
+      btnAudio.classList.add("playing");
+      audioPlaying = true;
+      fadeInAudio(0.10, 800);
+    }).catch(() => {
+      const startOnInteraction = () => {
+        if (!audioPlaying) {
+          bgMusic.play().then(() => {
+            btnAudio.classList.add("playing");
+            audioPlaying = true;
+            fadeInAudio(0.10, 800);
+          }).catch(() => {});
+        }
+        document.removeEventListener("click", startOnInteraction);
+        document.removeEventListener("keydown", startOnInteraction);
+      };
+
+      document.addEventListener("click", startOnInteraction);
+      document.addEventListener("keydown", startOnInteraction);
+    });
+  }
+
+  tryAutoplay();
+}
