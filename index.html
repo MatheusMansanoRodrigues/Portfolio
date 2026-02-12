@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#070a0f" />
+  <title>Portfólio Full Stack — Terminal</title>
+  <meta name="description" content="Portfólio full stack estilo terminal: comandos, projetos, stack e contato." />
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-theme="dark">
+  <div class="wrap">
+    <div class="top">
+      <div class="dots" aria-hidden="true">
+        <span class="dot red"></span>
+        <span class="dot ylw"></span>
+        <span class="dot grn"></span>
+      </div>
+
+      <div class="title">
+        <span class="pill" id="hostPill">dev@portfolio</span>
+        <span class="title-text">~/home · terminal — <span id="clock">--:--</span></span>
+      </div>
+
+      <div class="actions">
+        <button class="btn audio-btn" id="btnAudio" type="button" title="Tocar / Pausar música">
+          <span class="audio-icon" id="audioIcon">&#9835;</span>
+          <span class="audio-label" id="audioLabel">play</span>
+          <span class="audio-bars" id="audioBars">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </span>
+        </button>
+        <button class="btn" id="btnHelp" type="button">help</button>
+        <button class="btn" id="btnProjects" type="button">projects</button>
+        <button class="btn" id="btnTheme" type="button">theme</button>
+        <button class="btn" id="btnClear" type="button">clear</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- Sidebar -->
+      <aside class="card">
+        <div class="head">
+          <div class="h">perfil <span class="kbd">/etc/me</span></div>
+          <span class="pill" id="availabilityPill">status: disponível</span>
+        </div>
+        <div class="body">
+          <div class="profile">
+            <div class="avatar" aria-hidden="true"></div>
+            <div>
+              <div class="name" id="pName">Matheus Mansano Rodrigues</div>
+              <div class="role" id="pRole">Full Stack · PHP/MySQL · Web</div>
+            </div>
+          </div>
+
+          <div class="status" aria-label="Indicadores">
+            <div class="stat">
+              <div class="n" id="statYears">2+</div>
+              <div class="t">anos</div>
+            </div>
+            <div class="stat">
+              <div class="n" id="statProjects">6</div>
+              <div class="t">projetos</div>
+            </div>
+            <div class="stat">
+              <div class="n" id="statFocus">UX</div>
+              <div class="t">foco</div>
+            </div>
+            <div class="stat">
+              <div class="n" id="statMode">CLI</div>
+              <div class="t">estilo</div>
+            </div>
+          </div>
+
+          <ul class="list" aria-label="Info rápida">
+            <li class="li clickable" id="emailItem" title="Clique para copiar e-mail">
+              <span class="bullet" aria-hidden="true"></span>
+              <div>
+                <div class="k">e-mail</div>
+                <div class="v mono" id="emailText">matheusmansano1@gmail.com</div>
+              </div>
+            </li>
+            <li class="li">
+              <span class="bullet" aria-hidden="true" style="background:var(--cyan); box-shadow:0 0 0 6px rgba(88,231,255,.10)"></span>
+              <div>
+                <div class="k">stack principal</div>
+                <div class="v">PHP · MySQL · HTML/CSS · JS</div>
+              </div>
+            </li>
+            <li class="li">
+              <span class="bullet" aria-hidden="true" style="background:var(--pink); box-shadow:0 0 0 6px rgba(255,79,216,.10)"></span>
+              <div>
+                <div class="k">links</div>
+                <div class="v">
+                  <a class="sidebar-link" href="https://github.com/akiramath" target="_blank" rel="noreferrer"><span class="mono">github</span></a> /
+                  <a class="sidebar-link" href="https://www.linkedin.com/in/matheus-mansano-rodrigues-b04054253/" target="_blank" rel="noreferrer"><span class="mono">linkedin</span></a> /
+                  <a class="sidebar-link" href="https://api.whatsapp.com/send/?phone=5543988080637&text=Ol%C3%A1%21+Vi+seu+portf%C3%B3lio+e+queria+conversar+sobre+um+projeto.&type=phone_number&app_absent=0" target="_blank" rel="noreferrer"><span class="mono">whatsapp</span></a>
+                </div>
+              </div>
+            </li>
+          </ul>
+
+          <div class="quick" aria-label="Atalhos de comando">
+            <span class="chip" data-cmd="help">help</span>
+            <span class="chip" data-cmd="projects">projects</span>
+            <span class="chip" data-cmd="open 1">open 1</span>
+            <span class="chip" data-cmd="stack">stack</span>
+            <span class="chip" data-cmd="contact">contact</span>
+            <span class="chip" data-cmd="copy email">copy email</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Terminal -->
+      <section class="card terminal" aria-label="Terminal">
+        <div class="head">
+          <div class="h">shell <span class="kbd">/bin/portfolio</span></div>
+          <span class="pill">dica: ↑ histórico · tab sugestão</span>
+        </div>
+
+        <div class="screen" id="screen" tabindex="0" aria-label="Saída do terminal"></div>
+
+        <div class="inputbar">
+          <div class="ps1" id="ps1">dev@portfolio:~$</div>
+          <input class="cmd" id="cmd" autocomplete="off" spellcheck="false" placeholder="Digite um comando... (help)" />
+          <div class="hint" id="hint">ex: <span class="mono">projects</span> · <span class="mono">open 2</span></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <audio id="bgMusic" src="music.mp3" loop preload="auto"></audio>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
