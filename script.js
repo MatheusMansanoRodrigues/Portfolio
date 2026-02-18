@@ -1,7 +1,7 @@
 $(function () {
 
     // =========================
-    // DADOS (do seu port antigo)
+    // DADOS
     // =========================
     const PROFILE = {
         name: "Matheus Mansano",
@@ -184,7 +184,7 @@ $(function () {
     // PROJETOS – Timeline
     // =========================
     const $timeline = $("#timelineProjects");
-    const years = ["2024", "2024", "2023"]; // ou inferir
+    const years = ["2026", "2026", "2023"];
 
     PROJECTS.forEach((p, i) => {
         const imgs = PROJECT_IMAGES[i];
@@ -233,7 +233,6 @@ $(function () {
     };
 
     const pcfg = {
-        // escolha UMA das opções:
         text: "PORTFÓLIO",
         // text: "MATHEUS MANSANO",
 
