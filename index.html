@@ -1,142 +1,219 @@
 <!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="theme-color" content="#070a0f" />
-  <title>Portfólio Full Stack — Terminal</title>
-  <meta name="description" content="Portfólio full stack estilo terminal: comandos, projetos, stack e contato." />
-  <link rel="stylesheet" href="style.css">
-</head>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Matheus Mansano Rodrigues | Full Stack</title>
 
-<body data-theme="dark">
-  <div class="wrap">
-    <div class="top">
-      <div class="dots" aria-hidden="true">
-        <span class="dot red"></span>
-        <span class="dot ylw"></span>
-        <span class="dot grn"></span>
-      </div>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
 
-      <div class="title">
-        <span class="pill" id="hostPill">dev@portfolio</span>
-        <span class="title-text">~/home · terminal — <span id="clock">--:--</span></span>
-      </div>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script defer src="script.js"></script>
+    <!-- Galáxia Three.js (import via CDN) -->
+    <script type="module" src="galaxy.js"></script>
+  </head>
 
-      <div class="actions">
-        <button class="btn audio-btn" id="btnAudio" type="button" title="Tocar / Pausar música">
-          <span class="audio-icon" id="audioIcon">&#9835;</span>
-          <span class="audio-label" id="audioLabel">play</span>
-          <span class="audio-bars" id="audioBars">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-          </span>
+  <body>
+    <header>
+      <div class="navRow">
+        <!-- Botão hamburger (só aparece no mobile via CSS) -->
+        <button
+          class="hamb"
+          id="btnHamb"
+          type="button"
+          aria-label="Abrir menu"
+          aria-expanded="false"
+          aria-controls="mobileMenu"
+        >
+          <span></span><span></span><span></span>
         </button>
-        <button class="btn" id="btnHelp" type="button">help</button>
-        <button class="btn" id="btnProjects" type="button">projects</button>
-        <button class="btn" id="btnTheme" type="button">theme</button>
-        <button class="btn" id="btnClear" type="button">clear</button>
+
+        <!-- NAV desktop -->
+        <nav class="navDesktop" aria-label="Navegação">
+          <a href="#sobre">Sobre</a>
+          <a href="#stack">Stack</a>
+          <a href="#projetos">Projetos</a>
+          <a href="#contato">Contato</a>
+        </nav>
+
+        <div class="cart" id="availabilityTop">disponível</div>
       </div>
-    </div>
 
-    <div class="grid">
-      <!-- Sidebar -->
-      <aside class="card">
-        <div class="head">
-          <div class="h">perfil <span class="kbd">/me</span></div>
-          <span class="pill" id="availabilityPill">status: disponível</span>
+      <!-- Overlay + Menu Mobile -->
+      <div class="overlay" id="menuOverlay" hidden></div>
+
+      <nav class="navMobile" id="mobileMenu" aria-label="Menu mobile" hidden>
+        <div class="navMobileHead">
+          <div class="navMobileTitle">Menu</div>
+          <button
+            class="closeMobile"
+            id="btnCloseMobile"
+            type="button"
+            aria-label="Fechar menu"
+          >
+            ✕
+          </button>
         </div>
-        <div class="body">
-          <div class="profile">
-            <div class="avatar" aria-hidden="true"></div>
-            <div>
-              <div class="name" id="pName">Matheus Mansano Rodrigues</div>
-              <div class="role" id="pRole">Full Stack · PHP/MySQL · Web</div>
-            </div>
+
+        <div class="navMobileLinks">
+          <a href="#sobre">Sobre</a>
+          <a href="#stack">Stack</a>
+          <a href="#projetos">Projetos</a>
+          <a href="#contato">Contato</a>
+        </div>
+
+        <div class="navMobileFoot">
+          <a class="miniLink" href="mailto:matheusmansano1@gmail.com"
+            >matheusmansano1@gmail.com</a
+          >
+          <a
+            class="miniLink"
+            target="_blank"
+            rel="noopener"
+            href="https://github.com/akiramath"
+            >GitHub</a
+          >
+          <a
+            class="miniLink"
+            target="_blank"
+            rel="noopener"
+            href="https://www.linkedin.com/in/matheus-mansano-rodrigues-b04054253/"
+            >LinkedIn</a
+          >
+        </div>
+      </nav>
+    </header>
+
+    <audio id="bgMusic" loop preload="auto">
+      <source src="music.mp3" type="audio/mpeg" />
+    </audio>
+
+    <section class="hero">
+      <div id="galaxyScene" class="galaxy-bg" aria-hidden="true"></div>
+      <button
+        class="music-toggle"
+        id="btnMusic"
+        type="button"
+        aria-label="Reproduzir música de fundo"
+        title="Música de fundo"
+      >
+        <span class="icon-play">▶</span>
+        <span class="icon-pause">⏸</span>
+      </button>
+      <canvas id="heroCanvas"></canvas>
+
+      <div class="subtitle scroll-reveal" id="heroSubtitle" data-delay="200">Full Stack · PHP/MySQL · Web</div>
+
+      <div class="contact scroll-reveal" id="heroContact" data-delay="300">
+        Brasil<br /><br />
+        matheusmansano1@gmail.com
+      </div>
+    </section>
+
+    <!-- SOBRE -->
+    <section id="sobre" class="section ink scroll-section">
+      <div class="wrap">
+        <h2 class="scroll-reveal" data-delay="0">Sobre</h2>
+        <p class="lead scroll-reveal" id="aboutText" data-delay="100"></p>
+
+        <div class="meta scroll-reveal" data-delay="200">
+          <div class="pill"><span id="yearsPill">2+</span> anos</div>
+          <div class="pill">
+            <span id="projectsPill">3</span> projetos públicos
           </div>
-
-          <div class="status" aria-label="Indicadores">
-            <div class="stat">
-              <div class="n" id="statYears">2+</div>
-              <div class="t">anos</div>
-            </div>
-            <div class="stat">
-              <div class="n" id="statProjects">6</div>
-              <div class="t">projetos</div>
-            </div>
-            <div class="stat">
-              <div class="n" id="statFocus">UX</div>
-              <div class="t">foco</div>
-            </div>
-            <div class="stat">
-              <div class="n" id="statMode">CLI</div>
-              <div class="t">estilo</div>
-            </div>
-          </div>
-
-          <ul class="list" aria-label="Info rápida">
-            <li class="li clickable" id="emailItem" title="Clique para copiar e-mail">
-              <span class="bullet" aria-hidden="true"></span>
-              <div>
-                <div class="k">e-mail</div>
-                <div class="v mono" id="emailText">matheusmansano1@gmail.com</div>
-              </div>
-            </li>
-            <li class="li">
-              <span class="bullet" aria-hidden="true" style="background:var(--cyan); box-shadow:0 0 0 6px rgba(88,231,255,.10)"></span>
-              <div>
-                <div class="k">stack principal</div>
-                <div class="v">PHP · MySQL · HTML/CSS · JS</div>
-              </div>
-            </li>
-            <li class="li">
-              <span class="bullet" aria-hidden="true" style="background:var(--pink); box-shadow:0 0 0 6px rgba(255,79,216,.10)"></span>
-              <div>
-                <div class="k">links</div>
-                <div class="v">
-                  <a class="sidebar-link" href="https://github.com/akiramath" target="_blank" rel="noreferrer"><span class="mono">github</span></a> /
-                  <a class="sidebar-link" href="https://www.linkedin.com/in/matheus-mansano-rodrigues-b04054253/" target="_blank" rel="noreferrer"><span class="mono">linkedin</span></a> /
-                  <a class="sidebar-link" href="https://api.whatsapp.com/send/?phone=5543988080637&text=Ol%C3%A1%21+Vi+seu+portf%C3%B3lio+e+queria+conversar+sobre+um+projeto.&type=phone_number&app_absent=0" target="_blank" rel="noreferrer"><span class="mono">whatsapp</span></a>
-                </div>
-              </div>
-            </li>
-          </ul>
-
-          <div class="quick" aria-label="Atalhos de comando">
-            <span class="chip" data-cmd="help">help</span>
-            <span class="chip" data-cmd="projects">projects</span>
-            <span class="chip" data-cmd="open 1">open 1</span>
-            <span class="chip" data-cmd="stack">stack</span>
-            <span class="chip" data-cmd="contact">contact</span>
-            <span class="chip" data-cmd="copy email">copy email</span>
-          </div>
+          <a
+            class="pill link"
+            id="githubPill"
+            href="#"
+            target="_blank"
+            rel="noopener"
+            >GitHub</a
+          >
+          <a
+            class="pill link"
+            id="linkedinPill"
+            href="#"
+            target="_blank"
+            rel="noopener"
+            >LinkedIn</a
+          >
+          <a
+            class="pill link"
+            id="whatsappPill"
+            href="#"
+            target="_blank"
+            rel="noopener"
+            >WhatsApp</a
+          >
         </div>
-      </aside>
+      </div>
+    </section>
 
-      <!-- Terminal -->
-      <section class="card terminal" aria-label="Terminal">
-        <div class="head">
-          <div class="h">shell <span class="kbd">/bin/portfolio</span></div>
-          <span class="pill">dica: ↑ histórico · tab sugestão</span>
+    <!-- STACK -->
+    <section id="stack" class="section ink scroll-section">
+      <div class="wrap">
+        <h2 class="scroll-reveal" data-delay="0">Stack</h2>
+        <div class="grid" id="stackGrid"></div>
+      </div>
+    </section>
+
+    <!-- PROJETOS – Timeline -->
+    <section id="projetos" class="section ink section-projects scroll-section">
+      <div class="timeline-wrap">
+        <h2 class="timeline-title scroll-reveal" data-delay="0">Projetos</h2>
+        <div class="timeline" id="timelineProjects">
+          <!-- preenchido via JS -->
+        </div>
+        <div class="timeline-footer scroll-reveal">
+          <a class="miniLink" id="moreOnGithub" href="#" target="_blank" rel="noopener">
+            Ver mais no GitHub →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato" class="section ink scroll-section">
+      <div class="wrap">
+        <h2 class="scroll-reveal" data-delay="0">Contato</h2>
+        <p class="lead scroll-reveal" data-delay="100">
+          Se quiser conversar sobre um projeto, me chama por e-mail ou WhatsApp.
+        </p>
+
+        <div class="contactCards">
+          <a
+            class="cCard scroll-reveal"
+            id="emailCard"
+            data-delay="0"
+            href="#"
+            target="_blank"
+            rel="noopener"
+          >
+            <div class="cTitle">E-mail</div>
+            <div class="cValue" id="emailText">matheusmansano1@gmail.com</div>
+          </a>
+          <a class="cCard scroll-reveal" id="wppCard" href="#" target="_blank" rel="noopener" data-delay="80">
+            <div class="cTitle">WhatsApp</div>
+            <div class="cValue">Enviar mensagem</div>
+          </a>
+          <a class="cCard scroll-reveal" id="liCard" href="#" target="_blank" rel="noopener" data-delay="160">
+            <div class="cTitle">LinkedIn</div>
+            <div class="cValue">Ver perfil</div>
+          </a>
+          <a class="cCard scroll-reveal" id="ghCard" href="#" target="_blank" rel="noopener" data-delay="240">
+            <div class="cTitle">GitHub</div>
+            <div class="cValue">Repositórios</div>
+          </a>
         </div>
 
-        <div class="screen" id="screen" tabindex="0" aria-label="Saída do terminal"></div>
-
-        <div class="inputbar">
-          <div class="ps1" id="ps1">dev@portfolio:~$</div>
-          <input class="cmd" id="cmd" autocomplete="off" spellcheck="false" placeholder="Digite um comando... (help)" />
-          <div class="hint" id="hint">ex: <span class="mono">projects</span> · <span class="mono">open 2</span></div>
+        <div class="footNote scroll-reveal" data-delay="300">
+          © <span id="year"></span> Matheus Mansano Rodrigues
         </div>
-      </section>
-    </div>
-  </div>
-
-  <audio id="bgMusic" src="music.mp3" loop preload="auto"></audio>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-  <script src="script.js" defer></script>
-</body>
+      </div>
+    </section>
+  </body>
 </html>

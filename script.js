@@ -1,456 +1,538 @@
-const PROFILE = {
-    name: "Matheus Mansano Rodrigues",
-    role: "Full Stack · PHP/MySQL · Web",
-    email: "matheusmansano1@gmail.com",
-    github: "https://github.com/akiramath",
-    linkedin: "https://www.linkedin.com/in/matheus-mansano-rodrigues-b04054253/",
-    whatsapp: "https://api.whatsapp.com/send/?phone=5543988080637&text=Ol%C3%A1%21+Vi+seu+portf%C3%B3lio+e+queria+conversar+sobre+um+projeto.&type=phone_number&app_absent=0",
-    location: "Brasil",
-    availability: "disponível",
-    years: "2+",
-    totalProjects: 3,
-    about:  " #####    #####   ######   ######   #######           ##   ##   ######  ##   ## \n" +
-            "##   ##  ### ###   ##  ##   ##  ##   ##   #           ### ###     ##    ### ### \n" +
-            "##       ##   ##   ##  ##   ##  ##   ##               #######     ##    ####### \n" +
-            " #####   ##   ##   #####    #####    ####             ## # ##     ##    ## # ## \n" +
-            "     ##  ##   ##   ##  ##   ## ##    ##               ##   ##     ##    ##   ## \n" +
-            "##   ##  ### ###   ##  ##   ## ##    ##   #           ##   ##     ##    ##   ## \n" +
-            " #####    #####   ######   #### ##  #######           ### ###   ######  ### ### \n" +
-            "\n\n\n" + 
-            "Olá a todos, obrigado por me permitirem me apresentar. Sou desenvolvedor full stack com cerca de 2 anos de experiência, " + 
-            "atuando principalmente no desenvolvimento de sistemas ERP e aplicações web. Trabalho no dia a dia com PHP, jQuery, MySQL, SQL Server e integrações via APIs." +  
-            "Gosto de transformar requisitos em soluções objetivas, priorizando código claro, componentes reutilizáveis, segurança essencial (autenticação, validação e controle de requisições quando necessário) e bancos de dados bem modelados. " + 
+$(function () {
+
+    // =========================
+    // DADOS (do seu port antigo)
+    // =========================
+    const PROFILE = {
+        name: "Matheus Mansano",
+        fullName: "Matheus Mansano Rodrigues",
+        role: "Full Stack · PHP/MySQL · Web",
+        email: "matheusmansano1@gmail.com",
+        github: "https://github.com/akiramath",
+        linkedin: "https://www.linkedin.com/in/matheus-mansano-rodrigues-b04054253/",
+        whatsapp: "https://api.whatsapp.com/send/?phone=5543988080637&text=Ol%C3%A1%21+Vi+seu+portf%C3%B3lio+e+queria+conversar+sobre+um+projeto.&type=phone_number&app_absent=0",
+        location: "Brasil",
+        availability: "disponível",
+        years: "2+",
+        totalProjects: 6,
+        about:
+            "Olá a todos, obrigado por me permitirem me apresentar. Sou desenvolvedor full stack com cerca de 2 anos de experiência, " +
+            "atuando principalmente no desenvolvimento de sistemas ERP e aplicações web. Trabalho no dia a dia com PHP, jQuery, MySQL, SQL Server e integrações via APIs. " +
+            "Gosto de transformar requisitos em soluções objetivas, priorizando código claro, componentes reutilizáveis, segurança essencial (autenticação, validação e controle de requisições quando necessário) e bancos de dados bem modelados. " +
             "Quando o projeto pede, aplico animações e recursos 3D de forma leve, sempre com foco em performance e experiência do usuário."
-};
+    };
 
-const STACK = {
-    "Frontend": ["HTML", "CSS", "JavaScript", "jQuery", "Three.js"],
-    "Backend": ["PHP", "APIs REST"],
-    "Banco de Dados": ["MySQL", "SQL Server"],
-    "DevOps & Ferramentas": ["Git", "GitHub", "Docker"]
-};
+    const STACK = {
+        "Frontend": ["HTML", "CSS", "JavaScript", "jQuery", "Three.js"],
+        "Backend": ["PHP", "APIs REST"],
+        "Banco de Dados": ["MySQL", "SQL Server"],
+        "DevOps & Ferramentas": ["Git", "GitHub", "Docker"]
+    };
 
-const PROJECTS = [
-    {
-        title: "Esfera 3D Interativa",
-        what: "Cena 3D imersiva com rotação, gestos e navegação em tempo real usando Three.js.",
-        impact: "Demonstra domínio de WebGL e interatividade avançada no navegador.",
-        stack: ["HTML", "CSS", "JavaScript", "Three.js"],
-        tags: ["frontend", "3D", "webgl"],
-        demo: "https://akiramath.github.io/esfera_3d/",
-        repo: "https://github.com/akiramath/esfera_3d"
-    },
-    {
-        title: "Ótica Horizonte",
-        what: "Landing page moderna com dark/light mode, galeria de produtos, depoimentos e CTA via WhatsApp.",
-        impact: "Fortaleceu a presença digital da marca e aumentou conversões de leads.",
-        stack: ["HTML", "CSS", "JavaScript"],
-        tags: ["landing page", "responsive", "ui/ux"],
-        demo: "https://akiramath.github.io/otica_horizonte/",
-        repo: "https://github.com/akiramath/otica_horizonte"
-    },
-    {
-        title: "Gerenciador de Tarefas",
-        what: "App de tarefas com CRUD completo, filtros, dark mode e interface minimalista.",
-        impact: "Foco em produtividade pessoal com UX rápida e intuitiva.",
-        stack: ["HTML", "CSS", "JavaScript"],
-        tags: ["app", "responsive", "produtividade"],
-        demo: "https://akiramath.github.io/Projeto-Tarefa/",
-        repo: "https://github.com/akiramath/Projeto-Tarefa"
-    }
-];
+    const PROJECTS = [
+        {
+            title: "Esfera 3D Interativa",
+            what: "Cena 3D imersiva com rotação, gestos e navegação em tempo real usando Three.js.",
+            impact: "Demonstra domínio de WebGL e interatividade avançada no navegador.",
+            stack: ["HTML", "CSS", "JavaScript", "Three.js"],
+            tags: ["frontend", "3D", "webgl"],
+            demo: "https://akiramath.github.io/esfera_3d/",
+            repo: "https://github.com/akiramath/esfera_3d"
+        },
+        {
+            title: "Ótica Horizonte",
+            what: "Landing page moderna com dark/light mode, galeria de produtos, depoimentos e CTA via WhatsApp.",
+            impact: "Fortaleceu a presença digital da marca e aumentou conversões de leads.",
+            stack: ["HTML", "CSS", "JavaScript"],
+            tags: ["landing page", "responsive", "ui/ux"],
+            demo: "https://akiramath.github.io/otica_horizonte/",
+            repo: "https://github.com/akiramath/otica_horizonte"
+        },
+        {
+            title: "Gerenciador de Tarefas",
+            what: "App de tarefas com CRUD completo, filtros, dark mode e interface minimalista.",
+            impact: "Foco em produtividade pessoal com UX rápida e intuitiva.",
+            stack: ["HTML", "CSS", "JavaScript"],
+            tags: ["app", "responsive", "produtividade"],
+            demo: "https://akiramath.github.io/Projeto-Tarefa/",
+            repo: "https://github.com/akiramath/Projeto-Tarefa"
+        }
+    ];
 
-// ====== Helpers ======
-const $ = (sel, el = document) => el.querySelector(sel);
-const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
+    // Mapeamento de imagens: [principal, mini] por projeto (coloque em /assets)
+    const PROJECT_IMAGES = [
+        "assets/esfera/esfera_3d.webp", 
+        "assets/otica/otica_horizonte_h.webp", 
+        "assets/minhas_tarefas/minhas_tarefas_h.webp"
+    ];
 
-function esc(s) {
-    return String(s)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;");
-}
+    // =========================
+    // POPULA HERO / SOBRE / CONTATO
+    // =========================
+    document.title = `${PROFILE.name} | Full Stack`;
 
-function toast(msg) {
-    const t = $("#toast");
-    t.textContent = msg;
-    t.classList.add("show");
-    clearTimeout(toast._t);
-    toast._t = setTimeout(() => t.classList.remove("show"), 2200);
-}
+    $("#availabilityTop").text(PROFILE.availability);
+    $("#heroSubtitle").text(PROFILE.role);
 
-function nowClock() {
-    const d = new Date();
-    const hh = String(d.getHours()).padStart(2, "0");
-    const mm = String(d.getMinutes()).padStart(2, "0");
-    return `${hh}:${mm}`;
-}
+    $("#heroContact").html(`${PROFILE.location}<br><br>${PROFILE.email}`);
 
-// ====== UI init ======
-$("#pName").textContent = PROFILE.name;
-$("#pRole").textContent = PROFILE.role;
-$("#emailText").textContent = PROFILE.email;
-$("#availabilityPill").textContent = `status: ${PROFILE.availability}`;
-$("#statYears").textContent = PROFILE.years;
-$("#statProjects").textContent = String(PROFILE.totalProjects);
-$("#hostPill").textContent = `dev@${PROFILE.name.toLowerCase().replace(/\s+/g, "") || "portfolio"}`;
-$("#clock").textContent = nowClock();
-setInterval(() => $("#clock").textContent = nowClock(), 10000);
+    $("#aboutText").text(PROFILE.about);
 
-// ====== Terminal engine ======
-const screen = $("#screen");
-const input = $("#cmd");
-const ps1 = $("#ps1");
+    $("#yearsPill").text(PROFILE.years);
+    $("#projectsPill").text(String(PROFILE.totalProjects));
 
-const history = [];
-let hIndex = -1;
+    $("#githubPill").attr("href", PROFILE.github);
+    $("#linkedinPill").attr("href", PROFILE.linkedin);
+    $("#whatsappPill").attr("href", PROFILE.whatsapp);
 
-const themes = ["dark", "amber", "matrix", "cyberpunk", "ice", "blood", "paper", "solar"];
-function setTheme(t) {
-    document.body.setAttribute("data-theme", t);
-    localStorage.setItem("termTheme", t);
-    toast(`tema: ${t}`);
-}
-const savedTheme = localStorage.getItem("termTheme");
-if (savedTheme && themes.includes(savedTheme)) setTheme(savedTheme);
+    $("#moreOnGithub").attr("href", PROFILE.github);
 
-function print(prompt, html) {
-    const div = document.createElement("div");
-    div.className = "line";
-    div.innerHTML = `
-        <div class="prompt">${esc(prompt)}</div>
-        <div class="out">${html}</div>
-      `;
-    screen.appendChild(div);
-    screen.scrollTop = screen.scrollHeight;
-}
+    $("#emailText").text(PROFILE.email);
+    $("#emailCard").attr("href", `mailto:${PROFILE.email}`);
+    $("#wppCard").attr("href", PROFILE.whatsapp);
+    $("#liCard").attr("href", PROFILE.linkedin);
+    $("#ghCard").attr("href", PROFILE.github);
 
-function printOut(html) {
-    const div = document.createElement("div");
-    div.className = "line";
-    div.innerHTML = `<div class="prompt"></div><div class="out">${html}</div>`;
-    screen.appendChild(div);
-    screen.scrollTop = screen.scrollHeight;
-}
+    $("#year").text(new Date().getFullYear());
 
-function banner() {
-    const b =
-        `<span class="ok">✓</span> Bem-vindo(a), <span class="hot">${esc(PROFILE.name)}</span>.\n` +
-        `Digite <span class="linkish" data-cmd="help">help</span> para comandos.\n` +
-        `<span class="dim">Dica:</span> <span class="linkish" data-cmd="projects">projects</span> e depois <span class="linkish" data-cmd="open 1">open 1</span>.`;
-    printOut(b.replaceAll("\n", "<br>"));
-}
+    // =========================
+    // MÚSICA DE FUNDO – som ambiente, loop infinito, pause/play
+    // =========================
+    (function () {
+        const audio = document.getElementById("bgMusic");
+        const $btn = $("#btnMusic");
+        if (!audio || !$btn.length) return;
 
-function help() {
-    const html =
-        `<span class="ok">╭─ Comandos ───────────────────────────────╮</span><br><br>` +
-        `  <span class="linkish" data-cmd="help">help</span>            <span class="dim">mostra esta ajuda</span><br>` +
-        `  <span class="linkish" data-cmd="about">about</span>           <span class="dim">resumo profissional</span><br>` +
-        `  <span class="linkish" data-cmd="stack">stack</span>           <span class="dim">lista skills & stack</span><br>` +
-        `  <span class="linkish" data-cmd="projects">projects</span>        <span class="dim">lista projetos</span><br>` +
-        `  <span style="color:var(--cyan)">open &lt;id&gt;</span>       <span class="dim">detalhes do projeto (ex: open 2)</span><br>` +
-        `  <span class="linkish" data-cmd="links">links</span>           <span class="dim">github / linkedin / whatsapp</span><br>` +
-        `  <span class="linkish" data-cmd="copy email">copy email</span>      <span class="dim">copia e-mail</span><br>` +
-        `  <span class="linkish" data-cmd="theme">theme</span>           <span class="dim">alterna tema</span><br>` +
-        `  <span class="linkish" data-cmd="clear">clear</span>           <span class="dim">limpa a tela</span><br><br>` +
-        `  <span class="dim">atalhos: ↑ / ↓ histórico · Tab autocomplete</span><br><br>` +
-        `<span class="ok">╰──────────────────────────────────────────╯</span>`;
-    printOut(html);
-}
+        audio.volume = 0.2;  // volume baixo para som ambiente
+        let started = false;
 
-function about() {
-    const txt = PROFILE.about
-        + `\n\nLocal: ${PROFILE.location}`
-        + `\nDisponibilidade: ${PROFILE.availability}`;
-    printOut(esc(txt).replaceAll("\n", "<br>"));
-}
+        function playMusic() {
+            audio.play().catch(() => {});
+            started = true;
+            $btn.addClass("is-playing").attr("aria-label", "Pausar música");
+        }
 
-function stack() {
-    let html = `<span class="ok">╭─ Skills & Stack ─────────────────────────╮</span><br><br>`;
-    for (const [k, arr] of Object.entries(STACK)) {
-        html += `  <span class="warn">▸ ${esc(k)}</span><br>`;
-        html += `    ${arr.map(s => `<span class="dim">⬥</span> <span style="color:var(--cyan)">${esc(s)}</span>`).join("  ")}<br><br>`;
-    }
-    html += `<span class="ok">╰──────────────────────────────────────────╯</span>`;
-    printOut(html);
-}
+        function pauseMusic() {
+            audio.pause();
+            $btn.removeClass("is-playing").attr("aria-label", "Reproduzir música");
+        }
 
-function projects() {
-    if (!PROJECTS.length) {
-        printOut(`<span class="warn">Nenhum projeto cadastrado.</span>`);
-        return;
-    }
-    let html = `<span class="ok">╭─ Projetos ───────────────────────────────╮</span><br>`;
-    html += `<span class="dim">  use </span><span class="linkish" data-cmd="open 1">open &lt;id&gt;</span><span class="dim"> para detalhes</span><br><br>`;
+        function toggleMusic() {
+            if (!started) {
+                playMusic();
+            } else if (audio.paused) {
+                playMusic();
+            } else {
+                pauseMusic();
+            }
+        }
+
+        $btn.on("click", toggleMusic);
+
+        // Tenta autoplay ao carregar (navegadores podem bloquear)
+        audio.play().then(() => {
+            started = true;
+            $btn.addClass("is-playing").attr("aria-label", "Pausar música");
+        }).catch(() => {});
+
+        // Se autoplay bloqueado, inicia na primeira interação do usuário
+        const startOnInteraction = function () {
+            if (!started) playMusic();
+            document.removeEventListener("click", startOnInteraction);
+            document.removeEventListener("touchstart", startOnInteraction);
+            document.removeEventListener("keydown", startOnInteraction);
+        };
+        document.addEventListener("click", startOnInteraction, { once: true });
+        document.addEventListener("touchstart", startOnInteraction, { once: true });
+        document.addEventListener("keydown", startOnInteraction, { once: true });
+    })();
+
+    // Envolve palavras dos títulos em spans para animação escalonada
+    (function () {
+        $("h2.scroll-reveal").each(function () {
+            const $h = $(this);
+            const text = $h.text();
+            const words = text.split(/\s+/);
+            const html = words.map((w, i) =>
+                `<span class="word" style="transition-delay: ${i * 50}ms">${escapeHtml(w)}</span>`
+            ).join(" ");
+            $h.html(html);
+        });
+    })();
+
+    // =========================
+    // STACK (cards)
+    // =========================
+    const $stackGrid = $("#stackGrid");
+    let stackIndex = 0;
+    Object.entries(STACK).forEach(([area, items]) => {
+        const delay = stackIndex * 60;
+        stackIndex++;
+        const $card = $(`
+        <div class="stackCard">
+          <h3>${escapeHtml(area)}</h3>
+          <div class="stackList"></div>
+        </div>
+      `);
+        const $list = $card.find(".stackList");
+        items.forEach(s => $list.append(`<span class="stackTag">${escapeHtml(s)}</span>`));
+        $card.addClass("scroll-reveal").attr("data-delay", delay);
+        $stackGrid.append($card);
+    });
+
+    // =========================
+    // PROJETOS – Timeline
+    // =========================
+    const $timeline = $("#timelineProjects");
+    const years = ["2024", "2024", "2023"]; // ou inferir
+
     PROJECTS.forEach((p, i) => {
-        html += `  <span class="warn">[${i + 1}]</span> <span class="ok">${esc(p.title)}</span><br>`;
-        html += `      <span class="dim">${esc(p.what)}</span><br>`;
-        html += `      <span class="dim">stack:</span> <span style="color:var(--cyan)">${esc(p.stack.join(" · "))}</span><br>`;
-        if (i < PROJECTS.length - 1) html += `<br>`;
+        const imgs = PROJECT_IMAGES[i];
+        const img = Array.isArray(imgs) ? (imgs[0] || "") : (imgs || "");
+        const tagsHtml = (p.tags || []).map(t => `<span>${escapeHtml(t)}</span>`).join("");
+        const stackText = (p.stack || []).join(" · ");
+        const year = years[i] || String(new Date().getFullYear());
+        const side = i % 2 === 0 ? "left" : "right";
+
+        const $item = $(`
+        <article class="timeline-item scroll-reveal" data-side="${side}" data-delay="${i * 80}">
+          <div class="timeline-node"></div>
+          <div class="timeline-card">
+            <div class="timeline-card-img">
+              <img src="${escapeAttr(img)}" alt="${escapeAttr(p.title)}" />
+            </div>
+            <div class="timeline-card-body">
+              <span class="timeline-year">${escapeHtml(year)}</span>
+              <h3 class="timeline-card-title">${escapeHtml(p.title)}</h3>
+              <p class="timeline-card-desc">${escapeHtml(p.what)}</p>
+              <div class="timeline-card-stack">${escapeHtml(stackText)}</div>
+              <div class="timeline-card-tags">${tagsHtml}</div>
+              <div class="timeline-card-links">
+                <a href="${escapeAttr(p.demo)}" target="_blank" rel="noopener">Demo</a>
+                <a href="${escapeAttr(p.repo)}" target="_blank" rel="noopener">Código</a>
+              </div>
+            </div>
+          </div>
+        </article>
+      `);
+
+        $timeline.append($item);
     });
-    html += `<br>  <span class="dim">▸</span> <a class="linkish" href="${esc(PROFILE.github)}" target="_blank" rel="noreferrer">ver mais projetos no GitHub</a><br><br>`;
-    html += `<span class="ok">╰──────────────────────────────────────────╯</span>`;
-    printOut(html);
-}
 
-function openProject(id) {
-    const i = Number(id) - 1;
-    const p = PROJECTS[i];
-    if (!p) {
-        printOut(`<span class="warn">Projeto não encontrado. Use <span class="linkish" data-cmd="projects">projects</span>.</span>`);
-        return;
+    // =========================
+    // HERO: partículas no título (canvas) - versão leve
+    // =========================
+    const canvas = document.getElementById("heroCanvas");
+    const ctx = canvas.getContext("2d", { alpha: true });
+
+    const particleState = {
+        particles: [],
+        mouse: { x: -9999, y: -9999, active: false },
+        rafId: null,
+        resizeTimer: null
+    };
+
+    const pcfg = {
+        // escolha UMA das opções:
+        text: "PORTFÓLIO",
+        // text: "MATHEUS MANSANO",
+
+        fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
+
+        gap: 6,            // mais denso (mais bonito) – se pesar, aumente pra 6
+        radius: 105,       // área de repulsão maior
+        strength: 3.4,     // força maior
+        returnForce: 0.06,
+        friction: 0.86,
+        size: 1.5,
+        maxDpr: 1.75,
+
+        // agora o foco é ficar grande
+        maxFont: 210,      // maior
+        minFont: 90,       // mínimo bem alto
+        paddingX: 18       // menos respiro lateral para caber maior
+    };
+
+
+    function adaptiveGap(w) {
+        if (w < 420) return 9;
+        if (w < 700) return 7;
+        if (w < 980) return 6;
+        return 6;
     }
-    const html =
-        `<span class="ok">╭─ Projeto [${i + 1}] ──────────────────────────────╮</span><br><br>` +
-        `  <span class="ok">⚡ ${esc(p.title)}</span><br><br>` +
-        `  <span class="dim">○ Descrição:</span>  ${esc(p.what)}<br>` +
-        `  <span class="dim">○ Impacto:</span>    ${esc(p.impact)}<br>` +
-        `  <span class="dim">○ Stack:</span>      <span style="color:var(--cyan)">${esc(p.stack.join(" · "))}</span><br>` +
-        `  <span class="dim">○ Tags:</span>       <span style="color:var(--pink)">${esc(p.tags.join(" · "))}</span><br><br>` +
-        `  <span class="dim">○ Links:</span>      <a class="linkish" href="${esc(p.demo)}" target="_blank" rel="noreferrer">▸ demo</a>  ·  <a class="linkish" href="${esc(p.repo)}" target="_blank" rel="noreferrer">▸ código</a><br><br>` +
-        `<span class="ok">╰──────────────────────────────────────────╯</span>`;
-    printOut(html);
-}
 
-function links() {
-    const html =
-        `<span class="ok">╭─ Links ──────────────────────────────────╮</span><br><br>` +
-        `  <span class="dim">▸ github:</span>    <a class="linkish" href="${esc(PROFILE.github)}" target="_blank" rel="noreferrer">github.com/akiramath</a><br>` +
-        `  <span class="dim">▸ linkedin:</span>  <a class="linkish" href="${esc(PROFILE.linkedin)}" target="_blank" rel="noreferrer">linkedin.com/in/matheus-mansano</a><br>` +
-        `  <span class="dim">▸ whatsapp:</span>  <a class="linkish" href="${esc(PROFILE.whatsapp)}" target="_blank" rel="noreferrer">enviar mensagem</a><br><br>` +
-        `<span class="ok">╰──────────────────────────────────────────╯</span>`;
-    printOut(html);
-}
-
-async function copyEmail() {
-    try {
-        await navigator.clipboard.writeText(PROFILE.email);
-        printOut(`<span class="ok">E-mail copiado:</span> <span class="dim">${esc(PROFILE.email)}</span>`);
-        toast("Copiado!");
-    } catch {
-        printOut(`<span class="warn">Não consegui copiar automaticamente.</span> <span class="dim">E-mail: ${esc(PROFILE.email)}</span>`);
+    function resizeCanvas() {
+        const cssW = canvas.clientWidth;
+        const cssH = canvas.clientHeight;
+        const dpr = Math.max(1, Math.min(pcfg.maxDpr, window.devicePixelRatio || 1));
+        canvas.width = Math.floor(cssW * dpr);
+        canvas.height = Math.floor(cssH * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
-}
 
-function clear() {
-    screen.innerHTML = "";
-    banner();
-}
+    function buildParticles() {
+        particleState.particles = [];
 
-function theme(arg) {
-    const cur = document.body.getAttribute("data-theme") || themes[0];
+        const w = canvas.clientWidth;
+        const h = canvas.clientHeight;
 
-    // theme <nome>
-    if (arg) {
-        const wanted = String(arg).toLowerCase();
-        if (themes.includes(wanted)) {
-            setTheme(wanted);
-            printOut(`<span class="ok">Tema aplicado:</span> <span class="dim">${esc(wanted)}</span>`);
-        } else {
-            printOut(
-                `<span class="warn">Tema inválido:</span> <span class="dim">${esc(wanted)}</span><br>` +
-                `<span class="dim">Disponíveis:</span> ${themes.map(t => `<span class="linkish" data-cmd="theme ${esc(t)}">${esc(t)}</span>`).join(" · ")}`
-            );
+        // mobile: ajustes para o título caber
+        const minFont = w < 380 ? 48 : (w < 480 ? 58 : (w < 600 ? 72 : pcfg.minFont));
+        const pad = w < 480 ? 24 : (w < 600 ? 20 : pcfg.paddingX);
+        pcfg.gap = (w < 380) ? 8 : (w < 520 ? 7 : (w < 900 ? 6 : 5));
+
+        const off = document.createElement("canvas");
+        off.width = w;
+        off.height = h;
+        const octx = off.getContext("2d");
+
+        octx.clearRect(0, 0, w, h);
+        octx.fillStyle = "#fff";
+        octx.textAlign = "center";
+        octx.textBaseline = "middle";
+
+        const maxWidthAllowed = w - (pad * 2);
+
+        // auto-fit: aumenta bastante e só reduz se estourar
+        const maxForWidth = w < 600 ? w * 0.32 : w * 0.26;
+        let fontSize = Math.round(Math.min(pcfg.maxFont, maxForWidth));
+        fontSize = Math.max(fontSize, minFont);
+
+        function textWidth(fs) {
+            octx.font = `900 ${fs}px ${pcfg.fontFamily}`;
+            return octx.measureText(pcfg.text).width;
         }
-        return;
-    }
 
-    // theme (sem args) -> cicla na lista
-    const idx = themes.indexOf(cur);
-    const next = themes[(idx >= 0 ? idx + 1 : 1) % themes.length];
-
-    setTheme(next);
-    printOut(`<span class="ok">Tema alternado:</span> <span class="dim">${esc(next)}</span>`);
-}
-
-const COMMANDS = {
-    help,
-    about,
-    stack,
-    projects,
-    links,
-    contact: links,
-    clear,
-    theme,
-};
-
-function run(raw) {
-    const cmdline = (raw || "").trim();
-    if (!cmdline) return;
-
-    history.push(cmdline);
-    hIndex = history.length;
-
-    const prompt = ps1.textContent;
-    print(prompt, esc(cmdline));
-
-    const [cmd, ...args] = cmdline.split(/\s+/);
-    const c = cmd.toLowerCase();
-
-    if (c === "open") {
-        return openProject(args[0]);
-    }
-    if (c === "copy" && (args[0] || "").toLowerCase() === "email") {
-        return copyEmail();
-    }
-    if (c in COMMANDS) {
-        return COMMANDS[c](args[0]);
-    }
-
-    const msg =
-        `Comando não reconhecido: ${cmdline}
-        Digite 'help' para ver os comandos.`;
-    printOut(`<span class="warn">${esc(msg).replaceAll("\n", "<br>")}</span>`);
-}
-
-// ====== Autocomplete (Tab) ======
-function autocomplete() {
-    const v = input.value.trimStart();
-    const parts = v.split(/\s+/);
-    const first = (parts[0] || "").toLowerCase();
-
-    // completa primeiro token
-    if (parts.length <= 1) {
-        const pool = Object.keys(COMMANDS).concat(["open", "copy", "copy email", "projects", "about", "stack", "links", "clear", "theme", "help"]);
-        const matches = pool.filter(x => x.startsWith(first));
-        if (matches.length === 1) {
-            input.value = matches[0] + " ";
-        } else if (matches.length > 1) {
-            printOut(`<span class="dim">Sugestões:</span> ${matches.map(m => `<span class="linkish" data-cmd="${esc(m)}">${esc(m)}</span>`).join(" · ")}`);
+        while (fontSize > minFont && textWidth(fontSize) > maxWidthAllowed) {
+            fontSize -= 2;
         }
-        return;
-    }
 
-    // completa tema
-    if (first === "theme" && parts.length === 2) {
-        const a = (parts[1] || "").toLowerCase();
-        const matches = themes.filter(t => t.startsWith(a));
-        if (matches.length === 1) {
-            input.value = `theme ${matches[0]}`;
+        octx.font = `900 ${fontSize}px ${pcfg.fontFamily}`;
+        octx.fillText(pcfg.text, w / 2, h / 2);
+
+        const img = octx.getImageData(0, 0, w, h).data;
+
+        for (let y = 0; y < h; y += pcfg.gap) {
+            for (let x = 0; x < w; x += pcfg.gap) {
+                const a = img[(y * w + x) * 4 + 3];
+                if (a > 24) particleState.particles.push({ x, y, vx: 0, vy: 0, ox: x, oy: y });
+            }
+        }
+
+        // fallback performance
+        if (particleState.particles.length > 16000) {
+            pcfg.gap += 2;
+            buildParticles();
         }
     }
-}
 
-// ====== Bindings ======
-input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-        const v = input.value;
-        input.value = "";
-        run(v);
-    } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        if (history.length) {
-            hIndex = Math.max(0, hIndex - 1);
-            input.value = history[hIndex] || "";
-            setTimeout(() => input.setSelectionRange(input.value.length, input.value.length), 0);
+
+
+    function tick() {
+        const w = canvas.clientWidth;
+        const h = canvas.clientHeight;
+
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = "rgba(245,245,245,0.9)";
+
+        const m = particleState.mouse;
+        const r = pcfg.radius;
+
+        for (const p of particleState.particles) {
+            const dx = p.x - m.x;
+            const dy = p.y - m.y;
+            const dist = Math.hypot(dx, dy);
+
+            if (m.active && dist < r) {
+                const t = 1 - (dist / r);
+                const force = pcfg.strength * (t * t);
+                const nx = dx / (dist || 1);
+                const ny = dy / (dist || 1);
+                p.vx += nx * force;
+                p.vy += ny * force;
+            }
+
+            p.vx += (p.ox - p.x) * pcfg.returnForce;
+            p.vy += (p.oy - p.y) * pcfg.returnForce;
+
+            p.vx *= pcfg.friction;
+            p.vy *= pcfg.friction;
+
+            p.x += p.vx;
+            p.y += p.vy;
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, pcfg.size, 0, Math.PI * 2);
+            ctx.fill();
         }
-    } else if (e.key === "ArrowDown") {
-        e.preventDefault();
-        if (history.length) {
-            hIndex = Math.min(history.length, hIndex + 1);
-            input.value = history[hIndex] || "";
-        }
-    } else if (e.key === "Tab") {
-        e.preventDefault();
-        autocomplete();
+
+        particleState.rafId = requestAnimationFrame(tick);
     }
-});
 
-// clique em comandos “linkish”
-screen.addEventListener("click", (e) => {
-    const t = e.target;
-    if (t && t.classList && t.classList.contains("linkish") && t.dataset.cmd) {
-        run(t.dataset.cmd);
-        input.focus();
+    function setMouseFromEvent(e) {
+        const rect = canvas.getBoundingClientRect();
+        particleState.mouse.x = e.clientX - rect.left;
+        particleState.mouse.y = e.clientY - rect.top;
+        particleState.mouse.active = true;
     }
-});
 
-// Botões top
-$("#btnHelp").addEventListener("click", () => run("help"));
-$("#btnProjects").addEventListener("click", () => run("projects"));
-$("#btnTheme").addEventListener("click", () => run("theme"));
-$("#btnClear").addEventListener("click", () => run("clear"));
-
-// Sidebar: email clicável (copia)
-$("#emailItem").addEventListener("click", () => {
-    run("copy email");
-    input.focus();
-});
-
-// Sidebar: chips executam comandos
-$$(".chip[data-cmd]").forEach(chip => {
-    chip.addEventListener("click", () => {
-        run(chip.dataset.cmd);
-        input.focus();
+    $("#heroCanvas").on("mousemove", function (e) {
+        setMouseFromEvent(e.originalEvent);
+    }).on("mouseenter", function () {
+        particleState.mouse.active = true;
+    }).on("mouseleave", function () {
+        particleState.mouse.active = false;
+        particleState.mouse.x = -9999; particleState.mouse.y = -9999;
     });
-});
 
-// ====== Audio Player ======
-const bgMusic = $("#bgMusic");     // <audio> (DOM) ou null
-const btnAudio = $("#btnAudio");   // botão (DOM) ou null
-
-let audioPlaying = false;
-
-// Se o áudio/botão não existir no HTML, evita quebrar o site
-if (bgMusic && btnAudio) {
-
-  // volume ambiente inicial (10%)
-  bgMusic.volume = 0.10;
-
-  function fadeInAudio(target = 0.10, ms = 800) {
-    bgMusic.volume = 0;
-    const steps = 20;
-    const stepTime = ms / steps;
-    const step = target / steps;
-    let current = 0;
-
-    const t = setInterval(() => {
-      current += step;
-      bgMusic.volume = Math.min(current, target);
-      if (current >= target) clearInterval(t);
-    }, stepTime);
-  }
-
-  function toggleAudio() {
-    if (audioPlaying) {
-      bgMusic.pause();
-      btnAudio.classList.remove("playing");
-      audioPlaying = false;
-    } else {
-      bgMusic.play().then(() => {
-        btnAudio.classList.add("playing");
-        audioPlaying = true;
-        fadeInAudio(0.10, 800);
-      }).catch(() => {
-        toast("Clique novamente para tocar a música");
-      });
-    }
-  }
-
-  btnAudio.addEventListener("click", toggleAudio);
-
-  function tryAutoplay() {
-    bgMusic.play().then(() => {
-      btnAudio.classList.add("playing");
-      audioPlaying = true;
-      fadeInAudio(0.10, 800);
-    }).catch(() => {
-      const startOnInteraction = () => {
-        if (!audioPlaying) {
-          bgMusic.play().then(() => {
-            btnAudio.classList.add("playing");
-            audioPlaying = true;
-            fadeInAudio(0.10, 800);
-          }).catch(() => {});
-        }
-        document.removeEventListener("click", startOnInteraction);
-        document.removeEventListener("keydown", startOnInteraction);
-      };
-
-      document.addEventListener("click", startOnInteraction);
-      document.addEventListener("keydown", startOnInteraction);
+    $("#heroCanvas").on("touchstart touchmove", function (e) {
+        const t = e.originalEvent.touches && e.originalEvent.touches[0];
+        if (t) setMouseFromEvent(t);
+    }).on("touchend touchcancel", function () {
+        particleState.mouse.active = false;
+        particleState.mouse.x = -9999; particleState.mouse.y = -9999;
     });
-  }
 
-  tryAutoplay();
-}
+    $(window).on("resize", function () {
+        clearTimeout(particleState.resizeTimer);
+        particleState.resizeTimer = setTimeout(function () {
+            resizeCanvas();
+            buildParticles();
+        }, 120);
+    });
+
+    // init canvas
+    resizeCanvas();
+    buildParticles();
+    tick();
+
+    // =========================
+    // helpers
+    // =========================
+    function escapeHtml(s) {
+        return String(s ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+    function escapeAttr(s) { return escapeHtml(s); }
+
+    // ===============================
+    // SCROLL REVEAL – entra/sai revertendo (como voltar no tempo)
+    // ===============================
+    (function () {
+        const $targets = $(".scroll-reveal");
+        const rootMargin = "0px 0px -80px 0px"; // trigger um pouco antes de entrar
+
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach((e) => {
+                const $el = $(e.target);
+                const delay = parseInt($el.data("delay") || "0", 10);
+                if (e.isIntersecting) {
+                    $el.css("transition-delay", delay + "ms");
+                    $el.addClass("in-view");
+                } else {
+                    $el.removeClass("in-view");
+                    $el.css("transition-delay", "0ms");
+                }
+            });
+        }, { threshold: [0, 0.05, 0.1, 0.2, 0.3], rootMargin });
+
+        $targets.each(function () {
+            io.observe(this);
+        });
+    })();
+
+    // header: muda cor ao chegar na seção sobre (is-over-ink)
+    (function () {
+        const $header = $("header");
+        const $sobre = $("#sobre");
+
+        function checkHeaderOverSobre() {
+            if (!$sobre.length) return;
+            const rect = $sobre[0].getBoundingClientRect();
+            const headerH = $header.outerHeight() || 90;
+            const isOver = rect.top <= headerH;
+            $header.toggleClass("is-over-ink", isOver);
+        }
+
+        $(window).on("scroll", checkHeaderOverSobre);
+        checkHeaderOverSobre();
+    })();
+
+    // ===============================
+    // MENU HAMBURGER (mobile) - jQuery
+    // ===============================
+    (function () {
+        const $btn = $("#btnHamb");
+        const $menu = $("#mobileMenu");
+        const $overlay = $("#menuOverlay");
+        const $close = $("#btnCloseMobile");
+
+        function openMenu() {
+            $("body").addClass("menu-open");
+            $btn.attr("aria-expanded", "true");
+
+            $overlay.prop("hidden", false).addClass("is-open");
+            $menu.prop("hidden", false).addClass("is-open");
+        }
+
+        function closeMenu() {
+            $("body").removeClass("menu-open");
+            $btn.attr("aria-expanded", "false");
+
+            $overlay.removeClass("is-open");
+            $menu.removeClass("is-open");
+
+            // espera transição pra esconder
+            setTimeout(() => {
+                $overlay.prop("hidden", true);
+                $menu.prop("hidden", true);
+            }, 220);
+        }
+
+        $btn.on("click", function () {
+            const expanded = $btn.attr("aria-expanded") === "true";
+            expanded ? closeMenu() : openMenu();
+        });
+
+        $close.on("click", closeMenu);
+        $overlay.on("click", closeMenu);
+
+        // fecha ao clicar em qualquer link do menu
+        $menu.on("click", "a", function () {
+            closeMenu();
+        });
+
+        // ESC fecha
+        $(document).on("keydown", function (e) {
+            if (e.key === "Escape") {
+                const expanded = $btn.attr("aria-expanded") === "true";
+                if (expanded) closeMenu();
+            }
+        });
+
+        // se redimensionar e sair do mobile, fecha
+        $(window).on("resize", function () {
+            if (window.innerWidth > 900) {
+                const expanded = $btn.attr("aria-expanded") === "true";
+                if (expanded) closeMenu();
+            }
+        });
+
+        // scroll suave (pra ficar homogêneo)
+        $('a[href^="#"]').on("click", function (e) {
+            const href = $(this).attr("href");
+            if (!href || href === "#") return;
+
+            const $target = $(href);
+            if (!$target.length) return;
+
+            e.preventDefault();
+            const top = $target.offset().top - 86; // compensa header
+            $("html, body").stop(true).animate({ scrollTop: top }, 520);
+        });
+    })();
+});
