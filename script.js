@@ -9,7 +9,7 @@ $(function () {
         role: "Full Stack · PHP/MySQL · Web",
         email: "matheusmansano1@gmail.com",
         github: "https://github.com/akiramath",
-        linkedin: "https://www.linkedin.com/in/matheus-mansano-rodrigues-b04054253/",
+        linkedin: "https://www.linkedin.com/in/matheusrrodrigues/",
         whatsapp: "https://api.whatsapp.com/send/?phone=5543988080637&text=Ol%C3%A1%21+Vi+seu+portf%C3%B3lio+e+queria+conversar+sobre+um+projeto.&type=phone_number&app_absent=0",
         location: "Brasil",
         availability: "disponível",
