@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="styles.css" />
 
     <!-- jQuery -->
@@ -101,8 +102,8 @@
         aria-label="Reproduzir música de fundo"
         title="Música de fundo"
       >
-        <span class="icon-play">▶</span>
-        <span class="icon-pause">⏸</span>
+        <span class="icon-play"><i class="fa-solid fa-play"></i></span>
+        <span class="icon-pause"><i class="fa-solid fa-pause"></i></span>
       </button>
       <canvas id="heroCanvas"></canvas>
 
@@ -118,7 +119,7 @@
     <section id="sobre" class="section ink scroll-section">
       <div class="wrap">
         <h2 class="scroll-reveal" data-delay="0">Sobre</h2>
-        <p class="lead scroll-reveal" id="aboutText" data-delay="100"></p>
+        <p class="lead scroll-reveal about-lines" id="aboutText" data-delay="100"></p>
 
         <div class="meta scroll-reveal" data-delay="200">
           <div class="pill"><span id="yearsPill">2+</span> anos</div>

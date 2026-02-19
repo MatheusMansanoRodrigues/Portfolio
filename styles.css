@@ -636,6 +636,23 @@ canvas#heroCanvas {
   transform: translateY(0);
 }
 
+/* Sobre: animação linha por linha ao rolar */
+.about-lines .about-line {
+  display: block;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .5s ease, transform .5s ease;
+}
+
+.about-lines .about-line + .about-line {
+  margin-top: 0.6em;
+}
+
+.scroll-reveal.about-lines.in-view .about-line {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 header {
   transition: transform .25s ease, background .25s ease, border-color .25s ease;
 }

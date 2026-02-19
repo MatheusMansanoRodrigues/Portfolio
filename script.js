@@ -76,7 +76,17 @@ $(function () {
 
     $("#heroContact").html(`${PROFILE.location}<br><br>${PROFILE.email}`);
 
-    $("#aboutText").text(PROFILE.about);
+    // Texto Sobre: divide em linhas (sentenças) para animação linha por linha
+    (function () {
+        const $about = $("#aboutText");
+        const text = PROFILE.about;
+        const sentences = text.split(/(?<=[.!?])\s+/).filter(s => s.trim());
+        const lineDelay = 70;
+        const html = sentences.map((s, i) =>
+            `<span class="about-line" style="transition-delay: ${i * lineDelay}ms">${escapeHtml(s.trim())}</span>`
+        ).join("");
+        $about.html(html);
+    })();
 
     $("#yearsPill").text(PROFILE.years);
     $("#projectsPill").text(String(PROFILE.totalProjects));
