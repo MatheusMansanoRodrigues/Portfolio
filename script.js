@@ -8,7 +8,7 @@ $(function () {
         fullName: "Matheus Mansano Rodrigues",
         role: "Full Stack · PHP/MySQL · Web",
         email: "matheusmansano1@gmail.com",
-        github: "https://github.com/akiramath",
+        github: "https://github.com/matheusmansanorodrigues",
         linkedin: "https://www.linkedin.com/in/matheusrrodrigues/",
         whatsapp: "https://api.whatsapp.com/send/?phone=5543988080637&text=Ol%C3%A1%21+Vi+seu+portf%C3%B3lio+e+queria+conversar+sobre+um+projeto.&type=phone_number&app_absent=0",
         location: "Brasil",
@@ -36,8 +36,8 @@ $(function () {
             impact: "Demonstra domínio de WebGL e interatividade avançada no navegador.",
             stack: ["HTML", "CSS", "JavaScript", "Three.js"],
             tags: ["frontend", "3D", "webgl"],
-            demo: "https://akiramath.github.io/esfera_3d/",
-            repo: "https://github.com/akiramath/esfera_3d"
+            demo: "https://matheusmansanorodrigues.github.io/esfera_3d/",
+            repo: "https://github.com/matheusmansanorodrigues/esfera_3d"
         },
         {
             title: "Ótica Horizonte",
@@ -45,8 +45,8 @@ $(function () {
             impact: "Fortaleceu a presença digital da marca e aumentou conversões de leads.",
             stack: ["HTML", "CSS", "JavaScript"],
             tags: ["landing page", "responsive", "ui/ux"],
-            demo: "https://akiramath.github.io/otica_horizonte/",
-            repo: "https://github.com/akiramath/otica_horizonte"
+            demo: "https://matheusmansanorodrigues.github.io/otica_horizonte/",
+            repo: "https://github.com/matheusmansanorodrigues/otica_horizonte"
         },
         {
             title: "Gerenciador de Tarefas",
@@ -54,8 +54,8 @@ $(function () {
             impact: "Foco em produtividade pessoal com UX rápida e intuitiva.",
             stack: ["HTML", "CSS", "JavaScript"],
             tags: ["app", "responsive", "produtividade"],
-            demo: "https://akiramath.github.io/Projeto-Tarefa/",
-            repo: "https://github.com/akiramath/Projeto-Tarefa"
+            demo: "https://matheusmansanorodrigues.github.io/Projeto-Tarefa/",
+            repo: "https://github.com/matheusmansanorodrigues/Projeto-Tarefa"
         }
     ];
 
