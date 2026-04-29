@@ -1,220 +1,188 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Matheus Mansano Rodrigues | Full Stack</title>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Matheus Mansano | Full Stack</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet" />
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script defer src="script.js"></script>
-    <!-- Galáxia Three.js (import via CDN) -->
-    <script type="module" src="galaxy.js"></script>
-  </head>
+  <link rel="stylesheet" href="styles.css" />
 
-  <body>
-    <header>
-      <div class="navRow">
-        <!-- Botão hamburger (só aparece no mobile via CSS) -->
-        <button
-          class="hamb"
-          id="btnHamb"
-          type="button"
-          aria-label="Abrir menu"
-          aria-expanded="false"
-          aria-controls="mobileMenu"
-        >
-          <span></span><span></span><span></span>
-        </button>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <div class="scroll-progress" id="scrollProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progresso de leitura da página">
+    <span class="scroll-progress-fill" id="scrollProgressFill"></span>
+  </div>
 
-        <!-- NAV desktop -->
-        <nav class="navDesktop" aria-label="Navegação">
-          <a href="#sobre">Sobre</a>
-          <a href="#stack">Stack</a>
-          <a href="#projetos">Projetos</a>
-          <a href="#contato">Contato</a>
-        </nav>
+  <div class="grain" aria-hidden="true"></div>
 
-        <div class="cart" id="availabilityTop">disponível</div>
+  <a id="sideEmail" class="side-email mono" href="#" title="Enviar e-mail"></a>
+
+  <header class="site-header">
+    <a href="#hero" class="brand" aria-label="Início">
+      <span class="brand-mark">MM</span>
+      <span class="brand-text">Matheus Mansano</span>
+    </a>
+    <nav class="nav-main" aria-label="Principal">
+      <a href="#sobre" data-i18n="nav_about">Sobre</a>
+      <a href="#stack" data-i18n="nav_stack">Stack</a>
+      <a href="#experience" data-i18n="nav_trajectory">Trajetória</a>
+      <a href="#projetos" data-i18n="nav_projects">Projetos</a>
+      <div class="lang-switcher">
+        <button type="button" class="lang-btn" data-lang="en">EN</button>
+        <span class="lang-sep">/</span>
+        <button type="button" class="lang-btn" data-lang="pt">PT</button>
       </div>
+    </nav>
+    <button type="button" id="btnHamb" class="menu-fab" aria-expanded="false" aria-controls="menuPanel" aria-label="Abrir menu">
+      <span class="menu-fab-lines" aria-hidden="true"></span>
+    </button>
+  </header>
 
-      <!-- Overlay + Menu Mobile -->
-      <div class="overlay" id="menuOverlay" hidden></div>
-
-      <nav class="navMobile" id="mobileMenu" aria-label="Menu mobile" hidden>
-        <div class="navMobileHead">
-          <div class="navMobileTitle">Menu</div>
-          <button
-            class="closeMobile"
-            id="btnCloseMobile"
-            type="button"
-            aria-label="Fechar menu"
-          >
-            ✕
-          </button>
-        </div>
-
-        <div class="navMobileLinks">
-          <a href="#sobre">Sobre</a>
-          <a href="#stack">Stack</a>
-          <a href="#projetos">Projetos</a>
-          <a href="#contato">Contato</a>
-        </div>
-
-        <div class="navMobileFoot">
-          <a class="miniLink" href="mailto:matheusmansano1@gmail.com"
-            >matheusmansano1@gmail.com</a
-          >
-          <a
-            class="miniLink"
-            target="_blank"
-            rel="noopener"
-            href="https://github.com/matheusmansanorodrigues"
-            >GitHub</a
-          >
-          <a
-            class="miniLink"
-            target="_blank"
-            rel="noopener"
-            href="https://www.linkedin.com/in/matheusrrodrigues/"
-            >LinkedIn</a
-          >
-        </div>
+  <div id="menuOverlay" class="menu-overlay" aria-hidden="true">
+    <div class="menu-overlay-inner" id="menuPanel">
+      <div class="menu-overlay-head">
+        <p class="menu-eyebrow mono" data-i18n="menu_navigation">Navegação</p>
+        <button type="button" class="menu-close" id="menuClose" data-i18n="menu_close">Fechar</button>
+      </div>
+      <nav class="menu-overlay-nav" aria-label="Menu expandido">
+        <a href="#hero" class="panel-link" data-i18n="nav_home">Início</a>
+        <a href="#sobre" class="panel-link" data-i18n="nav_about">Sobre</a>
+        <a href="#stack" class="panel-link" data-i18n="nav_stack">Stack</a>
+        <a href="#experience" class="panel-link" data-i18n="nav_trajectory">Trajetória</a>
+        <a href="#projetos" class="panel-link" data-i18n="nav_projects">Projetos</a>
       </nav>
-    </header>
-
-    <audio id="bgMusic" loop preload="auto">
-      <source src="music.mp3" type="audio/mpeg" />
-    </audio>
-
-    <section class="hero">
-      <div id="galaxyScene" class="galaxy-bg" aria-hidden="true"></div>
-      <button
-        class="music-toggle"
-        id="btnMusic"
-        type="button"
-        aria-label="Reproduzir música de fundo"
-        title="Música de fundo"
-      >
-        <span class="icon-play"><i class="fa-solid fa-play"></i></span>
-        <span class="icon-pause"><i class="fa-solid fa-pause"></i></span>
-      </button>
-      <canvas id="heroCanvas"></canvas>
-
-      <div class="subtitle scroll-reveal" id="heroSubtitle" data-delay="200">Full Stack · PHP/MySQL · Web</div>
-
-      <div class="contact scroll-reveal" id="heroContact" data-delay="300">
-        Brasil<br /><br />
-        matheusmansano1@gmail.com
+      <div class="menu-overlay-foot">
+        <div>
+          <p class="menu-eyebrow mono" data-i18n="menu_social">Social</p>
+          <ul class="menu-socials">
+            <li><a id="navGithub" href="#" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            <li><a id="navLinkedin" href="#" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+            <li><a id="navWhatsapp" href="#" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="menu-eyebrow mono" data-i18n="menu_contact">Contato</p>
+          <a id="navEmail" class="menu-email" href="#"></a>
+        </div>
       </div>
-    </section>
+    </div>
+  </div>
 
-    <!-- SOBRE -->
-    <section id="sobre" class="section ink scroll-section">
-      <div class="wrap">
-        <h2 class="scroll-reveal" data-delay="0">Sobre</h2>
-        <p class="lead scroll-reveal about-lines" id="aboutText" data-delay="100"></p>
-
-        <div class="meta scroll-reveal" data-delay="200">
-          <div class="pill"><span id="yearsPill">2+</span> anos</div>
-          <div class="pill">
-            <span id="projectsPill">3</span> projetos públicos
+  <main>
+    <section id="hero" class="hero hero-cinematic">
+      <svg class="hero-chevron" width="376" height="111" viewBox="0 0 376 111" fill="none" aria-hidden="true">
+        <path class="hero-chevron-path" d="M1 1V39.9286L188 110V70.6822L1 1Z" stroke="currentColor" />
+        <path class="hero-chevron-path" d="M375 1V39.9286L188 110V70.6822L375 1Z" stroke="currentColor" />
+      </svg>
+      <div class="container hero-math-grid">
+        <div class="hero-math-copy">
+          <h1 class="hero-massive">
+            <span class="hero-massive-line hero-massive-accent slide-up">FULL STACK</span>
+            <span class="hero-massive-line slide-up">DEVELOPER</span>
+          </h1>
+          <p class="hero-lead hero-lead-math slide-up" id="heroLead">
+            Hi! I'm <strong id="heroNameHighlight">Matheus Mansano Rodrigues</strong> — a creative Full Stack Developer with 2+ years of experience building high-performance, scalable and responsive web solutions.
+          </p>
+          <div class="hero-cta-row slide-up">
+            <a class="btn-hero-solid" id="hireMeBtn" href="#" target="_blank" rel="noopener noreferrer" data-i18n="hero_cta">VAMOS CONVERSAR</a>
+            <a class="hero-link-gh mono" id="heroGithub" href="#" target="_blank" rel="noopener noreferrer">github →</a>
           </div>
-          <a
-            class="pill link"
-            id="githubPill"
-            href="#"
-            target="_blank"
-            rel="noopener"
-            >GitHub</a
-          >
-          <a
-            class="pill link"
-            id="linkedinPill"
-            href="#"
-            target="_blank"
-            rel="noopener"
-            >LinkedIn</a
-          >
-          <a
-            class="pill link"
-            id="whatsappPill"
-            href="#"
-            target="_blank"
-            rel="noopener"
-            >WhatsApp</a
-          >
+        </div>
+        <aside class="hero-math-stats slide-up" aria-label="Em números">
+          <div class="stat-block">
+            <span class="stat-num" id="heroYears">2+</span>
+            <span class="stat-cap" data-i18n="stat_years">Years of Experience</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-num" id="heroProjectCount">6+</span>
+            <span class="stat-cap" data-i18n="stat_projects">Completed Projects</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-num">100%</span>
+            <span class="stat-cap" data-i18n="stat_commitment">Commitment</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="sobre" class="section section-about">
+      <div class="container">
+        <header class="section-head">
+          <span class="section-index mono">01</span>
+          <div class="section-head-text">
+            <h2 class="section-title" data-i18n="nav_about">Sobre</h2>
+            <p class="section-desc" data-i18n="about_desc">Prefiro entregar o essencial bem feito do que recheio sem base.</p>
+          </div>
+        </header>
+        <div class="about-layout">
+          <blockquote class="about-pull slide-up" data-i18n="about_quote">
+            Código organizado, banco bem modelado e produto que o time consegue evoluir sem medo.
+          </blockquote>
+          <div class="about-body">
+            <p class="about-hi slide-up" data-i18n="about_hi">Oi, sou o Matheus.</p>
+            <div id="aboutTextContainer"></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- STACK -->
-    <section id="stack" class="section ink scroll-section">
-      <div class="wrap">
-        <h2 class="scroll-reveal" data-delay="0">Stack</h2>
-        <div class="grid" id="stackGrid"></div>
+    <section id="stack" class="section section-stack">
+      <div class="container">
+        <header class="section-head">
+          <span class="section-index mono">02</span>
+          <div class="section-head-text">
+            <h2 class="section-title" data-i18n="nav_stack">Stack</h2>
+            <p class="section-desc" data-i18n="stack_desc">O que uso no dia a dia para tirar ideias do papel.</p>
+          </div>
+        </header>
+        <div id="stackContainer" class="stack-groups"></div>
       </div>
     </section>
 
-    <!-- PROJETOS – Timeline -->
-    <section id="projetos" class="section ink section-projects scroll-section">
-      <div class="timeline-wrap">
-        <h2 class="timeline-title scroll-reveal" data-delay="0">Projetos</h2>
-        <div class="timeline" id="timelineProjects">
-          <!-- preenchido via JS -->
-        </div>
-        <div class="timeline-footer scroll-reveal">
-          <a class="miniLink" id="moreOnGithub" href="#" target="_blank" rel="noopener">
-            Ver mais no GitHub →
-          </a>
-        </div>
+    <section id="experience" class="section section-exp">
+      <div class="container">
+        <header class="section-head">
+          <span class="section-index mono">03</span>
+          <div class="section-head-text">
+            <h2 class="section-title" data-i18n="nav_trajectory">Trajetória</h2>
+            <p class="section-desc" data-i18n="exp_desc">Experiência em produtos web e sistemas internos.</p>
+          </div>
+        </header>
+        <div class="timeline" id="experienceContainer"></div>
       </div>
     </section>
 
-    <!-- CONTATO -->
-    <section id="contato" class="section ink scroll-section">
-      <div class="wrap">
-        <h2 class="scroll-reveal" data-delay="0">Contato</h2>
-        <p class="lead scroll-reveal" data-delay="100">
-          Se quiser conversar sobre um projeto, me chama por e-mail ou WhatsApp.
+    <section id="projetos" class="section section-projects">
+      <div class="container">
+        <header class="section-head">
+          <span class="section-index mono">04</span>
+          <div class="section-head-text">
+            <h2 class="section-title" data-i18n="nav_projects">Projetos</h2>
+            <p class="section-desc" data-i18n="projects_desc">Alguns trabalhos públicos — clique para abrir.</p>
+          </div>
+        </header>
+        <div class="projects-grid" id="projectsContainer"></div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <p class="footer-lead" data-i18n="footer_lead">Vamos conversar?</p>
+          <a id="footerEmail" class="footer-email" href="#">email@example.com</a>
+        </div>
+        <p class="footer-meta">
+          <span data-i18n="footer_made_by">Design e código por</span> <span class="footer-name">Matheus Mansano</span>
+          <span class="footer-year" id="footerYear"></span>
         </p>
-
-        <div class="contactCards">
-          <a
-            class="cCard scroll-reveal"
-            id="emailCard"
-            data-delay="0"
-            href="#"
-            target="_blank"
-            rel="noopener"
-          >
-            <div class="cTitle">E-mail</div>
-            <div class="cValue" id="emailText">matheusmansano1@gmail.com</div>
-          </a>
-          <a class="cCard scroll-reveal" id="wppCard" href="#" target="_blank" rel="noopener" data-delay="80">
-            <div class="cTitle">WhatsApp</div>
-            <div class="cValue">Enviar mensagem</div>
-          </a>
-          <a class="cCard scroll-reveal" id="liCard" href="#" target="_blank" rel="noopener" data-delay="160">
-            <div class="cTitle">LinkedIn</div>
-            <div class="cValue">Ver perfil</div>
-          </a>
-          <a class="cCard scroll-reveal" id="ghCard" href="#" target="_blank" rel="noopener" data-delay="240">
-            <div class="cTitle">GitHub</div>
-            <div class="cValue">Repositórios</div>
-          </a>
-        </div>
-
-        <div class="footNote scroll-reveal" data-delay="300">
-          © <span id="year"></span> Matheus Mansano Rodrigues
-        </div>
       </div>
-    </section>
-  </body>
+    </footer>
+  </main>
+</body>
 </html>

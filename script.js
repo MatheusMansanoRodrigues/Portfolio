@@ -1,547 +1,360 @@
 $(function () {
+    const I18N_DATA = {
+        en: {
+            nav_home: "Home",
+            nav_about: "About",
+            nav_stack: "Stack",
+            nav_trajectory: "Journey",
+            nav_projects: "Projects",
+            menu_navigation: "Navigation",
+            menu_close: "Close",
+            menu_social: "Social",
+            menu_contact: "Contact",
+            hero_cta: "LET'S TALK",
+            stat_years: "Years of Experience",
+            stat_projects: "Completed Projects",
+            stat_commitment: "Commitment",
+            about_desc: "I prefer delivering the essentials well-done than fluff without a base.",
+            about_quote: "Organized code, well-modeled database and a product the team can evolve without fear.",
+            about_hi: "Hi, I'm Matheus.",
+            stack_desc: "What I use daily to turn ideas into reality.",
+            exp_desc: "Experience in web products and internal systems.",
+            projects_desc: "Some public works — click to open.",
+            footer_lead: "Let's talk?",
+            footer_made_by: "Design and code by"
+        },
+        pt: {
+            nav_home: "Início",
+            nav_about: "Sobre",
+            nav_stack: "Stack",
+            nav_trajectory: "Trajetória",
+            nav_projects: "Projetos",
+            menu_navigation: "Navegação",
+            menu_close: "Fechar",
+            menu_social: "Social",
+            menu_contact: "Contato",
+            hero_cta: "VAMOS CONVERSAR",
+            stat_years: "Anos de Experiência",
+            stat_projects: "Projetos Concluídos",
+            stat_commitment: "Comprometimento",
+            about_desc: "Prefiro entregar o essencial bem feito do que recheio sem base.",
+            about_quote: "Código organizado, banco bem modelado e produto que o time consegue evoluir sem medo.",
+            about_hi: "Oi, sou o Matheus.",
+            stack_desc: "O que uso no dia a dia para tirar ideias do papel.",
+            exp_desc: "Experiência em produtos web e sistemas internos.",
+            projects_desc: "Alguns trabalhos públicos — clique para abrir.",
+            footer_lead: "Vamos conversar?",
+            footer_made_by: "Design e código por"
+        }
+    };
 
-    // =========================
-    // DADOS
-    // =========================
     const PROFILE = {
-        name: "Matheus Mansano",
-        fullName: "Matheus Mansano Rodrigues",
-        role: "Full Stack · PHP/MySQL · Web",
-        email: "matheusmansano1@gmail.com",
-        github: "https://github.com/matheusmansanorodrigues",
-        linkedin: "https://www.linkedin.com/in/matheusrrodrigues/",
-        whatsapp: "https://api.whatsapp.com/send/?phone=5543988080637&text=Ol%C3%A1%21+Vi+seu+portf%C3%B3lio+e+queria+conversar+sobre+um+projeto.&type=phone_number&app_absent=0",
-        location: "Brasil",
-        availability: "disponível",
-        years: "2+",
-        totalProjects: 6,
-        about:
-            "Olá a todos, obrigado por me permitirem me apresentar. Sou desenvolvedor full stack com cerca de 2 anos de experiência, " +
-            "atuando principalmente no desenvolvimento de sistemas ERP e aplicações web. Trabalho no dia a dia com PHP, jQuery, MySQL, SQL Server e integrações via APIs. " +
-            "Gosto de transformar requisitos em soluções objetivas, priorizando código claro, componentes reutilizáveis, segurança essencial (autenticação, validação e controle de requisições quando necessário) e bancos de dados bem modelados. " +
-            "Quando o projeto pede, aplico animações e recursos 3D de forma leve, sempre com foco em performance e experiência do usuário."
+        en: {
+            name: "Matheus Mansano",
+            fullName: "Matheus Mansano Rodrigues",
+            role: "Full Stack · PHP/MySQL · Web",
+            email: "matheusmansano1@gmail.com",
+            github: "https://github.com/matheusmansanorodrigues",
+            linkedin: "https://www.linkedin.com/in/matheusrrodrigues/",
+            whatsapp: "https://api.whatsapp.com/send/?phone=5543988080637&text=Hello!+I+saw+your+portfolio+and+wanted+to+talk+about+a+project.",
+            location: "Brazil",
+            years: "2+",
+            totalProjects: 6,
+            about:
+                "Hello everyone, thank you for allowing me to introduce myself. I am a full stack developer with about 2 years of experience, " +
+                "working mainly in the development of ERP systems and web applications. I work daily with PHP, jQuery, MySQL, SQL Server and integrations via APIs. " +
+                "I like to transform requirements into objective solutions, prioritizing clear code, reusable components, essential security (authentication, validation and request control when necessary) and well-modeled databases. " +
+                "When the project calls for it, I apply animations and 3D resources lightly, always focusing on performance and user experience."
+        },
+        pt: {
+            name: "Matheus Mansano",
+            fullName: "Matheus Mansano Rodrigues",
+            role: "Full Stack · PHP/MySQL · Web",
+            email: "matheusmansano1@gmail.com",
+            github: "https://github.com/matheusmansanorodrigues",
+            linkedin: "https://www.linkedin.com/in/matheusrrodrigues/",
+            whatsapp: "https://api.whatsapp.com/send/?phone=5543988080637&text=Ol%C3%A1%21+Vi+seu+portf%C3%B3lio+e+queria+conversar+sobre+um+projeto.",
+            location: "Brasil",
+            years: "2+",
+            totalProjects: 6,
+            about:
+                "Olá a todos, obrigado por me permitirem me apresentar. Sou desenvolvedor full stack com cerca de 2 anos de experiência, " +
+                "atuando principalmente no desenvolvimento de sistemas ERP e aplicações web. Trabalho no dia a dia com PHP, jQuery, MySQL, SQL Server e integrações via APIs. " +
+                "Gosto de transformar requisitos em soluções objetivas, priorizando código claro, componentes reutilizáveis, segurança essencial (autenticação, validação e controle de requisições quando necessário) e bancos de dados bem modelados. " +
+                "Quando o projeto pede, aplico animações e recursos 3D de forma leve, sempre com foco em performance e experiência do usuário."
+        }
     };
 
     const STACK = {
-        "Frontend": ["HTML", "CSS", "JavaScript", "jQuery", "Three.js"],
-        "Backend": ["PHP", "APIs REST"],
-        "Banco de Dados": ["MySQL", "SQL Server"],
-        "DevOps & Ferramentas": ["Git", "GitHub", "Docker"]
+        en: {
+            "Frontend": ["HTML", "CSS", "JavaScript", "jQuery", "Three.js"],
+            "Backend": ["PHP", "REST APIs"],
+            "Database": ["MySQL", "SQL Server"],
+            "Tools": ["Git", "GitHub", "Docker"]
+        },
+        pt: {
+            "Frontend": ["HTML", "CSS", "JavaScript", "jQuery", "Three.js"],
+            "Backend": ["PHP", "APIs REST"],
+            "Banco de Dados": ["MySQL", "SQL Server"],
+            "Ferramentas": ["Git", "GitHub", "Docker"]
+        }
     };
 
     const PROJECTS = [
         {
-            title: "Esfera 3D Interativa",
-            what: "Cena 3D imersiva com rotação, gestos e navegação em tempo real usando Three.js.",
-            impact: "Demonstra domínio de WebGL e interatividade avançada no navegador.",
+            title: "Esfera 3D",
             stack: ["HTML", "CSS", "JavaScript", "Three.js"],
-            tags: ["frontend", "3D", "webgl"],
             demo: "https://matheusmansanorodrigues.github.io/esfera_3d/",
-            repo: "https://github.com/matheusmansanorodrigues/esfera_3d"
         },
         {
             title: "Ótica Horizonte",
-            what: "Landing page moderna com dark/light mode, galeria de produtos, depoimentos e CTA via WhatsApp.",
-            impact: "Fortaleceu a presença digital da marca e aumentou conversões de leads.",
-            stack: ["HTML", "CSS", "JavaScript"],
-            tags: ["landing page", "responsive", "ui/ux"],
+            stack: ["HTML", "CSS", "JavaScript", "UI/UX"],
             demo: "https://matheusmansanorodrigues.github.io/otica_horizonte/",
-            repo: "https://github.com/matheusmansanorodrigues/otica_horizonte"
         },
         {
-            title: "Gerenciador de Tarefas",
-            what: "App de tarefas com CRUD completo, filtros, dark mode e interface minimalista.",
-            impact: "Foco em produtividade pessoal com UX rápida e intuitiva.",
+            title: "Gestor de Tarefas",
             stack: ["HTML", "CSS", "JavaScript"],
-            tags: ["app", "responsive", "produtividade"],
             demo: "https://matheusmansanorodrigues.github.io/Projeto-Tarefa/",
-            repo: "https://github.com/matheusmansanorodrigues/Projeto-Tarefa"
+        },
+        {
+            title: "O Tomo do Mestre",
+            stack: ["HTML", "CSS", "JavaScript"],
+            demo: "https://matheusmansanorodrigues.github.io/Guia_RPG/",
         }
     ];
 
-    // Mapeamento de imagens: [principal, mini] por projeto (coloque em /assets)
     const PROJECT_IMAGES = [
-        "assets/esfera/esfera_3d.webp", 
-        "assets/otica/otica_horizonte_h.webp", 
-        "assets/minhas_tarefas/minhas_tarefas_h.webp"
+        "assets/esfera_3d.webp",
+        "assets/otica_horizonte_h.webp",
+        "assets/minhas_tarefas_h.webp",
+        "assets/tomo_mestre.webp"
     ];
 
-    // =========================
-    // POPULA HERO / SOBRE / CONTATO
-    // =========================
-    document.title = `${PROFILE.name} | Full Stack`;
-
-    $("#availabilityTop").text(PROFILE.availability);
-    $("#heroSubtitle").text(PROFILE.role);
-
-    $("#heroContact").html(`${PROFILE.location}<br><br>${PROFILE.email}`);
-
-    // Texto Sobre: divide em linhas (sentenças) para animação linha por linha
-    (function () {
-        const $about = $("#aboutText");
-        const text = PROFILE.about;
-        const sentences = text.split(/(?<=[.!?])\s+/).filter(s => s.trim());
-        const lineDelay = 70;
-        const html = sentences.map((s, i) =>
-            `<span class="about-line" style="transition-delay: ${i * lineDelay}ms">${escapeHtml(s.trim())}</span>`
-        ).join("");
-        $about.html(html);
-    })();
-
-    $("#yearsPill").text(PROFILE.years);
-    $("#projectsPill").text(String(PROFILE.totalProjects));
-
-    $("#githubPill").attr("href", PROFILE.github);
-    $("#linkedinPill").attr("href", PROFILE.linkedin);
-    $("#whatsappPill").attr("href", PROFILE.whatsapp);
-
-    $("#moreOnGithub").attr("href", PROFILE.github);
-
-    $("#emailText").text(PROFILE.email);
-    $("#emailCard").attr("href", `mailto:${PROFILE.email}`);
-    $("#wppCard").attr("href", PROFILE.whatsapp);
-    $("#liCard").attr("href", PROFILE.linkedin);
-    $("#ghCard").attr("href", PROFILE.github);
-
-    $("#year").text(new Date().getFullYear());
-
-    // =========================
-    // MÚSICA DE FUNDO – som ambiente, loop infinito, pause/play
-    // =========================
-    (function () {
-        const audio = document.getElementById("bgMusic");
-        const $btn = $("#btnMusic");
-        if (!audio || !$btn.length) return;
-
-        audio.volume = 0.2;  // volume baixo para som ambiente
-        let started = false;
-
-        function playMusic() {
-            audio.play().catch(() => {});
-            started = true;
-            $btn.addClass("is-playing").attr("aria-label", "Pausar música");
-        }
-
-        function pauseMusic() {
-            audio.pause();
-            $btn.removeClass("is-playing").attr("aria-label", "Reproduzir música");
-        }
-
-        function toggleMusic() {
-            if (!started) {
-                playMusic();
-            } else if (audio.paused) {
-                playMusic();
-            } else {
-                pauseMusic();
+    const EXPERIENCES = {
+        en: [
+            {
+                company: "Full Stack Developer",
+                role: "MSE Engenharia",
+                date: "Nov 2023 - Present"
+            },
+            {
+                company: "Full Stack Developer",
+                role: "Freelancer / Self-employed",
+                date: "Present"
             }
-        }
-
-        $btn.on("click", toggleMusic);
-
-        // Tenta autoplay ao carregar (navegadores podem bloquear)
-        audio.play().then(() => {
-            started = true;
-            $btn.addClass("is-playing").attr("aria-label", "Pausar música");
-        }).catch(() => {});
-
-        // Se autoplay bloqueado, inicia na primeira interação do usuário
-        const startOnInteraction = function () {
-            if (!started) playMusic();
-            document.removeEventListener("click", startOnInteraction);
-            document.removeEventListener("touchstart", startOnInteraction);
-            document.removeEventListener("keydown", startOnInteraction);
-        };
-        document.addEventListener("click", startOnInteraction, { once: true });
-        document.addEventListener("touchstart", startOnInteraction, { once: true });
-        document.addEventListener("keydown", startOnInteraction, { once: true });
-    })();
-
-    // Envolve palavras dos títulos em spans para animação escalonada
-    (function () {
-        $("h2.scroll-reveal").each(function () {
-            const $h = $(this);
-            const text = $h.text();
-            const words = text.split(/\s+/);
-            const html = words.map((w, i) =>
-                `<span class="word" style="transition-delay: ${i * 50}ms">${escapeHtml(w)}</span>`
-            ).join(" ");
-            $h.html(html);
-        });
-    })();
-
-    // =========================
-    // STACK (cards)
-    // =========================
-    const $stackGrid = $("#stackGrid");
-    let stackIndex = 0;
-    Object.entries(STACK).forEach(([area, items]) => {
-        const delay = stackIndex * 60;
-        stackIndex++;
-        const $card = $(`
-        <div class="stackCard">
-          <h3>${escapeHtml(area)}</h3>
-          <div class="stackList"></div>
-        </div>
-      `);
-        const $list = $card.find(".stackList");
-        items.forEach(s => $list.append(`<span class="stackTag">${escapeHtml(s)}</span>`));
-        $card.addClass("scroll-reveal").attr("data-delay", delay);
-        $stackGrid.append($card);
-    });
-
-    // =========================
-    // PROJETOS – Timeline
-    // =========================
-    const $timeline = $("#timelineProjects");
-    const years = ["2026", "2026", "2023"];
-
-    PROJECTS.forEach((p, i) => {
-        const imgs = PROJECT_IMAGES[i];
-        const img = Array.isArray(imgs) ? (imgs[0] || "") : (imgs || "");
-        const tagsHtml = (p.tags || []).map(t => `<span>${escapeHtml(t)}</span>`).join("");
-        const stackText = (p.stack || []).join(" · ");
-        const year = years[i] || String(new Date().getFullYear());
-        const side = i % 2 === 0 ? "left" : "right";
-
-        const $item = $(`
-        <article class="timeline-item scroll-reveal" data-side="${side}" data-delay="${i * 80}">
-          <div class="timeline-node"></div>
-          <div class="timeline-card">
-            <div class="timeline-card-img">
-              <img src="${escapeAttr(img)}" alt="${escapeAttr(p.title)}" />
-            </div>
-            <div class="timeline-card-body">
-              <span class="timeline-year">${escapeHtml(year)}</span>
-              <h3 class="timeline-card-title">${escapeHtml(p.title)}</h3>
-              <p class="timeline-card-desc">${escapeHtml(p.what)}</p>
-              <div class="timeline-card-stack">${escapeHtml(stackText)}</div>
-              <div class="timeline-card-tags">${tagsHtml}</div>
-              <div class="timeline-card-links">
-                <a href="${escapeAttr(p.demo)}" target="_blank" rel="noopener">Demo</a>
-                <a href="${escapeAttr(p.repo)}" target="_blank" rel="noopener">Código</a>
-              </div>
-            </div>
-          </div>
-        </article>
-      `);
-
-        $timeline.append($item);
-    });
-
-    // =========================
-    // HERO: partículas no título (canvas) - versão leve
-    // =========================
-    const canvas = document.getElementById("heroCanvas");
-    const ctx = canvas.getContext("2d", { alpha: true });
-
-    const particleState = {
-        particles: [],
-        mouse: { x: -9999, y: -9999, active: false },
-        rafId: null,
-        resizeTimer: null
+        ],
+        pt: [
+            {
+                company: "Desenvolvedor Full Stack",
+                role: "MSE Engenharia",
+                date: "Nov 2023 - Presente"
+            },
+            {
+                company: "Desenvolvedor Full Stack",
+                role: "Freelancer / Autônomo",
+                date: "Presente"
+            }
+        ]
     };
 
-    const pcfg = {
-        text: "PORTFÓLIO",
-        // text: "MATHEUS MANSANO",
+    let currentLang = localStorage.getItem("portfolio_lang") || "en";
 
-        fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
+    function updateLanguage() {
+        const lang = currentLang;
+        const profile = PROFILE[lang];
+        const i18n = I18N_DATA[lang];
 
-        gap: 6,            // mais denso (mais bonito) – se pesar, aumente pra 6
-        radius: 105,       // área de repulsão maior
-        strength: 3.4,     // força maior
-        returnForce: 0.06,
-        friction: 0.86,
-        size: 1.5,
-        maxDpr: 1.75,
-
-        // agora o foco é ficar grande
-        maxFont: 210,      // maior
-        minFont: 90,       // mínimo bem alto
-        paddingX: 18       // menos respiro lateral para caber maior
-    };
-
-
-    function adaptiveGap(w) {
-        if (w < 420) return 9;
-        if (w < 700) return 7;
-        if (w < 980) return 6;
-        return 6;
-    }
-
-    function resizeCanvas() {
-        const cssW = canvas.clientWidth;
-        const cssH = canvas.clientHeight;
-        const dpr = Math.max(1, Math.min(pcfg.maxDpr, window.devicePixelRatio || 1));
-        canvas.width = Math.floor(cssW * dpr);
-        canvas.height = Math.floor(cssH * dpr);
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-
-    function buildParticles() {
-        particleState.particles = [];
-
-        const w = canvas.clientWidth;
-        const h = canvas.clientHeight;
-
-        // mobile: ajustes para o título caber
-        const minFont = w < 380 ? 48 : (w < 480 ? 58 : (w < 600 ? 72 : pcfg.minFont));
-        const pad = w < 480 ? 24 : (w < 600 ? 20 : pcfg.paddingX);
-        pcfg.gap = (w < 380) ? 8 : (w < 520 ? 7 : (w < 900 ? 6 : 5));
-
-        const off = document.createElement("canvas");
-        off.width = w;
-        off.height = h;
-        const octx = off.getContext("2d");
-
-        octx.clearRect(0, 0, w, h);
-        octx.fillStyle = "#fff";
-        octx.textAlign = "center";
-        octx.textBaseline = "middle";
-
-        const maxWidthAllowed = w - (pad * 2);
-
-        // auto-fit: aumenta bastante e só reduz se estourar
-        const maxForWidth = w < 600 ? w * 0.32 : w * 0.26;
-        let fontSize = Math.round(Math.min(pcfg.maxFont, maxForWidth));
-        fontSize = Math.max(fontSize, minFont);
-
-        function textWidth(fs) {
-            octx.font = `900 ${fs}px ${pcfg.fontFamily}`;
-            return octx.measureText(pcfg.text).width;
-        }
-
-        while (fontSize > minFont && textWidth(fontSize) > maxWidthAllowed) {
-            fontSize -= 2;
-        }
-
-        octx.font = `900 ${fontSize}px ${pcfg.fontFamily}`;
-        octx.fillText(pcfg.text, w / 2, h / 2);
-
-        const img = octx.getImageData(0, 0, w, h).data;
-
-        for (let y = 0; y < h; y += pcfg.gap) {
-            for (let x = 0; x < w; x += pcfg.gap) {
-                const a = img[(y * w + x) * 4 + 3];
-                if (a > 24) particleState.particles.push({ x, y, vx: 0, vy: 0, ox: x, oy: y });
+        // Update static elements with data-i18n
+        $("[data-i18n]").each(function () {
+            const key = $(this).data("i18n");
+            if (i18n[key]) {
+                $(this).text(i18n[key]);
             }
-        }
-
-        // fallback performance
-        if (particleState.particles.length > 16000) {
-            pcfg.gap += 2;
-            buildParticles();
-        }
-    }
-
-
-
-    function tick() {
-        const w = canvas.clientWidth;
-        const h = canvas.clientHeight;
-
-        ctx.clearRect(0, 0, w, h);
-        ctx.fillStyle = "rgba(245,245,245,0.9)";
-
-        const m = particleState.mouse;
-        const r = pcfg.radius;
-
-        for (const p of particleState.particles) {
-            const dx = p.x - m.x;
-            const dy = p.y - m.y;
-            const dist = Math.hypot(dx, dy);
-
-            if (m.active && dist < r) {
-                const t = 1 - (dist / r);
-                const force = pcfg.strength * (t * t);
-                const nx = dx / (dist || 1);
-                const ny = dy / (dist || 1);
-                p.vx += nx * force;
-                p.vy += ny * force;
-            }
-
-            p.vx += (p.ox - p.x) * pcfg.returnForce;
-            p.vy += (p.oy - p.y) * pcfg.returnForce;
-
-            p.vx *= pcfg.friction;
-            p.vy *= pcfg.friction;
-
-            p.x += p.vx;
-            p.y += p.vy;
-
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, pcfg.size, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        particleState.rafId = requestAnimationFrame(tick);
-    }
-
-    function setMouseFromEvent(e) {
-        const rect = canvas.getBoundingClientRect();
-        particleState.mouse.x = e.clientX - rect.left;
-        particleState.mouse.y = e.clientY - rect.top;
-        particleState.mouse.active = true;
-    }
-
-    $("#heroCanvas").on("mousemove", function (e) {
-        setMouseFromEvent(e.originalEvent);
-    }).on("mouseenter", function () {
-        particleState.mouse.active = true;
-    }).on("mouseleave", function () {
-        particleState.mouse.active = false;
-        particleState.mouse.x = -9999; particleState.mouse.y = -9999;
-    });
-
-    $("#heroCanvas").on("touchstart touchmove", function (e) {
-        const t = e.originalEvent.touches && e.originalEvent.touches[0];
-        if (t) setMouseFromEvent(t);
-    }).on("touchend touchcancel", function () {
-        particleState.mouse.active = false;
-        particleState.mouse.x = -9999; particleState.mouse.y = -9999;
-    });
-
-    $(window).on("resize", function () {
-        clearTimeout(particleState.resizeTimer);
-        particleState.resizeTimer = setTimeout(function () {
-            resizeCanvas();
-            buildParticles();
-        }, 120);
-    });
-
-    // init canvas
-    resizeCanvas();
-    buildParticles();
-    tick();
-
-    // =========================
-    // helpers
-    // =========================
-    function escapeHtml(s) {
-        return String(s ?? "")
-            .replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;")
-            .replaceAll('"', "&quot;")
-            .replaceAll("'", "&#039;");
-    }
-    function escapeAttr(s) { return escapeHtml(s); }
-
-    // ===============================
-    // SCROLL REVEAL – entra/sai revertendo (como voltar no tempo)
-    // ===============================
-    (function () {
-        const $targets = $(".scroll-reveal");
-        const rootMargin = "0px 0px -80px 0px"; // trigger um pouco antes de entrar
-
-        const io = new IntersectionObserver((entries) => {
-            entries.forEach((e) => {
-                const $el = $(e.target);
-                const delay = parseInt($el.data("delay") || "0", 10);
-                if (e.isIntersecting) {
-                    $el.css("transition-delay", delay + "ms");
-                    $el.addClass("in-view");
-                } else {
-                    $el.removeClass("in-view");
-                    $el.css("transition-delay", "0ms");
-                }
-            });
-        }, { threshold: [0, 0.05, 0.1, 0.2, 0.3], rootMargin });
-
-        $targets.each(function () {
-            io.observe(this);
         });
-    })();
 
-    // header: muda cor ao chegar na seção sobre (is-over-ink)
-    (function () {
-        const $header = $("header");
-        const $sobre = $("#sobre");
+        // Update specific text nodes and attributes
+        document.title = `Portfolio — ${profile.name}`;
+        $("html").attr("lang", lang === "en" ? "en" : "pt-BR");
 
-        function checkHeaderOverSobre() {
-            if (!$sobre.length) return;
-            const rect = $sobre[0].getBoundingClientRect();
-            const headerH = $header.outerHeight() || 90;
-            const isOver = rect.top <= headerH;
-            $header.toggleClass("is-over-ink", isOver);
+        // Accessibility and Titles
+        $(".brand").attr("aria-label", lang === "en" ? "Home" : "Início");
+        $("#sideEmail").attr("title", lang === "en" ? "Send email" : "Enviar e-mail");
+        $("#btnHamb").attr("aria-label", lang === "en" ? "Open menu" : "Abrir menu");
+        $("#menuClose").attr("aria-label", lang === "en" ? "Close menu" : "Fechar menu");
+        $(".hero-massive").attr("aria-label", lang === "en" ? "Full Stack Developer" : "Desenvolvedor Full Stack");
+
+        $("#navGithub").attr("href", profile.github);
+        $("#navLinkedin").attr("href", profile.linkedin);
+        $("#navWhatsapp").attr("href", profile.whatsapp);
+        $("#navEmail").text(profile.email).attr("href", `mailto:${profile.email}`);
+        $("#footerEmail").text(profile.email).attr("href", `mailto:${profile.email}`);
+        $("#sideEmail").text(profile.email).attr("href", `mailto:${profile.email}`);
+        $("#footerYear").text(new Date().getFullYear());
+
+        $("#hireMeBtn").attr("href", profile.whatsapp);
+        $("#heroGithub").attr("href", profile.github);
+        $("#heroProjectCount").text(profile.totalProjects + "+");
+        $("#heroYears").text(profile.years);
+        $("#heroNameHighlight").text(profile.fullName);
+
+        // Hero Lead Text (Special case)
+        if (lang === "en") {
+            $("#heroLead").html(`Hi! I'm <strong id="heroNameHighlight">${profile.fullName}</strong> — a creative Full Stack Developer with ${profile.years} of experience building high-performance, scalable and responsive web solutions.`);
+        } else {
+            $("#heroLead").html(`Olá! Eu sou <strong id="heroNameHighlight">${profile.fullName}</strong> — um Desenvolvedor Full Stack criativo com ${profile.years} de experiência construindo soluções web de alta performance, escaláveis e responsivas.`);
         }
 
-        $(window).on("scroll", checkHeaderOverSobre);
-        checkHeaderOverSobre();
-    })();
+        // About Sentences
+        const $aboutContainer = $("#aboutTextContainer");
+        $aboutContainer.empty();
+        const sentencas = profile.about.split(/(?<=[.!?])\s+/).filter((s) => s.trim());
+        sentencas.forEach((s, i) => {
+            $aboutContainer.append(`<p class="slide-up in-view" style="transition-delay: ${i * 90}ms">${s}</p>`);
+        });
 
-    // ===============================
-    // MENU HAMBURGER (mobile) - jQuery
-    // ===============================
-    (function () {
-        const $btn = $("#btnHamb");
-        const $menu = $("#mobileMenu");
-        const $overlay = $("#menuOverlay");
-        const $close = $("#btnCloseMobile");
+        // Stack
+        const $stackContainer = $("#stackContainer");
+        $stackContainer.empty();
+        Object.entries(STACK[lang]).forEach(([categoria, items]) => {
+            $stackContainer.append(`
+                <div class="stack-group slide-up in-view">
+                    <h3 class="stack-label mono">${categoria}</h3>
+                    <div class="stack-pills">
+                        ${items.map((item) => `<span class="stack-pill">${item}</span>`).join("")}
+                    </div>
+                </div>
+            `);
+        });
 
-        function openMenu() {
+        // Experiences
+        const $expContainer = $("#experienceContainer");
+        $expContainer.empty();
+        EXPERIENCES[lang].forEach((exp, i) => {
+            $expContainer.append(`
+                <div class="timeline-item slide-up in-view" style="transition-delay: ${i * 120}ms">
+                    <div class="timeline-dot" aria-hidden="true"></div>
+                    <p class="timeline-company">${exp.company}</p>
+                    <p class="timeline-role">${exp.role}</p>
+                    <p class="timeline-date">${exp.date}</p>
+                </div>
+            `);
+        });
+
+        // Projects
+        const $projContainer = $("#projectsContainer");
+        $projContainer.empty();
+        const arrowSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>`;
+        PROJECTS.forEach((proj, i) => {
+            const num = String(i + 1).padStart(2, "0");
+            const imgUrl = PROJECT_IMAGES[i] || "";
+            const tags = proj.stack.map((t) => `<span>${t}</span>`).join("");
+            $projContainer.append(`
+                <article class="project-card slide-up in-view" style="transition-delay: ${i * 90}ms">
+                    <a class="project-card-link" href="${proj.demo}" target="_blank" rel="noopener noreferrer">
+                        <div class="project-card-media">
+                            <img src="${imgUrl}" alt="" loading="lazy" onerror="var p=this.parentElement;this.remove();p.classList.add('is-empty');" />
+                        </div>
+                        <div class="project-card-body">
+                            <span class="project-card-num mono">/${num}</span>
+                            <h3 class="project-card-title">
+                                <span>${proj.title}</span>
+                                ${arrowSvg}
+                            </h3>
+                            <div class="project-card-tags">${tags}</div>
+                        </div>
+                    </a>
+                </article>
+            `);
+        });
+
+        // Update active button state
+        $(".lang-btn").removeClass("is-active");
+        $(`.lang-btn[data-lang="${lang}"]`).addClass("is-active");
+    }
+
+    // Language Switcher Event
+    $(".lang-btn").on("click", function () {
+        const newLang = $(this).data("lang");
+        if (newLang !== currentLang) {
+            currentLang = newLang;
+            localStorage.setItem("portfolio_lang", currentLang);
+            updateLanguage();
+        }
+    });
+
+    // Initial Render
+    updateLanguage();
+
+    // Navigation and UI interactions
+    const $btn = $("#btnHamb");
+    const $overlay = $("#menuOverlay");
+    const $close = $("#menuClose");
+
+    function setMenuOpen(open) {
+        if (open) {
+            $btn.addClass("is-active").attr("aria-expanded", "true");
+            $overlay.addClass("is-open").attr("aria-hidden", "false");
             $("body").addClass("menu-open");
-            $btn.attr("aria-expanded", "true");
-
-            $overlay.prop("hidden", false).addClass("is-open");
-            $menu.prop("hidden", false).addClass("is-open");
-        }
-
-        function closeMenu() {
+        } else {
+            $btn.removeClass("is-active").attr("aria-expanded", "false");
+            $overlay.removeClass("is-open").attr("aria-hidden", "true");
             $("body").removeClass("menu-open");
-            $btn.attr("aria-expanded", "false");
-
-            $overlay.removeClass("is-open");
-            $menu.removeClass("is-open");
-
-            // espera transição pra esconder
-            setTimeout(() => {
-                $overlay.prop("hidden", true);
-                $menu.prop("hidden", true);
-            }, 220);
         }
+    }
 
-        $btn.on("click", function () {
-            const expanded = $btn.attr("aria-expanded") === "true";
-            expanded ? closeMenu() : openMenu();
-        });
+    function toggleMenu() {
+        setMenuOpen(!$overlay.hasClass("is-open"));
+    }
 
-        $close.on("click", closeMenu);
-        $overlay.on("click", closeMenu);
+    $btn.on("click", toggleMenu);
+    $close.on("click", () => setMenuOpen(false));
 
-        // fecha ao clicar em qualquer link do menu
-        $menu.on("click", "a", function () {
-            closeMenu();
-        });
+    $overlay.on("click", function (e) {
+        if (e.target === this) setMenuOpen(false);
+    });
 
-        // ESC fecha
-        $(document).on("keydown", function (e) {
-            if (e.key === "Escape") {
-                const expanded = $btn.attr("aria-expanded") === "true";
-                if (expanded) closeMenu();
-            }
-        });
+    $(document).on("keydown", function (e) {
+        if (e.key === "Escape" && $overlay.hasClass("is-open")) setMenuOpen(false);
+    });
 
-        // se redimensionar e sair do mobile, fecha
-        $(window).on("resize", function () {
-            if (window.innerWidth > 900) {
-                const expanded = $btn.attr("aria-expanded") === "true";
-                if (expanded) closeMenu();
-            }
-        });
+    $(".panel-link").on("click", () => setMenuOpen(false));
 
-        // scroll suave (pra ficar homogêneo)
-        $('a[href^="#"]').on("click", function (e) {
-            const href = $(this).attr("href");
-            if (!href || href === "#") return;
+    function headerOffsetPx() {
+        const h = document.querySelector(".site-header");
+        return (h ? h.offsetHeight : 68) + 3;
+    }
 
-            const $target = $(href);
-            if (!$target.length) return;
+    function updateScrollProgress() {
+        const $w = $(window);
+        const st = $w.scrollTop();
+        const dh = $(document).height() - $w.height();
+        const pct = dh > 0 ? Math.min(100, Math.max(0, (st / dh) * 100)) : 0;
+        $("#scrollProgressFill").css("width", pct + "%");
+        $("#scrollProgress").attr("aria-valuenow", Math.round(pct));
+    }
+    $(window).on("scroll resize", updateScrollProgress);
+    updateScrollProgress();
 
-            e.preventDefault();
-            const top = $target.offset().top - 86; // compensa header
-            $("html, body").stop(true).animate({ scrollTop: top }, 520);
-        });
-    })();
+    $('a[href^="#"]').on("click", function (e) {
+        const href = $(this).attr("href");
+        if (!href || href === "#") return;
+        const $target = $(href);
+        if (!$target.length) return;
+        e.preventDefault();
+        const top = $target.offset().top - headerOffsetPx();
+        $("html, body").stop(true).animate({ scrollTop: top }, 550);
+    });
+
+    const revealEls = document.querySelectorAll(".slide-up");
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) entry.target.classList.add("in-view");
+                else entry.target.classList.remove("in-view");
+            });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    revealEls.forEach((el) => observer.observe(el));
 });
