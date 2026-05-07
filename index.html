@@ -1,188 +1,406 @@
-<!doctype html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Matheus Mansano | Full Stack</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet" />
-
-  <link rel="stylesheet" href="styles.css" />
-
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script defer src="script.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matheus Mansano — Dev</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
+
 <body>
-  <div class="scroll-progress" id="scrollProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progresso de leitura da página">
-    <span class="scroll-progress-fill" id="scrollProgressFill"></span>
-  </div>
 
-  <div class="grain" aria-hidden="true"></div>
+    <!-- CURSOR -->
+    <div id="cur"></div>
 
-  <a id="sideEmail" class="side-email mono" href="#" title="Enviar e-mail"></a>
-
-  <header class="site-header">
-    <a href="#hero" class="brand" aria-label="Início">
-      <span class="brand-mark">MM</span>
-      <span class="brand-text">Matheus Mansano</span>
-    </a>
-    <nav class="nav-main" aria-label="Principal">
-      <a href="#sobre" data-i18n="nav_about">Sobre</a>
-      <a href="#stack" data-i18n="nav_stack">Stack</a>
-      <a href="#experience" data-i18n="nav_trajectory">Trajetória</a>
-      <a href="#projetos" data-i18n="nav_projects">Projetos</a>
-      <div class="lang-switcher">
-        <button type="button" class="lang-btn" data-lang="en">EN</button>
-        <span class="lang-sep">/</span>
-        <button type="button" class="lang-btn" data-lang="pt">PT</button>
-      </div>
-    </nav>
-    <button type="button" id="btnHamb" class="menu-fab" aria-expanded="false" aria-controls="menuPanel" aria-label="Abrir menu">
-      <span class="menu-fab-lines" aria-hidden="true"></span>
+    <!-- THEME TOGGLE -->
+    <button id="theme-toggle" aria-label="Alternar tema" title="Alternar tema">
+        <i id="theme-icon" class="fa-solid fa-sun"></i>
     </button>
-  </header>
 
-  <div id="menuOverlay" class="menu-overlay" aria-hidden="true">
-    <div class="menu-overlay-inner" id="menuPanel">
-      <div class="menu-overlay-head">
-        <p class="menu-eyebrow mono" data-i18n="menu_navigation">Navegação</p>
-        <button type="button" class="menu-close" id="menuClose" data-i18n="menu_close">Fechar</button>
-      </div>
-      <nav class="menu-overlay-nav" aria-label="Menu expandido">
-        <a href="#hero" class="panel-link" data-i18n="nav_home">Início</a>
-        <a href="#sobre" class="panel-link" data-i18n="nav_about">Sobre</a>
-        <a href="#stack" class="panel-link" data-i18n="nav_stack">Stack</a>
-        <a href="#experience" class="panel-link" data-i18n="nav_trajectory">Trajetória</a>
-        <a href="#projetos" class="panel-link" data-i18n="nav_projects">Projetos</a>
-      </nav>
-      <div class="menu-overlay-foot">
-        <div>
-          <p class="menu-eyebrow mono" data-i18n="menu_social">Social</p>
-          <ul class="menu-socials">
-            <li><a id="navGithub" href="#" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-            <li><a id="navLinkedin" href="#" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-            <li><a id="navWhatsapp" href="#" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
-          </ul>
+    <!-- ══════════════════════════════════════════════════════════
+        HERO
+    ══════════════════════════════════════════════════════════ -->
+    <section id="hero">
+        <div id="hero-left">
+            <div id="hero-tag">disponível para projetos</div>
+            <h1>
+                Full-Stack<br>
+                <em>Developer.</em>
+            </h1>
+            <p id="hero-desc">
+                Crio interfaces modernas e intuitivas, focadas em experiência, performance e usabilidade.
+                Também desenvolvo sistemas robustos e bem estruturados, pensados para funcionar com estabilidade e eficiência.
+            </p>
+            <div id="hero-actions">
+                <button class="btn-primary"
+                    onclick="document.getElementById('bento').scrollIntoView({behavior:'smooth'})">Ver meu
+                    trabalho</button>
+                <button class="btn-ghost"
+                    onclick="document.getElementById('footer').scrollIntoView({behavior:'smooth'})">Entrar em
+                    contato</button>
+            </div>
         </div>
-        <div>
-          <p class="menu-eyebrow mono" data-i18n="menu_contact">Contato</p>
-          <a id="navEmail" class="menu-email" href="#"></a>
+
+        <div id="hero-right">
+            <div class="hero-card-stack" id="card-stack">
+
+                <!-- Card 1 — Esfera 3D -->
+                <div class="hcs-card">
+                    <img class="hcs-gif" src="assets/esfera_3d.webp" alt="Esfera 3D">
+                    <div class="hcs-body">
+                        <div class="hcs-label">VISÃO COMPUTACIONAL</div>
+                        <div class="hcs-title">Esfera 3D</div>
+                        <div class="hcs-sub">Controle por gestos com a mão</div>
+                    </div>
+                    <a class="hcs-link" href="https://matheusmansanorodrigues.github.io/esfera_3d/" target="_blank" rel="noopener" title="Ver projeto">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+
+                <!-- Card 2 — Ótica Horizonte -->
+                <div class="hcs-card">
+                    <img class="hcs-gif" src="assets/otica_horizonte_h.webp" alt="Ótica Horizonte">
+                    <div class="hcs-body">
+                        <div class="hcs-label">LANDING PAGE</div>
+                        <div class="hcs-title">Ótica Horizonte</div>
+                        <div class="hcs-sub">Site completo para ótica em Florianópolis</div>
+                    </div>
+                    <a class="hcs-link" href="https://matheusmansanorodrigues.github.io/otica_horizonte/" target="_blank" rel="noopener" title="Ver projeto">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+
+                <!-- Card 3 — Gestor de Tarefas -->
+                <div class="hcs-card">
+                    <img class="hcs-gif" src="assets/minhas_tarefas_h.webp" alt="Gestor de Tarefas">
+                    <div class="hcs-body">
+                        <div class="hcs-label">PRODUTIVIDADE</div>
+                        <div class="hcs-title">Gestor de Tarefas</div>
+                        <div class="hcs-sub">CRUD com filtro e pesquisa</div>
+                    </div>
+                    <a class="hcs-link" href="https://matheusmansanorodrigues.github.io/Projeto-Tarefa/" target="_blank" rel="noopener" title="Ver projeto">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+
+                <!-- Card 4 — Tomo do Mestre -->
+                <div class="hcs-card">
+                    <img class="hcs-gif" src="assets/tomo_mestre.webp" alt="Tomo do Mestre">
+                    <div class="hcs-body">
+                        <div class="hcs-label">RPG · GUIA INTERATIVO</div>
+                        <div class="hcs-title">Tomo do Mestre</div>
+                        <div class="hcs-sub">Guia medieval multi-sistema de RPG</div>
+                    </div>
+                    <a class="hcs-link" href="https://matheusmansanorodrigues.github.io/Guia_RPG/" target="_blank" rel="noopener" title="Ver projeto">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+
+                <div class="stack-hint">
+                    <i class="fa-solid fa-hand-pointer"></i> arraste para explorar
+                </div>
+            </div>
         </div>
-      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+        MARQUEE
+    ══════════════════════════════════════════════════════════ -->
+    <div id="marquee-wrap">
+        <div class="marquee-track">
+            <span>Full-Stack Dev</span><span class="accent">✦</span>
+            <span>PHP</span><span class="accent">✦</span>
+            <span>JavaScript</span><span class="accent">✦</span>
+            <span>MySQL</span><span class="accent">✦</span>
+            <span>UI Design</span><span class="accent">✦</span>
+            <span>2 Anos de XP</span><span class="accent">✦</span>
+            <span>6 Projetos</span><span class="accent">✦</span>
+            <span>Disponível</span><span class="accent">✦</span>
+            <span>Full-Stack Dev</span><span class="accent">✦</span>
+            <span>PHP</span><span class="accent">✦</span>
+            <span>JavaScript</span><span class="accent">✦</span>
+            <span>MySQL</span><span class="accent">✦</span>
+            <span>UI Design</span><span class="accent">✦</span>
+            <span>2 Anos de XP</span><span class="accent">✦</span>
+            <span>6 Projetos</span><span class="accent">✦</span>
+            <span>Disponível</span><span class="accent">✦</span>
+        </div>
     </div>
-  </div>
 
-  <main>
-    <section id="hero" class="hero hero-cinematic">
-      <svg class="hero-chevron" width="376" height="111" viewBox="0 0 376 111" fill="none" aria-hidden="true">
-        <path class="hero-chevron-path" d="M1 1V39.9286L188 110V70.6822L1 1Z" stroke="currentColor" />
-        <path class="hero-chevron-path" d="M375 1V39.9286L188 110V70.6822L375 1Z" stroke="currentColor" />
-      </svg>
-      <div class="container hero-math-grid">
-        <div class="hero-math-copy">
-          <h1 class="hero-massive">
-            <span class="hero-massive-line hero-massive-accent slide-up">FULL STACK</span>
-            <span class="hero-massive-line slide-up">DEVELOPER</span>
-          </h1>
-          <p class="hero-lead hero-lead-math slide-up" id="heroLead">
-            Hi! I'm <strong id="heroNameHighlight">Matheus Mansano Rodrigues</strong> — a creative Full Stack Developer with 2+ years of experience building high-performance, scalable and responsive web solutions.
-          </p>
-          <div class="hero-cta-row slide-up">
-            <a class="btn-hero-solid" id="hireMeBtn" href="#" target="_blank" rel="noopener noreferrer" data-i18n="hero_cta">VAMOS CONVERSAR</a>
-            <a class="hero-link-gh mono" id="heroGithub" href="#" target="_blank" rel="noopener noreferrer">github →</a>
-          </div>
+    <!-- ══════════════════════════════════════════════════════════
+        BENTO GRID
+    ══════════════════════════════════════════════════════════ -->
+    <div id="bento">
+
+        <!-- ABOUT — large -->
+        <div class="bento-card bc-about sr" data-reveal="about">
+            <div class="bc-pad" style="height:100%;display:flex;flex-direction:column;justify-content:space-between">
+                <div>
+                    <div class="bc-eyebrow">01 — Sobre mim</div>
+                    <h2 class="bc-h2">Matheus<br>Mansano<br>Rodrigues</h2>
+                    <p class="bc-body">
+                        26 anos. Full-Stack Developer há 2 anos.
+                        Gosto de resolver problemas reais com código limpo e interfaces que fazem sentido.
+                        Cada projeto é uma oportunidade de criar algo que as pessoas realmente usam.
+                    </p>
+                </div>
+            </div>
         </div>
-        <aside class="hero-math-stats slide-up" aria-label="Em números">
-          <div class="stat-block">
-            <span class="stat-num" id="heroYears">2+</span>
-            <span class="stat-cap" data-i18n="stat_years">Years of Experience</span>
-          </div>
-          <div class="stat-block">
-            <span class="stat-num" id="heroProjectCount">6+</span>
-            <span class="stat-cap" data-i18n="stat_projects">Completed Projects</span>
-          </div>
-          <div class="stat-block">
-            <span class="stat-num">100%</span>
-            <span class="stat-cap" data-i18n="stat_commitment">Commitment</span>
-          </div>
-        </aside>
-      </div>
-    </section>
 
-    <section id="sobre" class="section section-about">
-      <div class="container">
-        <header class="section-head">
-          <span class="section-index mono">01</span>
-          <div class="section-head-text">
-            <h2 class="section-title" data-i18n="nav_about">Sobre</h2>
-            <p class="section-desc" data-i18n="about_desc">Prefiro entregar o essencial bem feito do que recheio sem base.</p>
-          </div>
-        </header>
-        <div class="about-layout">
-          <blockquote class="about-pull slide-up" data-i18n="about_quote">
-            Código organizado, banco bem modelado e produto que o time consegue evoluir sem medo.
-          </blockquote>
-          <div class="about-body">
-            <p class="about-hi slide-up" data-i18n="about_hi">Oi, sou o Matheus.</p>
-            <div id="aboutTextContainer"></div>
-          </div>
+        <!-- GIF 1 — coding vibes -->
+        <div class="bento-card bc-gif1 sr" style="transition-delay:.1s">
+            <div class="bc-gif-wrap">
+                <img src="assets/eu.png" alt="coding gif">
+                <div class="bc-gif-label">// while(true) { code(); }</div>
+            </div>
         </div>
-      </div>
-    </section>
 
-    <section id="stack" class="section section-stack">
-      <div class="container">
-        <header class="section-head">
-          <span class="section-index mono">02</span>
-          <div class="section-head-text">
-            <h2 class="section-title" data-i18n="nav_stack">Stack</h2>
-            <p class="section-desc" data-i18n="stack_desc">O que uso no dia a dia para tirar ideias do papel.</p>
-          </div>
-        </header>
-        <div id="stackContainer" class="stack-groups"></div>
-      </div>
-    </section>
-
-    <section id="experience" class="section section-exp">
-      <div class="container">
-        <header class="section-head">
-          <span class="section-index mono">03</span>
-          <div class="section-head-text">
-            <h2 class="section-title" data-i18n="nav_trajectory">Trajetória</h2>
-            <p class="section-desc" data-i18n="exp_desc">Experiência em produtos web e sistemas internos.</p>
-          </div>
-        </header>
-        <div class="timeline" id="experienceContainer"></div>
-      </div>
-    </section>
-
-    <section id="projetos" class="section section-projects">
-      <div class="container">
-        <header class="section-head">
-          <span class="section-index mono">04</span>
-          <div class="section-head-text">
-            <h2 class="section-title" data-i18n="nav_projects">Projetos</h2>
-            <p class="section-desc" data-i18n="projects_desc">Alguns trabalhos públicos — clique para abrir.</p>
-          </div>
-        </header>
-        <div class="projects-grid" id="projectsContainer"></div>
-      </div>
-    </section>
-
-    <footer class="site-footer">
-      <div class="container footer-grid">
-        <div>
-          <p class="footer-lead" data-i18n="footer_lead">Vamos conversar?</p>
-          <a id="footerEmail" class="footer-email" href="#">email@example.com</a>
+        <!-- STATUS -->
+        <div class="bento-card bc-status sr" style="transition-delay:.15s" data-reveal="status">
+            <div class="bc-pad-sm">
+                <div class="bc-status-dot">online agora</div>
+                <div style="font-size:15px;font-weight:600;margin-bottom:4px">Disponível para projetos</div>
+                <div style="font-size:13px;color:var(--gray)">Respondo em menos de 24h</div>
+            </div>
         </div>
-        <p class="footer-meta">
-          <span data-i18n="footer_made_by">Design e código por</span> <span class="footer-name">Matheus Mansano</span>
-          <span class="footer-year" id="footerYear"></span>
-        </p>
-      </div>
+
+        <!-- EXPERIENCE -->
+        <div class="bento-card bc-exp sr" style="transition-delay:.2s" data-reveal="exp">
+            <div class="bc-pad-sm">
+                <div class="bc-eyebrow">Experiência</div>
+                <div style="font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:#776B5D;line-height:1">2
+                </div>
+                <div style="font-size:14px;color:#B0A695">anos construindo<br>aplicações web</div>
+            </div>
+        </div>
+
+        <!-- STACK -->
+        <div class="bento-card bc-stack sr" style="transition-delay:.25s">
+            <div class="bc-pad">
+                <div class="bc-eyebrow">02 — Stack</div>
+                <h3 class="bc-h2" style="font-size:22px">Ferramentas<br>que domino</h3>
+                <div class="stack-pills">
+                    <span class="pill">Java</span>
+                    <span class="pill">HTML5</span>
+                    <span class="pill">CSS3</span>
+                    <span class="pill">JavaScript</span>
+                    <span class="pill">jQuery</span>
+                    <span class="pill">Three.js</span>
+                    <span class="pill">PHP</span>
+                    <span class="pill">MySQL</span>
+                    <span class="pill">SQL Server</span>
+                    <span class="pill">Git</span>
+                    <span class="pill">VS Code</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME — SNAKE -->
+        <div class="bento-card bc-gif2 sr" style="transition-delay:.3s">
+            <div class="bc-gif-wrap">
+                <div class="doom-monitor">
+                    <canvas id="snake-canvas"></canvas>
+
+                    <!-- D-pad mobile controls -->
+                    <div id="dpad">
+                        <button class="dpad-btn" id="dp-up"   aria-label="Cima">
+                            <i class="fa-solid fa-chevron-up"></i>
+                        </button>
+                        <button class="dpad-btn" id="dp-left" aria-label="Esquerda">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <div class="dpad-center"></div>
+                        <button class="dpad-btn" id="dp-right" aria-label="Direita">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <button class="dpad-btn" id="dp-down"  aria-label="Baixo">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                    </div>
+
+                    <div id="game-overlay">
+                        <div class="game-overlay-inner">
+                            <div class="game-title">SNAKE</div>
+                            <div class="game-sub">↑↓←→ · WASD · D-pad</div>
+                            <button class="game-start-btn" id="game-start-btn">
+                                <i class="fa-solid fa-play"></i> jogar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROJECTS -->
+        <div class="bento-card bc-projects sr" style="transition-delay:.35s">
+            <div class="bc-pad">
+                <div class="bc-eyebrow">03 — Projetos</div>
+                <h3 class="bc-h2" style="font-size:22px">4 projetos<br>entregues</h3>
+                <div class="proj-list">
+                    <div class="proj-row" data-idx="0">
+                        <div class="proj-row-left">
+                            <span class="proj-num">01</span>
+                            <span class="proj-name">Esfera 3D</span>
+                        </div>
+                        <span class="proj-arrow">→</span>
+                    </div>
+                    <div class="proj-row" data-idx="1">
+                        <div class="proj-row-left">
+                            <span class="proj-num">02</span>
+                            <span class="proj-name">Ótica Horizonte</span>
+                        </div>
+                        <span class="proj-arrow">→</span>
+                    </div>
+                    <div class="proj-row" data-idx="2">
+                        <div class="proj-row-left">
+                            <span class="proj-num">03</span>
+                            <span class="proj-name">Gestor de Tarefas</span>
+                        </div>
+                        <span class="proj-arrow">→</span>
+                    </div>
+                    <div class="proj-row" data-idx="3">
+                        <div class="proj-row-left">
+                            <span class="proj-num">04</span>
+                            <span class="proj-name">Tomo do Mestre</span>
+                        </div>
+                        <span class="proj-arrow">→</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACT -->
+        <div class="bento-card bc-contact sr" style="transition-delay:.4s">
+            <div class="bc-pad bc-contact-inner">
+                <div class="bc-contact-text">
+                    <h3>Bora construir algo?</h3>
+                    <p>Manda uma mensagem — sem compromisso</p>
+                </div>
+                <button class="btn-primary btn-envia-wpp" style="white-space:nowrap;flex-shrink:0">
+                    Falar comigo →
+                </button>
+            </div>
+        </div>
+
+        <!-- QUOTE -->
+        <div class="bento-card bc-quote sr" style="transition-delay:.45s">
+            <div class="bc-pad bc-quote-inner">
+                <div class="bc-quote-mark">"</div>
+                <div class="bc-quote-text">
+                    Código bom é aquele que o próximo dev consegue entender — e o usuário nem percebe que existe.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+        CONTACT FORM
+    ══════════════════════════════════════════════════════════ -->
+    <section id="contact-section">
+
+        <!-- Left: copy -->
+        <div id="contact-left" class="sr">
+            <div class="contact-eyebrow">Contato</div>
+            <h2>Vamos construir<br>algo juntos?</h2>
+            <p>Estou disponível para novos projetos, freelas e oportunidades. Preencha o formulário e respondo em até
+                24h.</p>
+
+            <div class="contact-info-row">
+                <i class="fa-solid fa-envelope"></i>
+                <a href="mailto:matheusmansano1@gmail.com">matheusmansano1@gmail.com</a>
+            </div>
+            <div class="contact-info-row">
+                <i class="fa-brands fa-linkedin"></i>
+                <a href="https://www.linkedin.com/in/matheusrrodrigues/" target="_blank"
+                    rel="noopener">linkedin.com/in/matheusrrodrigues</a>
+            </div>
+            <div class="contact-info-row">
+                <i class="fa-brands fa-github"></i>
+                <a href="https://github.com/matheusmansanorodrigues" target="_blank"
+                    rel="noopener">github.com/matheusmansanorodrigues</a>
+            </div>
+            <div class="contact-info-row">
+                <i class="fa-solid fa-location-dot"></i>
+                Brasil · Remoto
+            </div>
+        </div>
+
+        <!-- Right: form -->
+        <div class="sr" style="transition-delay:.15s">
+            <form id="contact-form" novalidate>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="f-name">Nome</label>
+                        <input type="text" id="f-name" name="name" placeholder="Seu nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="f-company">Empresa</label>
+                        <input type="text" id="f-company" name="company" placeholder="Nome da empresa">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="f-email">E-mail</label>
+                    <input type="email" id="f-email" name="email" placeholder="seu@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="f-type">Tipo de projeto</label>
+                    <select id="f-type" name="type">
+                        <option value="" disabled selected>Selecione uma opção</option>
+                        <option value="site">Site / Landing Page</option>
+                        <option value="sistema">Sistema Web</option>
+                        <option value="painel">Painel Administrativo</option>
+                        <option value="api">API / Back-end</option>
+                        <option value="freela">Freela pontual</option>
+                        <option value="emprego">Oportunidade de emprego</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="f-msg">Mensagem</label>
+                    <textarea id="f-msg" name="message" placeholder="Conte um pouco sobre o projeto ou oportunidade..."
+                        required></textarea>
+                </div>
+
+                <button type="submit" id="btn-envia-wpp">
+                    <span id="submit-text">
+                        <i class="fa-brands fa-whatsapp"></i> Enviar via WhatsApp
+                    </span>
+                    <i class="fa-solid fa-arrow-right" id="submit-icon"></i>
+                </button>
+
+            </form>
+
+            <!-- Success state (hidden by default) -->
+            <div id="form-success">
+                <i class="fa-solid fa-circle-check"></i>
+                <h3>Mensagem enviada!</h3>
+                <p>Obrigado pelo contato.<br>Responderei em breve.</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+        FOOTER
+    ══════════════════════════════════════════════════════════ -->
+    <footer id="footer">
+        <div id="footer-logo">matheus<span>.</span>dev</div>
+        <div id="footer-copy">© 2026 · Matheus Mansano Rodrigues</div>
     </footer>
-  </main>
+
+    <script src="script.js" defer></script>
 </body>
+
 </html>

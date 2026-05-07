@@ -1,360 +1,657 @@
-$(function () {
-    const I18N_DATA = {
-        en: {
-            nav_home: "Home",
-            nav_about: "About",
-            nav_stack: "Stack",
-            nav_trajectory: "Journey",
-            nav_projects: "Projects",
-            menu_navigation: "Navigation",
-            menu_close: "Close",
-            menu_social: "Social",
-            menu_contact: "Contact",
-            hero_cta: "LET'S TALK",
-            stat_years: "Years of Experience",
-            stat_projects: "Completed Projects",
-            stat_commitment: "Commitment",
-            about_desc: "I prefer delivering the essentials well-done than fluff without a base.",
-            about_quote: "Organized code, well-modeled database and a product the team can evolve without fear.",
-            about_hi: "Hi, I'm Matheus.",
-            stack_desc: "What I use daily to turn ideas into reality.",
-            exp_desc: "Experience in web products and internal systems.",
-            projects_desc: "Some public works — click to open.",
-            footer_lead: "Let's talk?",
-            footer_made_by: "Design and code by"
-        },
-        pt: {
-            nav_home: "Início",
-            nav_about: "Sobre",
-            nav_stack: "Stack",
-            nav_trajectory: "Trajetória",
-            nav_projects: "Projetos",
-            menu_navigation: "Navegação",
-            menu_close: "Fechar",
-            menu_social: "Social",
-            menu_contact: "Contato",
-            hero_cta: "VAMOS CONVERSAR",
-            stat_years: "Anos de Experiência",
-            stat_projects: "Projetos Concluídos",
-            stat_commitment: "Comprometimento",
-            about_desc: "Prefiro entregar o essencial bem feito do que recheio sem base.",
-            about_quote: "Código organizado, banco bem modelado e produto que o time consegue evoluir sem medo.",
-            about_hi: "Oi, sou o Matheus.",
-            stack_desc: "O que uso no dia a dia para tirar ideias do papel.",
-            exp_desc: "Experiência em produtos web e sistemas internos.",
-            projects_desc: "Alguns trabalhos públicos — clique para abrir.",
-            footer_lead: "Vamos conversar?",
-            footer_made_by: "Design e código por"
-        }
-    };
+/* ── CURSOR ── */
+const cur = document.getElementById('cur');
+let mx = 0, my = 0;
 
-    const PROFILE = {
-        en: {
-            name: "Matheus Mansano",
-            fullName: "Matheus Mansano Rodrigues",
-            role: "Full Stack · PHP/MySQL · Web",
-            email: "matheusmansano1@gmail.com",
-            github: "https://github.com/matheusmansanorodrigues",
-            linkedin: "https://www.linkedin.com/in/matheusrrodrigues/",
-            whatsapp: "https://api.whatsapp.com/send/?phone=5543988080637&text=Hello!+I+saw+your+portfolio+and+wanted+to+talk+about+a+project.",
-            location: "Brazil",
-            years: "2+",
-            totalProjects: 6,
-            about:
-                "Hello everyone, thank you for allowing me to introduce myself. I am a full stack developer with about 2 years of experience, " +
-                "working mainly in the development of ERP systems and web applications. I work daily with PHP, jQuery, MySQL, SQL Server and integrations via APIs. " +
-                "I like to transform requirements into objective solutions, prioritizing clear code, reusable components, essential security (authentication, validation and request control when necessary) and well-modeled databases. " +
-                "When the project calls for it, I apply animations and 3D resources lightly, always focusing on performance and user experience."
-        },
-        pt: {
-            name: "Matheus Mansano",
-            fullName: "Matheus Mansano Rodrigues",
-            role: "Full Stack · PHP/MySQL · Web",
-            email: "matheusmansano1@gmail.com",
-            github: "https://github.com/matheusmansanorodrigues",
-            linkedin: "https://www.linkedin.com/in/matheusrrodrigues/",
-            whatsapp: "https://api.whatsapp.com/send/?phone=5543988080637&text=Ol%C3%A1%21+Vi+seu+portf%C3%B3lio+e+queria+conversar+sobre+um+projeto.",
-            location: "Brasil",
-            years: "2+",
-            totalProjects: 6,
-            about:
-                "Olá a todos, obrigado por me permitirem me apresentar. Sou desenvolvedor full stack com cerca de 2 anos de experiência, " +
-                "atuando principalmente no desenvolvimento de sistemas ERP e aplicações web. Trabalho no dia a dia com PHP, jQuery, MySQL, SQL Server e integrações via APIs. " +
-                "Gosto de transformar requisitos em soluções objetivas, priorizando código claro, componentes reutilizáveis, segurança essencial (autenticação, validação e controle de requisições quando necessário) e bancos de dados bem modelados. " +
-                "Quando o projeto pede, aplico animações e recursos 3D de forma leve, sempre com foco em performance e experiência do usuário."
-        }
-    };
+document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cur.style.left = mx + 'px';
+    cur.style.top = my + 'px';
+});
 
-    const STACK = {
-        en: {
-            "Frontend": ["HTML", "CSS", "JavaScript", "jQuery", "Three.js"],
-            "Backend": ["PHP", "REST APIs"],
-            "Database": ["MySQL", "SQL Server"],
-            "Tools": ["Git", "GitHub", "Docker"]
-        },
-        pt: {
-            "Frontend": ["HTML", "CSS", "JavaScript", "jQuery", "Three.js"],
-            "Backend": ["PHP", "APIs REST"],
-            "Banco de Dados": ["MySQL", "SQL Server"],
-            "Ferramentas": ["Git", "GitHub", "Docker"]
-        }
-    };
+document.querySelectorAll('button, a, .bento-card, .proj-row, .pill').forEach(el => {
+    el.addEventListener('mouseenter', () => cur.classList.add('big'));
+    el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+});
 
-    const PROJECTS = [
-        {
-            title: "Esfera 3D",
-            stack: ["HTML", "CSS", "JavaScript", "Three.js"],
-            demo: "https://matheusmansanorodrigues.github.io/esfera_3d/",
-        },
-        {
-            title: "Ótica Horizonte",
-            stack: ["HTML", "CSS", "JavaScript", "UI/UX"],
-            demo: "https://matheusmansanorodrigues.github.io/otica_horizonte/",
-        },
-        {
-            title: "Gestor de Tarefas",
-            stack: ["HTML", "CSS", "JavaScript"],
-            demo: "https://matheusmansanorodrigues.github.io/Projeto-Tarefa/",
-        },
-        {
-            title: "O Tomo do Mestre",
-            stack: ["HTML", "CSS", "JavaScript"],
-            demo: "https://matheusmansanorodrigues.github.io/Guia_RPG/",
-        }
+/* ── SCROLL REVEAL ── */
+const srObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); srObs.unobserve(e.target); }
+    });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.sr').forEach(el => srObs.observe(el));
+
+/* ── BENTO CARD MAGNETIC HOVER ── */
+document.querySelectorAll('.bento-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left - r.width / 2) / r.width;
+        const y = (e.clientY - r.top - r.height / 2) / r.height;
+        card.style.transform = `translateY(-3px) translateZ(0) rotateX(${-y * 4}deg) rotateY(${x * 4}deg)`;
+        card.style.transformStyle = 'preserve-3d';
+    });
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateZ(0)';
+        setTimeout(() => { card.style.transform = ''; }, 420);
+    });
+});
+
+/* ── HERO CARD STACK — fluid drag-behind ── */
+(function initStack() {
+    const stack = document.getElementById('card-stack');
+    if (!stack) return;
+
+    const cards = Array.from(stack.querySelectorAll('.hcs-card'));
+    const hint  = stack.querySelector('.stack-hint');
+    const N     = cards.length;
+
+    // Visual slots: pos 0 = top, pos N-1 = bottom-behind
+    const SLOTS = [
+        { y: 0,  rot:  0,  scale: 1.00, z: 30 },
+        { y: 14, rot: -4,  scale: 0.96, z: 20 },
+        { y: 26, rot:  3,  scale: 0.92, z: 10 },
     ];
 
-    const PROJECT_IMAGES = [
-        "assets/esfera_3d.webp",
-        "assets/otica_horizonte_h.webp",
-        "assets/minhas_tarefas_h.webp",
-        "assets/tomo_mestre.webp"
-    ];
+    // order[i] = which card index is at slot i
+    let order = cards.map((_, i) => i);
+    let busy  = false;
 
-    const EXPERIENCES = {
-        en: [
-            {
-                company: "Full Stack Developer",
-                role: "MSE Engenharia",
-                date: "Nov 2023 - Present"
-            },
-            {
-                company: "Full Stack Developer",
-                role: "Freelancer / Self-employed",
-                date: "Present"
-            }
-        ],
-        pt: [
-            {
-                company: "Desenvolvedor Full Stack",
-                role: "MSE Engenharia",
-                date: "Nov 2023 - Presente"
-            },
-            {
-                company: "Desenvolvedor Full Stack",
-                role: "Freelancer / Autônomo",
-                date: "Presente"
-            }
-        ]
-    };
-
-    let currentLang = localStorage.getItem("portfolio_lang") || "en";
-
-    function updateLanguage() {
-        const lang = currentLang;
-        const profile = PROFILE[lang];
-        const i18n = I18N_DATA[lang];
-
-        // Update static elements with data-i18n
-        $("[data-i18n]").each(function () {
-            const key = $(this).data("i18n");
-            if (i18n[key]) {
-                $(this).text(i18n[key]);
-            }
+    // ── apply slot positions ──
+    function place(animate) {
+        order.forEach((ci, slot) => {
+            const card = cards[ci];
+            const s    = SLOTS[Math.min(slot, SLOTS.length - 1)];
+            card.style.transition = animate
+                ? 'transform .55s cubic-bezier(0.34,1.2,0.64,1), box-shadow .4s ease, z-index 0s .1s'
+                : 'none';
+            card.style.zIndex    = s.z;
+            card.style.transform = `translateY(${s.y}px) rotate(${s.rot}deg) scale(${s.scale})`;
+            card.style.boxShadow = slot === 0
+                ? '0 20px 50px rgba(119,107,93,0.18)'
+                : '0 4px 14px rgba(119,107,93,0.07)';
         });
-
-        // Update specific text nodes and attributes
-        document.title = `Portfolio — ${profile.name}`;
-        $("html").attr("lang", lang === "en" ? "en" : "pt-BR");
-
-        // Accessibility and Titles
-        $(".brand").attr("aria-label", lang === "en" ? "Home" : "Início");
-        $("#sideEmail").attr("title", lang === "en" ? "Send email" : "Enviar e-mail");
-        $("#btnHamb").attr("aria-label", lang === "en" ? "Open menu" : "Abrir menu");
-        $("#menuClose").attr("aria-label", lang === "en" ? "Close menu" : "Fechar menu");
-        $(".hero-massive").attr("aria-label", lang === "en" ? "Full Stack Developer" : "Desenvolvedor Full Stack");
-
-        $("#navGithub").attr("href", profile.github);
-        $("#navLinkedin").attr("href", profile.linkedin);
-        $("#navWhatsapp").attr("href", profile.whatsapp);
-        $("#navEmail").text(profile.email).attr("href", `mailto:${profile.email}`);
-        $("#footerEmail").text(profile.email).attr("href", `mailto:${profile.email}`);
-        $("#sideEmail").text(profile.email).attr("href", `mailto:${profile.email}`);
-        $("#footerYear").text(new Date().getFullYear());
-
-        $("#hireMeBtn").attr("href", profile.whatsapp);
-        $("#heroGithub").attr("href", profile.github);
-        $("#heroProjectCount").text(profile.totalProjects + "+");
-        $("#heroYears").text(profile.years);
-        $("#heroNameHighlight").text(profile.fullName);
-
-        // Hero Lead Text (Special case)
-        if (lang === "en") {
-            $("#heroLead").html(`Hi! I'm <strong id="heroNameHighlight">${profile.fullName}</strong> — a creative Full Stack Developer with ${profile.years} of experience building high-performance, scalable and responsive web solutions.`);
-        } else {
-            $("#heroLead").html(`Olá! Eu sou <strong id="heroNameHighlight">${profile.fullName}</strong> — um Desenvolvedor Full Stack criativo com ${profile.years} de experiência construindo soluções web de alta performance, escaláveis e responsivas.`);
-        }
-
-        // About Sentences
-        const $aboutContainer = $("#aboutTextContainer");
-        $aboutContainer.empty();
-        const sentencas = profile.about.split(/(?<=[.!?])\s+/).filter((s) => s.trim());
-        sentencas.forEach((s, i) => {
-            $aboutContainer.append(`<p class="slide-up in-view" style="transition-delay: ${i * 90}ms">${s}</p>`);
-        });
-
-        // Stack
-        const $stackContainer = $("#stackContainer");
-        $stackContainer.empty();
-        Object.entries(STACK[lang]).forEach(([categoria, items]) => {
-            $stackContainer.append(`
-                <div class="stack-group slide-up in-view">
-                    <h3 class="stack-label mono">${categoria}</h3>
-                    <div class="stack-pills">
-                        ${items.map((item) => `<span class="stack-pill">${item}</span>`).join("")}
-                    </div>
-                </div>
-            `);
-        });
-
-        // Experiences
-        const $expContainer = $("#experienceContainer");
-        $expContainer.empty();
-        EXPERIENCES[lang].forEach((exp, i) => {
-            $expContainer.append(`
-                <div class="timeline-item slide-up in-view" style="transition-delay: ${i * 120}ms">
-                    <div class="timeline-dot" aria-hidden="true"></div>
-                    <p class="timeline-company">${exp.company}</p>
-                    <p class="timeline-role">${exp.role}</p>
-                    <p class="timeline-date">${exp.date}</p>
-                </div>
-            `);
-        });
-
-        // Projects
-        const $projContainer = $("#projectsContainer");
-        $projContainer.empty();
-        const arrowSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>`;
-        PROJECTS.forEach((proj, i) => {
-            const num = String(i + 1).padStart(2, "0");
-            const imgUrl = PROJECT_IMAGES[i] || "";
-            const tags = proj.stack.map((t) => `<span>${t}</span>`).join("");
-            $projContainer.append(`
-                <article class="project-card slide-up in-view" style="transition-delay: ${i * 90}ms">
-                    <a class="project-card-link" href="${proj.demo}" target="_blank" rel="noopener noreferrer">
-                        <div class="project-card-media">
-                            <img src="${imgUrl}" alt="" loading="lazy" onerror="var p=this.parentElement;this.remove();p.classList.add('is-empty');" />
-                        </div>
-                        <div class="project-card-body">
-                            <span class="project-card-num mono">/${num}</span>
-                            <h3 class="project-card-title">
-                                <span>${proj.title}</span>
-                                ${arrowSvg}
-                            </h3>
-                            <div class="project-card-tags">${tags}</div>
-                        </div>
-                    </a>
-                </article>
-            `);
-        });
-
-        // Update active button state
-        $(".lang-btn").removeClass("is-active");
-        $(`.lang-btn[data-lang="${lang}"]`).addClass("is-active");
     }
 
-    // Language Switcher Event
-    $(".lang-btn").on("click", function () {
-        const newLang = $(this).data("lang");
-        if (newLang !== currentLang) {
-            currentLang = newLang;
-            localStorage.setItem("portfolio_lang", currentLang);
-            updateLanguage();
-        }
-    });
+    place(false);
 
-    // Initial Render
-    updateLanguage();
+    // ── cycle: top card slides behind the stack ──
+    function cycle(releaseVelX) {
+        if (busy) return;
+        busy = true;
 
-    // Navigation and UI interactions
-    const $btn = $("#btnHamb");
-    const $overlay = $("#menuOverlay");
-    const $close = $("#menuClose");
+        const topCI  = order[0];
+        const topCard = cards[topCI];
 
-    function setMenuOpen(open) {
-        if (open) {
-            $btn.addClass("is-active").attr("aria-expanded", "true");
-            $overlay.addClass("is-open").attr("aria-hidden", "false");
-            $("body").addClass("menu-open");
-        } else {
-            $btn.removeClass("is-active").attr("aria-expanded", "false");
-            $overlay.removeClass("is-open").attr("aria-hidden", "true");
-            $("body").removeClass("menu-open");
-        }
+        // 1. Instantly drop z-index so it goes behind
+        topCard.style.transition = 'none';
+        topCard.style.zIndex = 0;
+
+        // 2. Slide it to the "behind" position with a slight arc
+        const dir = releaseVelX >= 0 ? 1 : -1;
+        requestAnimationFrame(() => {
+            topCard.style.transition = 'transform .48s cubic-bezier(0.4,0,0.2,1)';
+            const bottomS = SLOTS[SLOTS.length - 1];
+            topCard.style.transform =
+                `translateY(${bottomS.y}px) rotate(${bottomS.rot + dir * 6}deg) scale(${bottomS.scale})`;
+
+            // 3. Reorder array and animate everyone to new slots
+            setTimeout(() => {
+                order = [...order.slice(1), order[0]];
+                place(true);
+                setTimeout(() => { busy = false; }, 560);
+            }, 200);
+        });
     }
 
-    function toggleMenu() {
-        setMenuOpen(!$overlay.hasClass("is-open"));
-    }
+    // ── drag state ──
+    let dragging = false;
+    let startX, startY, lastX, velX;
 
-    $btn.on("click", toggleMenu);
-    $close.on("click", () => setMenuOpen(false));
+    function getTopCard() { return cards[order[0]]; }
 
-    $overlay.on("click", function (e) {
-        if (e.target === this) setMenuOpen(false);
-    });
-
-    $(document).on("keydown", function (e) {
-        if (e.key === "Escape" && $overlay.hasClass("is-open")) setMenuOpen(false);
-    });
-
-    $(".panel-link").on("click", () => setMenuOpen(false));
-
-    function headerOffsetPx() {
-        const h = document.querySelector(".site-header");
-        return (h ? h.offsetHeight : 68) + 3;
-    }
-
-    function updateScrollProgress() {
-        const $w = $(window);
-        const st = $w.scrollTop();
-        const dh = $(document).height() - $w.height();
-        const pct = dh > 0 ? Math.min(100, Math.max(0, (st / dh) * 100)) : 0;
-        $("#scrollProgressFill").css("width", pct + "%");
-        $("#scrollProgress").attr("aria-valuenow", Math.round(pct));
-    }
-    $(window).on("scroll resize", updateScrollProgress);
-    updateScrollProgress();
-
-    $('a[href^="#"]').on("click", function (e) {
-        const href = $(this).attr("href");
-        if (!href || href === "#") return;
-        const $target = $(href);
-        if (!$target.length) return;
+    stack.addEventListener('pointerdown', e => {
+        if (busy) return;
+        if (!getTopCard().contains(e.target)) return;
+        // ignore clicks on the link button
+        if (e.target.closest('.hcs-link')) return;
+        dragging = true;
+        startX = lastX = e.clientX;
+        startY = e.clientY;
+        velX = 0;
+        getTopCard().setPointerCapture(e.pointerId);
+        getTopCard().style.transition = 'none';
+        hint && (hint.style.opacity = '0');
         e.preventDefault();
-        const top = $target.offset().top - headerOffsetPx();
-        $("html, body").stop(true).animate({ scrollTop: top }, 550);
     });
 
-    const revealEls = document.querySelectorAll(".slide-up");
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) entry.target.classList.add("in-view");
-                else entry.target.classList.remove("in-view");
-            });
-        },
-        { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
-    );
+    window.addEventListener('pointermove', e => {
+        if (!dragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        velX = e.clientX - lastX;
+        lastX = e.clientX;
 
-    revealEls.forEach((el) => observer.observe(el));
+        // Drag follows finger/mouse with tilt
+        const rot   = dx * 0.10;
+        const lift  = Math.min(Math.abs(dx) * 0.04, 8);
+        const scale = 1 + Math.min(Math.abs(dx) * 0.0002, 0.03); // slight grow on drag
+        getTopCard().style.transform =
+            `translate(${dx}px, ${dy - lift}px) rotate(${rot}deg) scale(${scale})`;
+
+        // Peek cards below shift slightly toward top as drag progresses
+        const progress = Math.min(Math.abs(dx) / 120, 1);
+        order.slice(1).forEach((ci, i) => {
+            const from = SLOTS[Math.min(i + 1, SLOTS.length - 1)];
+            const to   = SLOTS[Math.min(i,     SLOTS.length - 1)];
+            const y    = from.y + (to.y - from.y) * progress;
+            const r    = from.rot + (to.rot - from.rot) * progress;
+            const sc   = from.scale + (to.scale - from.scale) * progress;
+            cards[ci].style.transition = 'none';
+            cards[ci].style.transform  = `translateY(${y}px) rotate(${r}deg) scale(${sc})`;
+        });
+    });
+
+    window.addEventListener('pointerup', e => {
+        if (!dragging) return;
+        dragging = false;
+
+        const dx = e.clientX - startX;
+        const THRESH = 80;
+
+        if (Math.abs(dx) > THRESH || Math.abs(velX) > 5) {
+            cycle(velX);
+        } else {
+            // Snap everything back
+            place(true);
+        }
+    });
+
+    // Click top card to cycle (ignore link button)
+    stack.addEventListener('click', e => {
+        if (busy) return;
+        if (e.target.closest('.hcs-link')) return;
+        const dx = Math.abs(e.clientX - (startX || e.clientX));
+        if (getTopCard().contains(e.target) && dx < 6) cycle(1);
+    });
+
+    // Cursor
+    stack.addEventListener('mouseenter', () => cur.classList.add('big'));
+    stack.addEventListener('mouseleave', () => cur.classList.remove('big'));
+})();
+
+/* ── PILL CLICK RIPPLE ── */
+document.querySelectorAll('.pill').forEach(pill => {
+    pill.addEventListener('click', function (e) {
+        const r = this.getBoundingClientRect();
+        const rip = document.createElement('span');
+        rip.style.cssText = `
+      position:absolute;border-radius:50%;
+      width:80px;height:80px;
+      left:${e.clientX - r.left - 40}px;
+      top:${e.clientY - r.top - 40}px;
+      background:rgba(0,0,0,0.12);
+      transform:scale(0);
+      animation:rip .5s ease-out forwards;
+      pointer-events:none;
+    `;
+        this.style.position = 'relative';
+        this.style.overflow = 'hidden';
+        this.appendChild(rip);
+        setTimeout(() => rip.remove(), 500);
+    });
+});
+
+/* ── PROJ ROW CLICK — expand detail ── */
+const projDetails = [
+    {
+        title: 'Esfera 3D',
+        desc: 'Controle de esfera 3D usando gestos da mão via câmera. Visão computacional no browser, sem instalar nada.',
+        tags: ['JavaScript', 'MediaPipe', 'Three.js', 'Canvas'],
+        url: 'https://matheusmansanorodrigues.github.io/esfera_3d/'
+    },
+    {
+        title: 'Ótica Horizonte',
+        desc: 'Site completo para ótica em Florianópolis com galeria, depoimentos, formulário de contato e mapa.',
+        tags: ['HTML', 'CSS', 'JavaScript', 'Landing Page'],
+        url: 'https://matheusmansanorodrigues.github.io/otica_horizonte/'
+    },
+    {
+        title: 'Gestor de Tarefas',
+        desc: 'App de produtividade com CRUD completo, filtro por status e pesquisa em tempo real.',
+        tags: ['HTML', 'CSS', 'JavaScript', 'LocalStorage'],
+        url: 'https://matheusmansanorodrigues.github.io/Projeto-Tarefa/'
+    },
+    {
+        title: 'Tomo do Mestre',
+        desc: 'Guia interativo medieval de RPG com suporte a múltiplos sistemas. Escolha o universo e o tomo se transforma.',
+        tags: ['HTML', 'CSS', 'JavaScript', 'RPG'],
+        url: 'https://matheusmansanorodrigues.github.io/Guia_RPG/'
+    },
+];
+
+document.querySelectorAll('.proj-row').forEach((row) => {
+    const idx = parseInt(row.dataset.idx, 10);
+    row.addEventListener('click', () => {
+        const d = projDetails[idx];
+        if (d) showToast(d.title, d.desc, d.tags, d.url);
+    });
+});
+
+/* ── TOAST NOTIFICATION ── */
+let toastEl = null;
+function showToast(title, desc, tags, url) {
+    if (toastEl) toastEl.remove();
+    toastEl = document.createElement('div');
+    toastEl.style.cssText = `
+    position:fixed;bottom:32px;right:32px;
+    background:#EBE3D5;border:1px solid rgba(119,107,93,0.2);
+    border-radius:16px;padding:24px 28px;
+    max-width:340px;z-index:9000;
+    transform:translateY(20px);opacity:0;
+    transition:all .4s cubic-bezier(0.16,1,0.3,1);
+    font-family:'Space Grotesk',sans-serif;
+    box-shadow:0 20px 60px rgba(119,107,93,0.15);
+  `;
+    const tagsHtml = tags.map(t => `<span style="padding:4px 10px;background:rgba(176,166,149,0.2);border:1px solid rgba(119,107,93,0.2);border-radius:100px;font-size:12px;color:#776B5D;font-family:'JetBrains Mono',monospace">${t}</span>`).join('');
+    const linkHtml = url
+        ? `<a href="${url}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:9px 18px;background:#776B5D;color:#F3EEEA;font-size:13px;font-weight:600;border-radius:8px;text-decoration:none;font-family:'Space Grotesk',sans-serif;transition:background .2s" onmouseover="this.style.background='#5a5248'" onmouseout="this.style.background='#776B5D'"><i class='fa-solid fa-arrow-up-right-from-square'></i> Ver projeto</a>`
+        : '';
+    toastEl.innerHTML = `
+    <div style="font-size:11px;color:#B0A695;letter-spacing:.12em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:8px">Projeto</div>
+    <div style="font-size:18px;font-weight:700;margin-bottom:8px;font-family:'Syne',sans-serif;color:#776B5D">${title}</div>
+    <div style="font-size:14px;color:#B0A695;line-height:1.6;margin-bottom:12px">${desc}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">${tagsHtml}</div>
+    ${linkHtml}
+  `;
+    document.body.appendChild(toastEl);
+    requestAnimationFrame(() => {
+        toastEl.style.transform = 'translateY(0)';
+        toastEl.style.opacity = '1';
+    });
+    setTimeout(() => {
+        if (toastEl) {
+            toastEl.style.transform = 'translateY(20px)';
+            toastEl.style.opacity = '0';
+            setTimeout(() => toastEl && toastEl.remove(), 400);
+        }
+    }, 5000);
+}
+
+/* ── RIPPLE KEYFRAME ── */
+const s = document.createElement('style');
+s.textContent = `
+  @keyframes rip { to { transform:scale(1); opacity:0 } }
+  .bento-card { perspective: 800px }
+`;
+document.head.appendChild(s);
+
+/* ── THEME TOGGLE ── */
+const themeBtn = document.getElementById('theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
+let isDark = false;
+
+function setThemeIcon(dark) {
+    themeIcon.className = dark ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+}
+
+// respect system preference on load
+if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    isDark = true;
+    document.body.classList.add('dark');
+    setThemeIcon(true);
+}
+
+themeBtn.addEventListener('click', () => {
+    isDark = !isDark;
+    document.body.classList.toggle('dark', isDark);
+    setThemeIcon(isDark);
+
+    // spin animation on click
+    themeBtn.style.transition = 'transform .5s cubic-bezier(0.34,1.56,0.64,1)';
+    themeBtn.style.transform = 'scale(1.15) rotate(360deg)';
+    setTimeout(() => { themeBtn.style.transform = ''; }, 500);
+});
+
+/* ── SNAKE ── */
+(function () {
+    const canvas  = document.getElementById('snake-canvas');
+    const overlay = document.getElementById('game-overlay');
+    const startBtn = document.getElementById('game-start-btn');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const CELL = 18;
+    let cols, rows, snake, dir, nextDir, food, score, hi, running, raf, speed;
+
+    const C = {
+        bg:     '#0a0a0a',
+        grid:   'rgba(119,107,93,0.06)',
+        snake:  '#776B5D',
+        snakeH: '#B0A695',
+        food:   '#F3EEEA',
+        foodGlow:'rgba(243,238,234,0.35)',
+        text:   '#B0A695',
+        dim:    'rgba(119,107,93,0.4)',
+    };
+
+    function resize() {
+        const w = canvas.parentElement.clientWidth  || 320;
+        const h = canvas.parentElement.clientHeight || 280;
+        canvas.width  = Math.floor(w / CELL) * CELL;
+        canvas.height = Math.floor(h / CELL) * CELL;
+        cols = canvas.width  / CELL;
+        rows = canvas.height / CELL;
+    }
+
+    function rndFood() {
+        let pos;
+        do {
+            pos = { x: Math.floor(Math.random() * cols), y: Math.floor(Math.random() * rows) };
+        } while (snake.some(s => s.x === pos.x && s.y === pos.y));
+        return pos;
+    }
+
+    function init() {
+        resize();
+        const mx = Math.floor(cols / 2), my = Math.floor(rows / 2);
+        snake   = [{ x: mx, y: my }, { x: mx - 1, y: my }, { x: mx - 2, y: my }];
+        dir     = { x: 1, y: 0 };
+        nextDir = { x: 1, y: 0 };
+        food    = rndFood();
+        score   = 0;
+        speed   = 120;
+        hi      = hi || 0;
+    }
+
+    function drawGrid() {
+        ctx.strokeStyle = C.grid;
+        ctx.lineWidth = .5;
+        for (let x = 0; x <= cols; x++) {
+            ctx.beginPath(); ctx.moveTo(x * CELL, 0); ctx.lineTo(x * CELL, canvas.height); ctx.stroke();
+        }
+        for (let y = 0; y <= rows; y++) {
+            ctx.beginPath(); ctx.moveTo(0, y * CELL); ctx.lineTo(canvas.width, y * CELL); ctx.stroke();
+        }
+    }
+
+    function drawSnake() {
+        snake.forEach((seg, i) => {
+            const r = i === 0 ? 6 : 4;
+            ctx.fillStyle = i === 0 ? C.snakeH : C.snake;
+            ctx.globalAlpha = i === 0 ? 1 : Math.max(0.35, 1 - i * 0.04);
+            roundRect(seg.x * CELL + 1, seg.y * CELL + 1, CELL - 2, CELL - 2, r);
+            ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+    }
+
+    function drawFood(t) {
+        const pulse = 1 + Math.sin(t * 0.005) * 0.15;
+        const fx = food.x * CELL + CELL / 2;
+        const fy = food.y * CELL + CELL / 2;
+        // glow
+        const grad = ctx.createRadialGradient(fx, fy, 0, fx, fy, CELL * pulse);
+        grad.addColorStop(0, C.foodGlow);
+        grad.addColorStop(1, 'transparent');
+        ctx.fillStyle = grad;
+        ctx.beginPath(); ctx.arc(fx, fy, CELL * pulse, 0, Math.PI * 2); ctx.fill();
+        // dot
+        ctx.fillStyle = C.food;
+        ctx.beginPath(); ctx.arc(fx, fy, CELL * 0.28 * pulse, 0, Math.PI * 2); ctx.fill();
+    }
+
+    function drawHUD() {
+        ctx.fillStyle = C.text;
+        ctx.font = `600 11px "JetBrains Mono", monospace`;
+        ctx.textAlign = 'left';
+        ctx.fillText(`SCORE  ${String(score).padStart(4,'0')}`, 8, 16);
+        ctx.textAlign = 'right';
+        ctx.fillText(`BEST  ${String(hi).padStart(4,'0')}`, canvas.width - 8, 16);
+    }
+
+    function roundRect(x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        ctx.lineTo(x + r, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+    }
+
+    let lastMove = 0;
+    function loop(t) {
+        if (!running) return;
+        raf = requestAnimationFrame(loop);
+
+        ctx.fillStyle = C.bg;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        drawGrid();
+        drawFood(t);
+        drawSnake();
+        drawHUD();
+
+        if (t - lastMove < speed) return;
+        lastMove = t;
+
+        dir = { ...nextDir };
+        const head = { x: (snake[0].x + dir.x + cols) % cols, y: (snake[0].y + dir.y + rows) % rows };
+
+        // self collision
+        if (snake.some(s => s.x === head.x && s.y === head.y)) {
+            running = false;
+            if (score > hi) hi = score;
+            drawGameOver();
+            return;
+        }
+
+        snake.unshift(head);
+
+        if (head.x === food.x && head.y === food.y) {
+            score += 10;
+            food = rndFood();
+            speed = Math.max(60, speed - 2); // speed up
+        } else {
+            snake.pop();
+        }
+    }
+
+    function drawGameOver() {
+        ctx.fillStyle = 'rgba(10,10,10,0.75)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = C.snakeH;
+        ctx.font = `900 ${Math.floor(canvas.width / 10)}px "Syne", sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 10);
+        ctx.fillStyle = C.text;
+        ctx.font = `500 11px "JetBrains Mono", monospace`;
+        ctx.fillText(`score ${score}  ·  press R or tap to restart`, canvas.width / 2, canvas.height / 2 + 20);
+    }
+
+    function startGame() {
+        overlay && overlay.classList.add('hidden');
+        if (dpad) dpad.classList.add('visible');
+        init();
+        running = true;
+        lastMove = 0;
+        if (raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(loop);
+        canvas.focus();
+    }
+
+    // ── D-PAD (declared before use) ──
+    const dpad = document.getElementById('dpad');
+    const dpMap = {
+        'dp-up':    { x: 0, y:-1 },
+        'dp-down':  { x: 0, y: 1 },
+        'dp-left':  { x:-1, y: 0 },
+        'dp-right': { x: 1, y: 0 },
+    };
+
+    Object.entries(dpMap).forEach(([id, d]) => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        btn.addEventListener('touchstart', e => {
+            e.preventDefault();
+            if (!running) { startGame(); return; }
+            if (d.x !== -dir.x || d.y !== -dir.y) nextDir = d;
+        }, { passive: false });
+        btn.addEventListener('mousedown', e => {
+            e.preventDefault();
+            if (!running) { startGame(); return; }
+            if (d.x !== -dir.x || d.y !== -dir.y) nextDir = d;
+        });
+    });
+
+    // controls
+    const DIRS = {
+        ArrowUp:    { x: 0, y:-1 }, ArrowDown:  { x: 0, y: 1 },
+        ArrowLeft:  { x:-1, y: 0 }, ArrowRight: { x: 1, y: 0 },
+        w: { x: 0, y:-1 }, s: { x: 0, y: 1 },
+        a: { x:-1, y: 0 }, d: { x: 1, y: 0 },
+        W: { x: 0, y:-1 }, S: { x: 0, y: 1 },
+        A: { x:-1, y: 0 }, D: { x: 1, y: 0 },
+    };
+
+    document.addEventListener('keydown', e => {
+        const d = DIRS[e.key];
+        if (d) {
+            if (d.x !== -dir.x || d.y !== -dir.y) nextDir = d;
+            e.preventDefault();
+        }
+        if ((e.key === 'r' || e.key === 'R') && !running) startGame();
+    });
+
+    // touch swipe (fallback when not using dpad)
+    let tx0, ty0;
+    canvas.addEventListener('touchstart', e => { tx0 = e.touches[0].clientX; ty0 = e.touches[0].clientY; }, { passive: true });
+    canvas.addEventListener('touchend', e => {
+        if (!running) { startGame(); return; }
+        const dx = e.changedTouches[0].clientX - tx0;
+        const dy = e.changedTouches[0].clientY - ty0;
+        if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return; // ignore taps
+        let d;
+        if (Math.abs(dx) > Math.abs(dy)) d = dx > 0 ? { x:1,y:0 } : { x:-1,y:0 };
+        else d = dy > 0 ? { x:0,y:1 } : { x:0,y:-1 };
+        if (d.x !== -dir.x || d.y !== -dir.y) nextDir = d;
+    }, { passive: true });
+
+    // start button
+    startBtn && startBtn.addEventListener('click', startGame);
+
+    // cursor
+    startBtn && startBtn.addEventListener('mouseenter', () => cur.classList.add('big'));
+    startBtn && startBtn.addEventListener('mouseleave', () => cur.classList.remove('big'));
+
+    // idle draw
+    resize();
+    ctx.fillStyle = C.bg; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    new ResizeObserver(() => { if (!running) { resize(); ctx.fillStyle = C.bg; ctx.fillRect(0,0,canvas.width,canvas.height); } }).observe(canvas.parentElement);
+})();
+
+function animCount(el, target, duration = 1200) {
+    let start = null;
+    function step(ts) {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / duration, 1);
+        el.textContent = Math.floor(p * target);
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = target;
+    }
+    requestAnimationFrame(step);
+}
+
+const expNum = document.querySelector('.bc-exp .bc-pad-sm [style*="42px"]');
+if (expNum) {
+    const obs = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) { animCount(expNum, 2); obs.disconnect(); }
+    }, { threshold: 0.5 });
+    obs.observe(expNum);
+}
+
+/* ── CONTACT FORM (jQuery + WhatsApp) ── */
+$(function () {
+    const WPP_NUMBER = '5543988080637'; // +55 43 98808-0637
+
+    // cursor nos campos
+    $('#contact-form input, #contact-form select, #contact-form textarea, #contact-form button')
+        .on('mouseenter', () => cur.classList.add('big'))
+        .on('mouseleave', () => cur.classList.remove('big'));
+
+    // validação inline
+    function setField($el, valid) {
+        $el.css({
+            'border-color': valid ? 'rgba(119,107,93,0.4)' : '#c0392b',
+            'box-shadow':   valid ? '' : '0 0 0 3px rgba(192,57,43,0.1)'
+        });
+    }
+
+    $('#f-name, #f-email, #f-msg').on('blur', function () {
+        const id  = this.id;
+        const val = $(this).val().trim();
+        if (id === 'f-email') {
+            setField($(this), /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val));
+        } else {
+            setField($(this), val.length > 0);
+        }
+    }).on('input', function () {
+        $(this).css({ 'border-color': '', 'box-shadow': '' });
+    });
+
+    // submit
+    $('#contact-form').on('submit', function (e) {
+        e.preventDefault();
+
+        const name    = $('#f-name').val().trim();
+        const email   = $('#f-email').val().trim();
+        const msg     = $('#f-msg').val().trim();
+        const company = $('#f-company').val().trim();
+        const type    = $('#f-type').val() || 'Não especificado';
+        const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+        // validação
+        if (!name)    { setField($('#f-name'),  false); return; }
+        if (!emailOk) { setField($('#f-email'), false); return; }
+        if (!msg)     { setField($('#f-msg'),   false); return; }
+
+        // loading
+        $('#btn-envia-wpp').addClass('loading');
+        $('#submit-text').html('<i class="fa-solid fa-spinner fa-spin"></i> Enviando...');
+
+        // monta mensagem
+        const texto = [
+            `*Olá Matheus! Vim pelo seu portfólio* 👋`,
+            ``,
+            `*Nome:* ${name}`,
+            company ? `*Empresa:* ${company}` : null,
+            `*E-mail:* ${email}`,
+            `*Tipo:* ${type}`,
+            ``,
+            `*Mensagem:*`,
+            msg
+        ].filter(l => l !== null).join('\n');
+
+        const wppUrl = `https://wa.me/${WPP_NUMBER}?text=${encodeURIComponent(texto)}`;
+        const smsUrl = `sms:+${WPP_NUMBER}?body=${encodeURIComponent(texto)}`;
+
+        setTimeout(function () {
+            // tenta abrir WhatsApp
+            const wppWin = window.open(wppUrl, '_blank');
+
+            // se o browser bloqueou o popup ou não abriu, fallback SMS
+            if (!wppWin || wppWin.closed || typeof wppWin.closed === 'undefined') {
+                window.location.href = smsUrl;
+            }
+
+            // mostra sucesso
+            $('#contact-form').fadeOut(300, function () {
+                $('#form-success').css('display', 'flex').hide().fadeIn(400);
+            });
+        }, 700);
+    });
 });
