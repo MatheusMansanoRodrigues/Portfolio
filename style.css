@@ -31,6 +31,10 @@ body {
     cursor: none;
 }
 
+@media (pointer: coarse) {
+    body { cursor: auto; }
+}
+
 /* ── CURSOR ── */
 #cur {
     position: fixed;
@@ -43,6 +47,16 @@ body {
     transform: translate(-50%, -50%);
     transition: width .25s var(--ease), height .25s var(--ease), background .25s;
     mix-blend-mode: multiply;
+}
+
+/* hide custom cursor on touch devices */
+@media (pointer: coarse) {
+    #cur { display: none; }
+    body { cursor: auto; }
+    button, a, .bento-card, .proj-row, .pill,
+    .btn-primary, .btn-ghost, #btn-envia-wpp,
+    .game-start-btn, .form-group select,
+    #theme-toggle { cursor: pointer; }
 }
 
 #cur.big {
@@ -80,12 +94,63 @@ body::after {
 @media(max-width:900px) {
     #hero {
         grid-template-columns: 1fr;
-        padding: 100px 24px 60px;
-        text-align: center
+        padding: 90px 20px 60px;
+        text-align: center;
+        gap: 32px;
     }
 
     #hero-right {
         display: none
+    }
+
+    #hero-tag {
+        margin-bottom: 20px;
+        font-size: 12px;
+    }
+
+    #hero h1 {
+        font-size: clamp(42px, 11vw, 72px);
+        margin-bottom: 20px;
+    }
+
+    #hero-desc {
+        font-size: 16px;
+        margin-bottom: 32px;
+        max-width: 100%;
+    }
+
+    #hero-actions {
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .btn-primary,
+    .btn-ghost {
+        padding: 14px 24px;
+        font-size: 14px;
+    }
+}
+
+@media(max-width:480px) {
+    #hero {
+        padding: 80px 16px 48px;
+    }
+
+    #hero h1 {
+        font-size: clamp(36px, 12vw, 56px);
+    }
+
+    #hero-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-primary,
+    .btn-ghost {
+        width: 100%;
+        max-width: 280px;
+        text-align: center;
+        justify-content: center;
     }
 }
 
@@ -192,7 +257,7 @@ body::after {
 #hero-actions {
     display: flex;
     gap: 16px;
-    flex-wrap: wrap
+    flex-wrap: wrap;
 }
 
 .btn-primary {
@@ -410,13 +475,16 @@ body::after {
 @media(max-width:900px) {
     #bento {
         padding: 60px 16px;
-        grid-template-columns: 1fr 1fr
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
     }
 }
 
 @media(max-width:600px) {
     #bento {
-        grid-template-columns: 1fr
+        padding: 48px 12px;
+        grid-template-columns: 1fr;
+        gap: 10px;
     }
 }
 
@@ -499,7 +567,21 @@ body::after {
     .bc-contact,
     .bc-quote {
         grid-column: span 2;
-        grid-row: span 1
+        grid-row: span 1;
+        min-height: 180px;
+    }
+
+    .bc-about {
+        min-height: 280px;
+    }
+
+    .bc-gif1,
+    .bc-gif2 {
+        min-height: 240px;
+    }
+
+    .bc-projects {
+        min-height: 320px;
     }
 }
 
@@ -515,7 +597,38 @@ body::after {
     .bc-contact,
     .bc-quote {
         grid-column: span 1;
-        grid-row: span 1
+        grid-row: span 1;
+        min-height: 200px;
+    }
+
+    .bc-about {
+        min-height: 320px;
+    }
+
+    .bc-gif1,
+    .bc-gif2 {
+        min-height: 260px;
+    }
+
+    .bc-projects {
+        min-height: 360px;
+    }
+
+    .bc-pad {
+        padding: 20px 18px;
+    }
+
+    .bc-pad-sm {
+        padding: 16px 18px;
+    }
+
+    .bc-h2 {
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    .bc-body {
+        font-size: 14px;
     }
 }
 
@@ -727,6 +840,20 @@ body::after {
     height: 100%;
 }
 
+@media(max-width:600px) {
+    .bc-quote-inner {
+        gap: 12px;
+    }
+
+    .bc-quote-mark {
+        font-size: 56px;
+    }
+
+    .bc-quote-text {
+        font-size: 15px;
+    }
+}
+
 .bc-quote-mark {
     font-family: 'Syne', sans-serif;
     font-size: 80px;
@@ -753,6 +880,18 @@ body::after {
     justify-content: space-between;
     gap: 20px;
     flex-wrap: wrap;
+}
+
+@media(max-width:600px) {
+    .bc-contact-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn-envia-wpp {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 .bc-contact-text h3 {
@@ -819,6 +958,16 @@ body::after {
     background: #EBE3D5;
 }
 
+@media(max-width: 600px) {
+    #footer {
+        padding: 40px 16px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 12px;
+    }
+}
+
 #footer-logo {
     font-family: 'Syne', sans-serif;
     font-size: 24px;
@@ -866,8 +1015,8 @@ body::after {
 @media(max-width: 900px) {
     #contact-section {
         grid-template-columns: 1fr;
-        padding: 80px 24px;
-        gap: 48px;
+        padding: 60px 16px;
+        gap: 40px;
     }
 }
 
@@ -906,6 +1055,8 @@ body::after {
     font-size: 14px;
     color: #B0A695;
     font-family: 'JetBrains Mono', monospace;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
 .contact-info-row a {
@@ -966,7 +1117,21 @@ body.dark .contact-info-row a:hover {
     }
 
     #contact-form {
-        padding: 28px 20px
+        padding: 24px 16px;
+    }
+
+    #contact-left h2 {
+        font-size: clamp(28px, 8vw, 40px);
+    }
+
+    #contact-left p {
+        font-size: 15px;
+        margin-bottom: 28px;
+    }
+
+    .contact-info-row {
+        font-size: 13px;
+        word-break: break-all;
     }
 }
 
@@ -1196,16 +1361,16 @@ body.dark #form-success h3 {
 ══════════════════════════════════════════════════════════ */
 #theme-toggle {
     position: fixed;
-    top: 24px;
-    right: 24px;
+    top: 16px;
+    right: 16px;
     z-index: 9990;
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     border: 1px solid var(--border);
     background: var(--dark-card);
     box-shadow: 0 4px 20px rgba(119, 107, 93, 0.12);
-    cursor: none;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
