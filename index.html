@@ -208,6 +208,11 @@
                 <div class="doom-monitor">
                     <canvas id="snake-canvas"></canvas>
 
+                    <!-- Botão legenda -->
+                    <button id="snake-legend-btn" aria-label="Ver legenda do jogo" title="Legenda">
+                        <i class="fa-solid fa-circle-info"></i>
+                    </button>
+
                     <!-- D-pad mobile controls -->
                     <div id="dpad">
                         <button class="dpad-btn" id="dp-up"   aria-label="Cima">
@@ -241,6 +246,46 @@
                             </button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL LEGENDA SNAKE -->
+        <div id="snake-modal-backdrop">
+            <div id="snake-modal" role="dialog" aria-modal="true" aria-labelledby="snake-modal-title">
+                <div id="snake-modal-header">
+                    <span id="snake-modal-title"><i class="fa-solid fa-gamepad"></i> Guia do Jogo</span>
+                    <button id="snake-modal-close" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div class="snake-modal-section">
+                    <div class="sms-label">🍎 Frutas & Pontos</div>
+                    <div class="sms-table">
+                        <div class="sms-row"><span class="sms-dot" style="background:#F3EEEA"></span><span class="sms-name">Normal</span><span class="sms-pts">+10 pts</span><span class="sms-info">Sempre presente · cresce 2</span></div>
+                        <div class="sms-row"><span class="sms-dot" style="background:#e07b54"></span><span class="sms-name">Laranja</span><span class="sms-pts">+30 pts</span><span class="sms-info">20% chance · dura ~6s · cresce 3</span></div>
+                        <div class="sms-row"><span class="sms-dot" style="background:#7ec8e3"></span><span class="sms-name">Azul</span><span class="sms-pts">+50 pts</span><span class="sms-info">12% chance · dura ~5s · cresce 4</span></div>
+                        <div class="sms-row"><span class="sms-dot" style="background:#c97fd4"></span><span class="sms-name">Roxo</span><span class="sms-pts">+100 pts</span><span class="sms-info">6% chance · dura ~4s · cresce 5</span></div>
+                        <div class="sms-row"><span class="sms-dot" style="background:#f5d020;box-shadow:0 0 8px #f5d020"></span><span class="sms-name">Amarela ★</span><span class="sms-pts">+200 pts</span><span class="sms-info">2% chance · dura ~3s · cresce 6</span></div>
+                    </div>
+                </div>
+
+                <div class="snake-modal-section">
+                    <div class="sms-label">🎨 Fases (a cada 200 pts)</div>
+                    <div class="sms-table">
+                        <div class="sms-row sms-phase"><span class="sms-phase-swatch" style="background:#0a0a0a;border-color:#B0A695"></span><span class="sms-phase-pts">0</span><span class="sms-phase-name">INÍCIO</span><span class="sms-phase-snake" style="background:#B0A695"></span></div>
+                        <div class="sms-row sms-phase"><span class="sms-phase-swatch" style="background:#0a0f1a;border-color:#7ec8e3"></span><span class="sms-phase-pts">200</span><span class="sms-phase-name">OCEANO</span><span class="sms-phase-snake" style="background:#7ec8e3"></span></div>
+                        <div class="sms-row sms-phase"><span class="sms-phase-swatch" style="background:#0f0a1a;border-color:#c97fd4"></span><span class="sms-phase-pts">400</span><span class="sms-phase-name">GALÁXIA</span><span class="sms-phase-snake" style="background:#c97fd4"></span></div>
+                        <div class="sms-row sms-phase"><span class="sms-phase-swatch" style="background:#1a0a0a;border-color:#e07b54"></span><span class="sms-phase-pts">600</span><span class="sms-phase-name">INFERNO</span><span class="sms-phase-snake" style="background:#e07b54"></span></div>
+                        <div class="sms-row sms-phase"><span class="sms-phase-swatch" style="background:#0a1a0a;border-color:#66bb6a"></span><span class="sms-phase-pts">800</span><span class="sms-phase-name">FLORESTA</span><span class="sms-phase-snake" style="background:#66bb6a"></span></div>
+                        <div class="sms-row sms-phase"><span class="sms-phase-swatch" style="background:#1a1500;border-color:#f5d020"></span><span class="sms-phase-pts">1000</span><span class="sms-phase-name">DOURADO</span><span class="sms-phase-snake" style="background:#f5d020"></span></div>
+                        <div class="sms-row sms-phase"><span class="sms-phase-swatch" style="background:#001a1a;border-color:#4dd0e1"></span><span class="sms-phase-pts">1200</span><span class="sms-phase-name">ABISSAL</span><span class="sms-phase-snake" style="background:#4dd0e1"></span></div>
+                        <div class="sms-row sms-phase sms-phase-neon"><span class="sms-phase-swatch" style="background:#1a001a;border-color:#f48fb1"></span><span class="sms-phase-pts">1400</span><span class="sms-phase-name">NEON ★</span><span class="sms-phase-snake" style="background:#f48fb1"></span></div>
+                    </div>
+                </div>
+
+                <div class="snake-modal-section">
+                    <div class="sms-label">⚡ Velocidade</div>
+                    <p class="sms-tip">A cobra acelera a cada 50 pts. Começa devagar e fica bem rápida no NEON — mas é possível chegar lá!</p>
                 </div>
             </div>
         </div>

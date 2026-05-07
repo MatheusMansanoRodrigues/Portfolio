@@ -345,10 +345,15 @@ themeBtn.addEventListener('click', () => {
         { color: '#f5d020', glow: 'rgba(245,208,32,0.60)',  pts: 200, grow: 6, size: 0.42, label: '★200', spawnChance: 0.02, ttlBase: 22, ttlRand: 2  },
     ];
 
-    // Velocidade base em função do score: começa em 130ms, mínimo 38ms
-    // A cada 50 pts a velocidade aumenta ~2ms
+    // Velocidade baseada no score com curva suave:
+    // 0 pts   → 150ms (bem devagar no início)
+    // 200 pts → ~130ms
+    // 600 pts → ~105ms
+    // 1000 pts → ~85ms
+    // 1400 pts → ~70ms (NEON — rápido mas jogável)
+    // mínimo absoluto: 55ms
     function calcSpeed(s) {
-        return Math.max(38, 130 - Math.floor(s / 50) * 2);
+        return Math.max(55, Math.round(150 - Math.sqrt(s) * 2.1));
     }
 
     // ── TEMAS POR FASE (a cada 200 pts) ──────────────────────
@@ -857,3 +862,42 @@ $(function () {
         }, 700);
     });
 });
+
+/* ── SNAKE LEGEND MODAL ── */
+(function () {
+    const btn      = document.getElementById('snake-legend-btn');
+    const backdrop = document.getElementById('snake-modal-backdrop');
+    const closeBtn = document.getElementById('snake-modal-close');
+    if (!btn || !backdrop) return;
+
+    function openModal() {
+        backdrop.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        closeBtn.focus();
+    }
+
+    function closeModal() {
+        backdrop.classList.remove('open');
+        document.body.style.overflow = '';
+        btn.focus();
+    }
+
+    btn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+
+    // Fecha ao clicar no backdrop
+    backdrop.addEventListener('click', e => {
+        if (e.target === backdrop) closeModal();
+    });
+
+    // Fecha com ESC
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && backdrop.classList.contains('open')) closeModal();
+    });
+
+    // Cursor
+    btn.addEventListener('mouseenter', () => cur && cur.classList.add('big'));
+    btn.addEventListener('mouseleave', () => cur && cur.classList.remove('big'));
+    closeBtn.addEventListener('mouseenter', () => cur && cur.classList.add('big'));
+    closeBtn.addEventListener('mouseleave', () => cur && cur.classList.remove('big'));
+})();
