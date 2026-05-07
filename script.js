@@ -322,17 +322,115 @@ themeBtn.addEventListener('click', () => {
 
     const ctx = canvas.getContext('2d');
     const CELL = 18;
-    let cols, rows, snake, dir, nextDir, food, score, hi, running, raf, speed;
+    let cols, rows, snake, dir, nextDir, food, fruits, grow, score, hi, running, raf, speed;
+
+    // ── FRUIT TYPES ──────────────────────────────────────────
+    // idx 0 = comida normal (sempre presente)
+    // idx 1–4 = frutas bônus (aparecem por probabilidade, somem com TTL)
+    //
+    //  spawn chance = probabilidade de aparecer ao comer comida normal
+    //  ttlBase      = duração base em ticks (moves)
+    //  ttlRand      = variação aleatória extra
+    // ─────────────────────────────────────────────────────────
+    const FRUIT_TYPES = [
+        // 0 — normal (sempre presente)
+        { color: '#F3EEEA', glow: 'rgba(243,238,234,0.35)', pts: 10,  grow: 2, size: 0.28, label: null,   spawnChance: 1.00, ttlBase: 0,  ttlRand: 0  },
+        // 1 — laranja  +30   (20% de chance, dura ~6s)
+        { color: '#e07b54', glow: 'rgba(224,123,84,0.45)',  pts: 30,  grow: 3, size: 0.32, label: '+30',  spawnChance: 0.20, ttlBase: 43, ttlRand: 6  },
+        // 2 — azul     +50   (12% de chance, dura ~5s)
+        { color: '#7ec8e3', glow: 'rgba(126,200,227,0.45)', pts: 50,  grow: 4, size: 0.34, label: '+50',  spawnChance: 0.12, ttlBase: 36, ttlRand: 4  },
+        // 3 — roxo     +100  (6% de chance, dura ~4s)
+        { color: '#c97fd4', glow: 'rgba(201,127,212,0.45)', pts: 100, grow: 5, size: 0.38, label: '+100', spawnChance: 0.06, ttlBase: 29, ttlRand: 3  },
+        // 4 — amarela  +200  (2% de chance, dura ~3s — raríssima!)
+        { color: '#f5d020', glow: 'rgba(245,208,32,0.60)',  pts: 200, grow: 6, size: 0.42, label: '★200', spawnChance: 0.02, ttlBase: 22, ttlRand: 2  },
+    ];
+
+    // Velocidade base em função do score: começa em 130ms, mínimo 38ms
+    // A cada 50 pts a velocidade aumenta ~2ms
+    function calcSpeed(s) {
+        return Math.max(38, 130 - Math.floor(s / 50) * 2);
+    }
+
+    // ── TEMAS POR FASE (a cada 200 pts) ──────────────────────
+    // bg       = cor de fundo do canvas
+    // snake    = corpo da cobra
+    // snakeH   = cabeça da cobra
+    // grid     = cor da grade
+    // text     = HUD
+    // name     = label exibido na transição
+    // ─────────────────────────────────────────────────────────
+    const THEMES = [
+        { bg: '#0a0a0a', snake: '#776B5D', snakeH: '#B0A695', grid: 'rgba(119,107,93,0.06)', text: '#B0A695', name: 'INÍCIO'    },
+        { bg: '#0a0f1a', snake: '#3a7bd5', snakeH: '#7ec8e3', grid: 'rgba(58,123,213,0.08)', text: '#7ec8e3', name: 'OCEANO'    },
+        { bg: '#0f0a1a', snake: '#8b3ab5', snakeH: '#c97fd4', grid: 'rgba(139,58,181,0.08)', text: '#c97fd4', name: 'GALÁXIA'   },
+        { bg: '#1a0a0a', snake: '#b53a3a', snakeH: '#e07b54', grid: 'rgba(181,58,58,0.08)',  text: '#e07b54', name: 'INFERNO'   },
+        { bg: '#0a1a0a', snake: '#2e7d32', snakeH: '#66bb6a', grid: 'rgba(46,125,50,0.08)',  text: '#66bb6a', name: 'FLORESTA'  },
+        { bg: '#1a1500', snake: '#b8860b', snakeH: '#f5d020', grid: 'rgba(184,134,11,0.08)', text: '#f5d020', name: 'DOURADO'   },
+        { bg: '#001a1a', snake: '#00838f', snakeH: '#4dd0e1', grid: 'rgba(0,131,143,0.08)',  text: '#4dd0e1', name: 'ABISSAL'   },
+        { bg: '#1a001a', snake: '#ad1457', snakeH: '#f48fb1', grid: 'rgba(173,20,87,0.08)',  text: '#f48fb1', name: 'NEON'      },
+    ];
+
+    // Interpolação hex entre dois temas
+    function hexToRgb(hex) {
+        const r = parseInt(hex.slice(1,3),16);
+        const g = parseInt(hex.slice(3,5),16);
+        const b = parseInt(hex.slice(5,7),16);
+        return [r, g, b];
+    }
+    function lerpColor(a, b, t) {
+        const [r1,g1,b1] = hexToRgb(a);
+        const [r2,g2,b2] = hexToRgb(b);
+        const r = Math.round(r1 + (r2-r1)*t);
+        const g = Math.round(g1 + (g2-g1)*t);
+        const bl = Math.round(b1 + (b2-b1)*t);
+        return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${bl.toString(16).padStart(2,'0')}`;
+    }
+
+    // Estado da transição de tema
+    let themeProgress = 0;   // 0..1 — progresso da interpolação atual
+    let lastThemeIdx  = 0;   // tema anterior
+    let curThemeIdx   = 0;   // tema atual
+    let themeFlash    = '';  // nome do tema para exibir brevemente
+
+    function getThemeIdx(s) {
+        return Math.floor(s / 200) % THEMES.length;
+    }
+
+    // Retorna as cores interpoladas entre lastTheme e curTheme
+    function C_live() {
+        const p = themeProgress;
+        const A = THEMES[lastThemeIdx];
+        const B = THEMES[curThemeIdx];
+        if (p >= 1) return { bg: B.bg, snake: B.snake, snakeH: B.snakeH, text: B.text, grid: B.grid };
+        return {
+            bg:     lerpColor(A.bg,     B.bg,     p),
+            snake:  lerpColor(A.snake,  B.snake,  p),
+            snakeH: lerpColor(A.snakeH, B.snakeH, p),
+            text:   B.text,   // texto muda imediatamente
+            grid:   B.grid,
+        };
+    }
+
+    // Checa se houve mudança de fase e dispara transição
+    function checkTheme() {
+        const idx = getThemeIdx(score);
+        if (idx !== curThemeIdx) {
+            lastThemeIdx  = curThemeIdx;
+            curThemeIdx   = idx;
+            themeProgress = 0;
+            themeFlash    = THEMES[idx].name;
+            setTimeout(() => { themeFlash = ''; }, 1800);
+        }
+        // Avança a interpolação (~0.06 por tick = ~8 ticks = ~1s de transição)
+        if (themeProgress < 1) themeProgress = Math.min(1, themeProgress + 0.06);
+    }
 
     const C = {
         bg:     '#0a0a0a',
         grid:   'rgba(119,107,93,0.06)',
         snake:  '#776B5D',
         snakeH: '#B0A695',
-        food:   '#F3EEEA',
-        foodGlow:'rgba(243,238,234,0.35)',
         text:   '#B0A695',
-        dim:    'rgba(119,107,93,0.4)',
     };
 
     function resize() {
@@ -344,28 +442,66 @@ themeBtn.addEventListener('click', () => {
         rows = canvas.height / CELL;
     }
 
-    function rndFood() {
-        let pos;
+    function rndPos(exclude) {
+        let pos, tries = 0;
         do {
             pos = { x: Math.floor(Math.random() * cols), y: Math.floor(Math.random() * rows) };
-        } while (snake.some(s => s.x === pos.x && s.y === pos.y));
+            tries++;
+        } while (
+            tries < 200 && (
+                snake.some(s => s.x === pos.x && s.y === pos.y) ||
+                (exclude && exclude.some(f => f.x === pos.x && f.y === pos.y))
+            )
+        );
         return pos;
+    }
+
+    // Tenta spawnar cada tipo de fruta bônus com sua probabilidade individual
+    function trySpawnFruits() {
+        const occupied = [food, ...fruits];
+        // Testa tipos 1–4 em ordem crescente de raridade
+        for (let typeIdx = 1; typeIdx <= 4; typeIdx++) {
+            const ft = FRUIT_TYPES[typeIdx];
+            // Não spawna se já existe uma do mesmo tipo na tela
+            if (fruits.some(f => f.typeIdx === typeIdx)) continue;
+            // Rola o dado
+            if (Math.random() < ft.spawnChance) {
+                const pos = rndPos(occupied);
+                const ttl = ft.ttlBase + Math.floor(Math.random() * ft.ttlRand);
+                fruits.push({ ...pos, typeIdx, ttl, maxTtl: ttl });
+                occupied.push(pos);
+            }
+        }
     }
 
     function init() {
         resize();
         const mx = Math.floor(cols / 2), my = Math.floor(rows / 2);
-        snake   = [{ x: mx, y: my }, { x: mx - 1, y: my }, { x: mx - 2, y: my }];
+        snake   = [
+            { x: mx,     y: my },
+            { x: mx - 1, y: my },
+            { x: mx - 2, y: my },
+            { x: mx - 3, y: my },
+            { x: mx - 4, y: my },
+        ];
         dir     = { x: 1, y: 0 };
         nextDir = { x: 1, y: 0 };
-        food    = rndFood();
+        food    = rndPos([]);
+        fruits  = [];
+        grow    = 0;
         score   = 0;
-        speed   = 120;
+        speed   = calcSpeed(0);
         hi      = hi || 0;
+        // reset tema
+        lastThemeIdx  = 0;
+        curThemeIdx   = 0;
+        themeProgress = 1;
+        themeFlash    = '';
     }
 
     function drawGrid() {
-        ctx.strokeStyle = C.grid;
+        const cl = C_live();
+        ctx.strokeStyle = cl.grid;
         ctx.lineWidth = .5;
         for (let x = 0; x <= cols; x++) {
             ctx.beginPath(); ctx.moveTo(x * CELL, 0); ctx.lineTo(x * CELL, canvas.height); ctx.stroke();
@@ -376,38 +512,79 @@ themeBtn.addEventListener('click', () => {
     }
 
     function drawSnake() {
+        const cl = C_live();
         snake.forEach((seg, i) => {
-            const r = i === 0 ? 6 : 4;
-            ctx.fillStyle = i === 0 ? C.snakeH : C.snake;
-            ctx.globalAlpha = i === 0 ? 1 : Math.max(0.35, 1 - i * 0.04);
+            const r = i === 0 ? 7 : 5;
+            ctx.fillStyle = i === 0 ? cl.snakeH : cl.snake;
+            ctx.globalAlpha = i === 0 ? 1 : Math.max(0.3, 1 - i * 0.03);
             roundRect(seg.x * CELL + 1, seg.y * CELL + 1, CELL - 2, CELL - 2, r);
             ctx.fill();
         });
         ctx.globalAlpha = 1;
     }
 
-    function drawFood(t) {
-        const pulse = 1 + Math.sin(t * 0.005) * 0.15;
-        const fx = food.x * CELL + CELL / 2;
-        const fy = food.y * CELL + CELL / 2;
+    function drawOneFruit(fx, fy, typeIdx, t, ttl, maxTtl) {
+        const ft = FRUIT_TYPES[typeIdx];
+
+        // Pisca nos últimos 40% do TTL — aviso visual de que vai sumir
+        let alpha = 1;
+        if (ttl !== undefined && maxTtl) {
+            const ratio = ttl / maxTtl;
+            if (ratio < 0.40) {
+                alpha = 0.2 + 0.8 * Math.abs(Math.sin(t * 0.02));
+            }
+        }
+
+        const pulse = 1 + Math.sin(t * 0.005 + typeIdx * 1.3) * 0.15;
+        ctx.globalAlpha = alpha;
+
         // glow
-        const grad = ctx.createRadialGradient(fx, fy, 0, fx, fy, CELL * pulse);
-        grad.addColorStop(0, C.foodGlow);
+        const grad = ctx.createRadialGradient(fx, fy, 0, fx, fy, CELL * pulse * 1.1);
+        grad.addColorStop(0, ft.glow);
         grad.addColorStop(1, 'transparent');
         ctx.fillStyle = grad;
-        ctx.beginPath(); ctx.arc(fx, fy, CELL * pulse, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(fx, fy, CELL * pulse * 1.1, 0, Math.PI * 2); ctx.fill();
+
         // dot
-        ctx.fillStyle = C.food;
-        ctx.beginPath(); ctx.arc(fx, fy, CELL * 0.28 * pulse, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = ft.color;
+        ctx.beginPath(); ctx.arc(fx, fy, CELL * ft.size * pulse, 0, Math.PI * 2); ctx.fill();
+
+        // label
+        if (ft.label) {
+            ctx.fillStyle = ft.color;
+            ctx.font = `700 8px "JetBrains Mono", monospace`;
+            ctx.textAlign = 'center';
+            ctx.fillText(ft.label, fx, fy - CELL * ft.size * pulse - 3);
+        }
+
+        ctx.globalAlpha = 1;
+    }
+
+    function drawFoods(t) {
+        drawOneFruit(food.x * CELL + CELL / 2, food.y * CELL + CELL / 2, 0, t, undefined, undefined);
+        fruits.forEach(f => {
+            drawOneFruit(f.x * CELL + CELL / 2, f.y * CELL + CELL / 2, f.typeIdx, t, f.ttl, f.maxTtl);
+        });
     }
 
     function drawHUD() {
-        ctx.fillStyle = C.text;
+        const cl = C_live();
+        ctx.fillStyle = cl.text;
         ctx.font = `600 11px "JetBrains Mono", monospace`;
         ctx.textAlign = 'left';
         ctx.fillText(`SCORE  ${String(score).padStart(4,'0')}`, 8, 16);
         ctx.textAlign = 'right';
         ctx.fillText(`BEST  ${String(hi).padStart(4,'0')}`, canvas.width - 8, 16);
+
+        // Flash do nome da fase na transição
+        if (themeFlash) {
+            ctx.globalAlpha = 0.85;
+            ctx.fillStyle = cl.snakeH;
+            ctx.font = `900 ${Math.floor(canvas.width / 14)}px "Syne", sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.fillText(themeFlash, canvas.width / 2, canvas.height / 2 + 6);
+            ctx.globalAlpha = 1;
+        }
     }
 
     function roundRect(x, y, w, h, r) {
@@ -429,10 +606,11 @@ themeBtn.addEventListener('click', () => {
         if (!running) return;
         raf = requestAnimationFrame(loop);
 
-        ctx.fillStyle = C.bg;
+        const cl = C_live();
+        ctx.fillStyle = cl.bg;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         drawGrid();
-        drawFood(t);
+        drawFoods(t);
         drawSnake();
         drawHUD();
 
@@ -452,23 +630,46 @@ themeBtn.addEventListener('click', () => {
 
         snake.unshift(head);
 
+        // tick TTLs — remove frutas expiradas
+        fruits = fruits.filter(f => { f.ttl--; return f.ttl > 0; });
+
+        // check normal food
         if (head.x === food.x && head.y === food.y) {
-            score += 10;
-            food = rndFood();
-            speed = Math.max(60, speed - 2); // speed up
-        } else {
-            snake.pop();
+            const ft = FRUIT_TYPES[0];
+            score += ft.pts;
+            grow  += ft.grow;
+            food   = rndPos(fruits);
+            speed  = calcSpeed(score);
+            checkTheme();
+            trySpawnFruits();
         }
+
+        // check bonus fruits
+        fruits = fruits.filter(f => {
+            if (f.x === head.x && f.y === head.y) {
+                const ft = FRUIT_TYPES[f.typeIdx];
+                score += ft.pts;
+                grow  += ft.grow;
+                speed  = calcSpeed(score);
+                checkTheme();
+                return false;
+            }
+            return true;
+        });
+
+        // grow ou remove cauda
+        if (grow > 0) { grow--; } else { snake.pop(); }
     }
 
     function drawGameOver() {
+        const cl = C_live();
         ctx.fillStyle = 'rgba(10,10,10,0.75)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = C.snakeH;
+        ctx.fillStyle = cl.snakeH;
         ctx.font = `900 ${Math.floor(canvas.width / 10)}px "Syne", sans-serif`;
         ctx.textAlign = 'center';
         ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 10);
-        ctx.fillStyle = C.text;
+        ctx.fillStyle = cl.text;
         ctx.font = `500 11px "JetBrains Mono", monospace`;
         ctx.fillText(`score ${score}  ·  press R or tap to restart`, canvas.width / 2, canvas.height / 2 + 20);
     }
@@ -479,6 +680,7 @@ themeBtn.addEventListener('click', () => {
         init();
         running = true;
         lastMove = 0;
+        grow = 0;
         if (raf) cancelAnimationFrame(raf);
         raf = requestAnimationFrame(loop);
         canvas.focus();
