@@ -758,7 +758,10 @@ themeBtn.addEventListener('click', () => {
     // idle draw
     resize();
     ctx.fillStyle = C.bg; ctx.fillRect(0, 0, canvas.width, canvas.height);
-    new ResizeObserver(() => { if (!running) { resize(); ctx.fillStyle = C.bg; ctx.fillRect(0,0,canvas.width,canvas.height); } }).observe(canvas.parentElement);
+    new ResizeObserver(() => {
+        resize();
+        if (!running) { ctx.fillStyle = C.bg; ctx.fillRect(0,0,canvas.width,canvas.height); }
+    }).observe(canvas.parentElement);
 })();
 
 function animCount(el, target, duration = 1200) {
@@ -863,6 +866,66 @@ $(function () {
     });
 });
 
+/* ── FOOTER LOGO EASTER EGG ── */
+(function () {
+    const logo = document.getElementById('footer-logo');
+    if (!logo) return;
+
+    const COLORS = ['#e07b54','#7ec8e3','#c97fd4','#f5d020','#66bb6a','#f48fb1','#4dd0e1','#B0A695'];
+    let busy = false;
+
+    function spawnConfetti(originX, originY) {
+        const count = 38;
+        for (let i = 0; i < count; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'confetti-dot';
+
+            const angle  = (Math.PI * 2 / count) * i + (Math.random() - 0.5) * 0.4;
+            const dist   = 80 + Math.random() * 120;
+            const tx     = Math.cos(angle) * dist;
+            const ty     = Math.sin(angle) * dist - 60; // sobe um pouco
+            const rot    = (Math.random() * 720 - 360) + 'deg';
+            const dur    = (0.8 + Math.random() * 0.6).toFixed(2) + 's';
+            const color  = COLORS[Math.floor(Math.random() * COLORS.length)];
+            const size   = (5 + Math.random() * 6).toFixed(1) + 'px';
+
+            dot.style.cssText = `
+                left:${originX}px; top:${originY}px;
+                background:${color};
+                width:${size}; height:${size};
+                --tx:${tx}px; --ty:${ty}px;
+                --rot:${rot}; --dur:${dur};
+                --ease:cubic-bezier(0.16,1,0.3,1);
+            `;
+            document.body.appendChild(dot);
+            setTimeout(() => dot.remove(), parseFloat(dur) * 1000 + 100);
+        }
+    }
+
+    logo.addEventListener('click', function (e) {
+        if (busy) return;
+        busy = true;
+
+        // glitch no texto
+        logo.classList.add('glitch');
+        setTimeout(() => logo.classList.remove('glitch'), 520);
+
+        // confetti a partir do centro do logo
+        const r = logo.getBoundingClientRect();
+        spawnConfetti(r.left + r.width / 2, r.top + r.height / 2);
+
+        // cursor big
+        cur && cur.classList.add('big');
+        setTimeout(() => {
+            cur && cur.classList.remove('big');
+            busy = false;
+        }, 600);
+    });
+
+    logo.addEventListener('mouseenter', () => cur && cur.classList.add('big'));
+    logo.addEventListener('mouseleave', () => cur && cur.classList.remove('big'));
+})();
+
 /* ── SNAKE LEGEND MODAL ── */
 (function () {
     const btn      = document.getElementById('snake-legend-btn');
@@ -900,4 +963,106 @@ $(function () {
     btn.addEventListener('mouseleave', () => cur && cur.classList.remove('big'));
     closeBtn.addEventListener('mouseenter', () => cur && cur.classList.add('big'));
     closeBtn.addEventListener('mouseleave', () => cur && cur.classList.remove('big'));
+})();
+
+/* ── SNAKE FULLSCREEN ── */
+(function () {
+    const fsBtn  = document.getElementById('snake-fullscreen-btn');
+    const monitor = document.querySelector('.doom-monitor');
+    if (!fsBtn || !monitor) return;
+
+    const fsIcon = fsBtn.querySelector('i');
+
+    function enterFullscreen() {
+        if (monitor.requestFullscreen) {
+            monitor.requestFullscreen();
+        } else if (monitor.webkitRequestFullscreen) {
+            monitor.webkitRequestFullscreen();
+        } else if (monitor.mozRequestFullScreen) {
+            monitor.mozRequestFullScreen();
+        } else if (monitor.msRequestFullscreen) {
+            monitor.msRequestFullscreen();
+        } else {
+            // Fallback CSS para browsers sem suporte à API
+            monitor.classList.add('snake-fullscreen');
+            document.body.style.overflow = 'hidden';
+            fsIcon.className = 'fa-solid fa-compress';
+            fsBtn.setAttribute('title', 'Sair da tela cheia');
+            fsBtn.setAttribute('aria-label', 'Sair da tela cheia');
+            // Dispara resize do canvas
+            window.dispatchEvent(new Event('resize'));
+        }
+    }
+
+    function exitFullscreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        } else {
+            // Fallback CSS
+            monitor.classList.remove('snake-fullscreen');
+            document.body.style.overflow = '';
+            fsIcon.className = 'fa-solid fa-expand';
+            fsBtn.setAttribute('title', 'Tela cheia');
+            fsBtn.setAttribute('aria-label', 'Tela cheia');
+            window.dispatchEvent(new Event('resize'));
+        }
+    }
+
+    fsBtn.addEventListener('click', () => {
+        const isFs = document.fullscreenElement ||
+                     document.webkitFullscreenElement ||
+                     document.mozFullScreenElement ||
+                     document.msFullscreenElement ||
+                     monitor.classList.contains('snake-fullscreen');
+
+        if (isFs) {
+            exitFullscreen();
+        } else {
+            enterFullscreen();
+        }
+    });
+
+    // Atualiza ícone e canvas ao entrar/sair via API nativa
+    function onFsChange() {
+        const isFs = document.fullscreenElement ||
+                     document.webkitFullscreenElement ||
+                     document.mozFullScreenElement ||
+                     document.msFullscreenElement;
+
+        if (isFs) {
+            fsIcon.className = 'fa-solid fa-compress';
+            fsBtn.setAttribute('title', 'Sair da tela cheia');
+            fsBtn.setAttribute('aria-label', 'Sair da tela cheia');
+        } else {
+            fsIcon.className = 'fa-solid fa-expand';
+            fsBtn.setAttribute('title', 'Tela cheia');
+            fsBtn.setAttribute('aria-label', 'Tela cheia');
+            monitor.classList.remove('snake-fullscreen');
+            document.body.style.overflow = '';
+        }
+        // Força o canvas a recalcular tamanho
+        setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
+    }
+
+    document.addEventListener('fullscreenchange',       onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    document.addEventListener('mozfullscreenchange',    onFsChange);
+    document.addEventListener('MSFullscreenChange',     onFsChange);
+
+    // Sai do fullscreen CSS com ESC
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && monitor.classList.contains('snake-fullscreen')) {
+            exitFullscreen();
+        }
+    });
+
+    // Cursor
+    fsBtn.addEventListener('mouseenter', () => cur && cur.classList.add('big'));
+    fsBtn.addEventListener('mouseleave', () => cur && cur.classList.remove('big'));
 })();
