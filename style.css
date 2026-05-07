@@ -1835,7 +1835,7 @@ body.dark #game-overlay { background: rgba(5,5,5,0.9); }
 /* ── D-PAD ── */
 #dpad {
     position: absolute;
-    bottom: 14px;
+    bottom: 50px;
     right: 14px;
     width: 110px;
     height: 110px;
@@ -1895,49 +1895,22 @@ body.dark .dpad-btn {
 }
 
 /* ══════════════════════════════════════════════════════════
-   SNAKE — BOTÃO LEGENDA
+   SNAKE — BOTÕES (legenda, pause, fullscreen)
+   Ficam no canto inferior direito para não cobrir o HUD
 ══════════════════════════════════════════════════════════ */
-#snake-legend-btn {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 7;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: 1px solid rgba(176,166,149,0.3);
-    background: rgba(10,10,10,0.7);
-    color: #B0A695;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background .2s ease, color .2s ease, transform .2s ease;
-    backdrop-filter: blur(4px);
-}
-
-#snake-legend-btn:hover {
-    background: rgba(119,107,93,0.85);
-    color: #F3EEEA;
-    transform: scale(1.1);
-}
-
-/* ══════════════════════════════════════════════════════════
-   SNAKE — BOTÃO FULLSCREEN
-══════════════════════════════════════════════════════════ */
+#snake-legend-btn,
+#snake-pause-btn,
 #snake-fullscreen-btn {
     position: absolute;
-    top: 10px;
-    left: 48px;
+    bottom: 10px;
     z-index: 7;
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     border: 1px solid rgba(176,166,149,0.3);
     background: rgba(10,10,10,0.7);
     color: #B0A695;
-    font-size: 13px;
+    font-size: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1946,10 +1919,76 @@ body.dark .dpad-btn {
     backdrop-filter: blur(4px);
 }
 
+/* posições da direita para a esquerda */
+#snake-fullscreen-btn { right: 10px; }
+#snake-pause-btn      { right: 46px; opacity: 0; pointer-events: none; }
+#snake-legend-btn     { right: 82px; }
+
+/* pause só aparece quando o jogo está ativo */
+.doom-monitor.game-active #snake-pause-btn {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#snake-legend-btn:hover,
+#snake-pause-btn:hover,
 #snake-fullscreen-btn:hover {
     background: rgba(119,107,93,0.85);
     color: #F3EEEA;
     transform: scale(1.1);
+}
+
+/* estado pausado — ícone fica destacado */
+#snake-pause-btn.paused {
+    background: rgba(119,107,93,0.6);
+    color: #F3EEEA;
+    border-color: rgba(176,166,149,0.6);
+}
+
+/* overlay de pause */
+#pause-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,10,10,0.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 6;
+    border-radius: inherit;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+    backdrop-filter: blur(2px);
+}
+
+#pause-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.pause-inner {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.pause-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(22px, 4vw, 36px);
+    font-weight: 900;
+    letter-spacing: .2em;
+    color: #B0A695;
+    line-height: 1;
+}
+
+.pause-hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .18em;
+    color: rgba(176,166,149,0.6);
+    text-transform: uppercase;
 }
 
 /* ── Modo fullscreen do jogo ── */
@@ -1966,9 +2005,6 @@ body.dark .dpad-btn {
     width: 100% !important;
     height: 100% !important;
 }
-
-/* Cursor padrão no fullscreen */
-#snake-fullscreen-btn { cursor: pointer; }
 
 /* ══════════════════════════════════════════════════════════
    SNAKE — MODAL LEGENDA

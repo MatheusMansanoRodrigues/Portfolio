@@ -213,6 +213,11 @@
                         <i class="fa-solid fa-circle-info"></i>
                     </button>
 
+                    <!-- Botão pause -->
+                    <button id="snake-pause-btn" aria-label="Pausar jogo" title="Pausar (P)">
+                        <i class="fa-solid fa-pause"></i>
+                    </button>
+
                     <!-- Botão fullscreen -->
                     <button id="snake-fullscreen-btn" aria-label="Tela cheia" title="Tela cheia">
                         <i class="fa-solid fa-expand"></i>
@@ -233,6 +238,14 @@
                         <button class="dpad-btn" id="dp-down"  aria-label="Baixo">
                             <i class="fa-solid fa-chevron-down"></i>
                         </button>
+                    </div>
+
+                    <!-- Overlay de pause -->
+                    <div id="pause-overlay">
+                        <div class="pause-inner">
+                            <div class="pause-title">PAUSE</div>
+                            <div class="pause-hint">P · Espaço · tap para continuar</div>
+                        </div>
                     </div>
 
                     <div id="game-overlay">

@@ -322,7 +322,7 @@ themeBtn.addEventListener('click', () => {
 
     const ctx = canvas.getContext('2d');
     const CELL = 18;
-    let cols, rows, snake, dir, nextDir, food, fruits, grow, score, hi, running, raf, speed;
+    let cols, rows, snake, dir, nextDir, food, fruits, grow, score, hi, running, paused, raf, speed;
 
     // ── FRUIT TYPES ──────────────────────────────────────────
     // idx 0 = comida normal (sempre presente)
@@ -502,6 +502,7 @@ themeBtn.addEventListener('click', () => {
         curThemeIdx   = 0;
         themeProgress = 1;
         themeFlash    = '';
+        paused        = false;
     }
 
     function drawGrid() {
@@ -611,6 +612,18 @@ themeBtn.addEventListener('click', () => {
         if (!running) return;
         raf = requestAnimationFrame(loop);
 
+        // Se pausado, redesenha o frame estático sem avançar o jogo
+        if (paused) {
+            const cl = C_live();
+            ctx.fillStyle = cl.bg;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            drawGrid();
+            drawFoods(t);
+            drawSnake();
+            drawHUD();
+            return;
+        }
+
         const cl = C_live();
         ctx.fillStyle = cl.bg;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -628,6 +641,11 @@ themeBtn.addEventListener('click', () => {
         // self collision
         if (snake.some(s => s.x === head.x && s.y === head.y)) {
             running = false;
+            paused  = false;
+            if (pauseOverlay) pauseOverlay.classList.remove('visible');
+            if (pauseBtn)     pauseBtn.classList.remove('paused');
+            if (pauseIcon)    pauseIcon.className = 'fa-solid fa-pause';
+            if (monitor)      monitor.classList.remove('game-active');
             if (score > hi) hi = score;
             drawGameOver();
             return;
@@ -682,8 +700,10 @@ themeBtn.addEventListener('click', () => {
     function startGame() {
         overlay && overlay.classList.add('hidden');
         if (dpad) dpad.classList.add('visible');
+        monitor && monitor.classList.add('game-active');
         init();
         running = true;
+        paused  = false;
         lastMove = 0;
         grow = 0;
         if (raf) cancelAnimationFrame(raf);
@@ -692,7 +712,27 @@ themeBtn.addEventListener('click', () => {
     }
 
     // ── D-PAD (declared before use) ──
-    const dpad = document.getElementById('dpad');
+    const dpad    = document.getElementById('dpad');
+    const monitor = canvas.closest('.doom-monitor');
+    const pauseOverlay = document.getElementById('pause-overlay');
+    const pauseBtn     = document.getElementById('snake-pause-btn');
+    const pauseIcon    = pauseBtn ? pauseBtn.querySelector('i') : null;
+
+    function togglePause() {
+        if (!running) return;
+        paused = !paused;
+        if (pauseOverlay) pauseOverlay.classList.toggle('visible', paused);
+        if (pauseBtn)     pauseBtn.classList.toggle('paused', paused);
+        if (pauseIcon)    pauseIcon.className = paused ? 'fa-solid fa-play' : 'fa-solid fa-pause';
+        if (pauseBtn)     pauseBtn.setAttribute('title', paused ? 'Continuar (P)' : 'Pausar (P)');
+        if (pauseBtn)     pauseBtn.setAttribute('aria-label', paused ? 'Continuar jogo' : 'Pausar jogo');
+        // Ao retomar, reseta o lastMove para evitar salto de velocidade
+        if (!paused) lastMove = 0;
+    }
+
+    pauseBtn && pauseBtn.addEventListener('click', togglePause);
+    pauseBtn && pauseBtn.addEventListener('mouseenter', () => cur && cur.classList.add('big'));
+    pauseBtn && pauseBtn.addEventListener('mouseleave', () => cur && cur.classList.remove('big'));
     const dpMap = {
         'dp-up':    { x: 0, y:-1 },
         'dp-down':  { x: 0, y: 1 },
@@ -706,11 +746,13 @@ themeBtn.addEventListener('click', () => {
         btn.addEventListener('touchstart', e => {
             e.preventDefault();
             if (!running) { startGame(); return; }
+            if (paused) { togglePause(); return; }
             if (d.x !== -dir.x || d.y !== -dir.y) nextDir = d;
         }, { passive: false });
         btn.addEventListener('mousedown', e => {
             e.preventDefault();
             if (!running) { startGame(); return; }
+            if (paused) { togglePause(); return; }
             if (d.x !== -dir.x || d.y !== -dir.y) nextDir = d;
         });
     });
@@ -726,8 +768,16 @@ themeBtn.addEventListener('click', () => {
     };
 
     document.addEventListener('keydown', e => {
+        // Pause com P ou Espaço
+        if ((e.key === 'p' || e.key === 'P' || e.key === ' ') && running) {
+            togglePause();
+            e.preventDefault();
+            return;
+        }
         const d = DIRS[e.key];
         if (d) {
+            // Retoma o jogo ao pressionar uma direção enquanto pausado
+            if (paused) togglePause();
             if (d.x !== -dir.x || d.y !== -dir.y) nextDir = d;
             e.preventDefault();
         }
@@ -741,7 +791,12 @@ themeBtn.addEventListener('click', () => {
         if (!running) { startGame(); return; }
         const dx = e.changedTouches[0].clientX - tx0;
         const dy = e.changedTouches[0].clientY - ty0;
-        if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return; // ignore taps
+        if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+            // tap: despausar se pausado
+            if (paused) { togglePause(); return; }
+            return;
+        }
+        if (paused) return; // ignora swipe enquanto pausado
         let d;
         if (Math.abs(dx) > Math.abs(dy)) d = dx > 0 ? { x:1,y:0 } : { x:-1,y:0 };
         else d = dy > 0 ? { x:0,y:1 } : { x:0,y:-1 };
