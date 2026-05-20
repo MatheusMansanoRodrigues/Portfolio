@@ -464,6 +464,16 @@ themeBtn.addEventListener('click', () => {
     // Tenta spawnar cada tipo de fruta bônus com sua probabilidade individual
     function trySpawnFruits() {
         const occupied = [food, ...fruits];
+
+        // Em fullscreen o canvas é muito maior — aumenta o TTL para dar tempo de chegar
+        const monitor = canvas.closest('.doom-monitor');
+        const isFs = document.fullscreenElement ||
+                     document.webkitFullscreenElement ||
+                     document.mozFullScreenElement  ||
+                     document.msFullscreenElement   ||
+                     (monitor && monitor.classList.contains('snake-fullscreen'));
+        const ttlMult = isFs ? 2.2 : 1;
+
         // Testa tipos 1–4 em ordem crescente de raridade
         for (let typeIdx = 1; typeIdx <= 4; typeIdx++) {
             const ft = FRUIT_TYPES[typeIdx];
@@ -472,7 +482,7 @@ themeBtn.addEventListener('click', () => {
             // Rola o dado
             if (Math.random() < ft.spawnChance) {
                 const pos = rndPos(occupied);
-                const ttl = ft.ttlBase + Math.floor(Math.random() * ft.ttlRand);
+                const ttl = Math.round((ft.ttlBase + Math.floor(Math.random() * ft.ttlRand)) * ttlMult);
                 fruits.push({ ...pos, typeIdx, ttl, maxTtl: ttl });
                 occupied.push(pos);
             }
@@ -717,6 +727,16 @@ themeBtn.addEventListener('click', () => {
     const pauseOverlay = document.getElementById('pause-overlay');
     const pauseBtn     = document.getElementById('snake-pause-btn');
     const pauseIcon    = pauseBtn ? pauseBtn.querySelector('i') : null;
+
+    // Cursor pointer ao entrar no bloco do jogo
+    if (monitor) {
+        monitor.addEventListener('mouseenter', () => {
+            if (cur) cur.classList.add('game-pointer');
+        });
+        monitor.addEventListener('mouseleave', () => {
+            if (cur) cur.classList.remove('game-pointer');
+        });
+    }
 
     function togglePause() {
         if (!running) return;
@@ -1044,7 +1064,7 @@ $(function () {
             fsIcon.className = 'fa-solid fa-compress';
             fsBtn.setAttribute('title', 'Sair da tela cheia');
             fsBtn.setAttribute('aria-label', 'Sair da tela cheia');
-            // Dispara resize do canvas
+            if (cur) cur.classList.add('game-pointer');
             window.dispatchEvent(new Event('resize'));
         }
     }
@@ -1065,6 +1085,7 @@ $(function () {
             fsIcon.className = 'fa-solid fa-expand';
             fsBtn.setAttribute('title', 'Tela cheia');
             fsBtn.setAttribute('aria-label', 'Tela cheia');
+            if (cur) cur.classList.remove('game-pointer');
             window.dispatchEvent(new Event('resize'));
         }
     }
@@ -1094,12 +1115,14 @@ $(function () {
             fsIcon.className = 'fa-solid fa-compress';
             fsBtn.setAttribute('title', 'Sair da tela cheia');
             fsBtn.setAttribute('aria-label', 'Sair da tela cheia');
+            if (cur) cur.classList.add('game-pointer');
         } else {
             fsIcon.className = 'fa-solid fa-expand';
             fsBtn.setAttribute('title', 'Tela cheia');
             fsBtn.setAttribute('aria-label', 'Tela cheia');
             monitor.classList.remove('snake-fullscreen');
             document.body.style.overflow = '';
+            if (cur) cur.classList.remove('game-pointer');
         }
         // Força o canvas a recalcular tamanho
         setTimeout(() => window.dispatchEvent(new Event('resize')), 50);

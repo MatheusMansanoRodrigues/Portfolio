@@ -57,12 +57,6 @@ body {
     cursor: auto;
 }
 
-#snake-modal button,
-#snake-modal a,
-#snake-legend-btn {
-    cursor: pointer;
-}
-
 /* hide custom cursor on touch devices */
 @media (pointer: coarse) {
     #cur { display: none; }
@@ -70,7 +64,6 @@ body {
     button, a, .bento-card, .proj-row, .pill,
     .btn-primary, .btn-ghost, #btn-envia-wpp,
     .game-start-btn, .form-group select,
-    #theme-toggle { cursor: pointer; }
 }
 
 #cur.big {
@@ -1436,7 +1429,6 @@ body.dark #form-success h3 {
     border: 1px solid var(--border);
     background: var(--dark-card);
     box-shadow: 0 4px 20px rgba(119, 107, 93, 0.12);
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1864,7 +1856,6 @@ body.dark #game-overlay { background: rgba(5,5,5,0.9); }
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     transition: background .15s ease, transform .1s ease;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
@@ -1914,7 +1905,6 @@ body.dark .dpad-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     transition: background .2s ease, color .2s ease, transform .2s ease;
     backdrop-filter: blur(4px);
 }
@@ -1991,7 +1981,16 @@ body.dark .dpad-btn {
     text-transform: uppercase;
 }
 
-/* ── Modo fullscreen do jogo ── */
+/* cursor vira pointer dentro do bloco do jogo */
+#cur.game-pointer,
+body.dark #cur.game-pointer {
+    width: 14px;
+    height: 14px;
+    background: rgba(255,255,255,0.9);
+    border: 2px solid rgba(255,255,255,0.9);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.5), 0 0 6px rgba(255,255,255,0.4);
+    mix-blend-mode: normal;
+}
 .doom-monitor.snake-fullscreen {
     position: fixed !important;
     inset: 0 !important;
@@ -2076,7 +2075,6 @@ body.dark .dpad-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     transition: background .2s, color .2s;
 }
 
