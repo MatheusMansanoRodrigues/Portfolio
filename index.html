@@ -1,476 +1,523 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Matheus Mansano — Dev</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cabinet+Grotesk:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
-
 <body>
 
-    <!-- CURSOR -->
-    <div id="cur"></div>
+<!-- CUSTOM CURSOR -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
 
-    <!-- THEME TOGGLE -->
-    <button id="theme-toggle" aria-label="Alternar tema" title="Alternar tema">
-        <i id="theme-icon" class="fa-solid fa-sun"></i>
+<!-- NOISE OVERLAY -->
+<div class="noise"></div>
+
+<!-- LOADING SCREEN -->
+<div id="loader">
+    <div class="loader-inner">
+        <div class="loader-line"></div>
+        <div class="loader-text">
+            <span class="loader-name">MATHEUS.DEV</span>
+            <span class="loader-pct" id="loader-pct">0</span>
+        </div>
+    </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+    <a href="#" class="nav-logo">M<span class="dot">.</span></a>
+    <div class="nav-center">
+        <a href="#work" class="nav-link" data-text="Projetos">Projetos</a>
+        <a href="#about" class="nav-link" data-text="Sobre">Sobre</a>
+        <a href="#contact" class="nav-link" data-text="Contato">Contato</a>
+    </div>
+    <button class="nav-cta" id="open-cv">
+        <span>Currículo</span>
+        <i class="fa-solid fa-arrow-up-right"></i>
     </button>
+</nav>
 
-    <!-- ══════════════════════════════════════════════════════════
-        HERO
-    ══════════════════════════════════════════════════════════ -->
-    <section id="hero">
-        <div id="hero-left">
-            <div id="hero-tag">disponível para projetos</div>
-            <h1>
-                Full-Stack<br>
-                <em>Developer.</em>
-            </h1>
-            <p id="hero-desc">
-                Crio interfaces modernas e intuitivas, focadas em experiência, performance e usabilidade.
-                Também desenvolvo sistemas robustos e bem estruturados, pensados para funcionar com estabilidade e eficiência.
+<!-- ══════════════════════════════════
+     HERO
+══════════════════════════════════ -->
+<section id="hero">
+    <canvas id="hero-canvas"></canvas>
+    
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="badge-dot"></span>
+            Disponível para projetos
+        </div>
+        
+        <h1 class="hero-title">
+            <span class="line" data-line="0">
+                <span class="word-mask"><em class="slide-word">FULL</em></span>
+                <span class="word-mask"><em class="slide-word">STACK</em></span>
+            </span>
+            <span class="line line-outline" data-line="1">
+                <span class="word-mask"><em class="slide-word">DEVEL</em></span><span class="word-mask"><em class="slide-word">OPER</em></span>
+            </span>
+        </h1>
+
+        <div class="hero-sub">
+            <div class="hero-desc">
+                <p>Interfaces que encantam.<br>Sistemas que funcionam.</p>
+            </div>
+            <div class="hero-scroll-hint">
+                <span>SCROLL</span>
+                <div class="scroll-line"></div>
+            </div>
+        </div>
+
+        <div class="hero-stats">
+            <div class="stat">
+                <span class="stat-num" data-target="2">0</span>
+                <span class="stat-label">Anos de XP</span>
+            </div>
+            <div class="stat-div"></div>
+            <div class="stat">
+                <span class="stat-num" data-target="4">0</span>
+                <span class="stat-label">Projetos</span>
+            </div>
+            <div class="stat-div"></div>
+            <div class="stat">
+                <span class="stat-label" style="font-size:13px">PHP · JS<br>MySQL · Java</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-marquee-vert">
+        <div class="marquee-vert-track">
+            <span>FULL STACK</span><span>·</span>
+            <span>PHP</span><span>·</span>
+            <span>JAVASCRIPT</span><span>·</span>
+            <span>MYSQL</span><span>·</span>
+            <span>UI DESIGN</span><span>·</span>
+            <span>FULL STACK</span><span>·</span>
+            <span>PHP</span><span>·</span>
+            <span>JAVASCRIPT</span><span>·</span>
+            <span>MYSQL</span><span>·</span>
+            <span>UI DESIGN</span><span>·</span>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════
+     MARQUEE DIVIDER
+══════════════════════════════════ -->
+<div class="marquee-strip">
+    <div class="marquee-track-h">
+        <span>FULL STACK DEV</span><span class="mx">✦</span>
+        <span>PHP</span><span class="mx">✦</span>
+        <span>JAVASCRIPT</span><span class="mx">✦</span>
+        <span>MYSQL</span><span class="mx">✦</span>
+        <span>UI DESIGN</span><span class="mx">✦</span>
+        <span>THREE.JS</span><span class="mx">✦</span>
+        <span>DISPONÍVEL</span><span class="mx">✦</span>
+        <span>FULL STACK DEV</span><span class="mx">✦</span>
+        <span>PHP</span><span class="mx">✦</span>
+        <span>JAVASCRIPT</span><span class="mx">✦</span>
+        <span>MYSQL</span><span class="mx">✦</span>
+        <span>UI DESIGN</span><span class="mx">✦</span>
+        <span>THREE.JS</span><span class="mx">✦</span>
+        <span>DISPONÍVEL</span><span class="mx">✦</span>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PROJECTS
+══════════════════════════════════ -->
+<section id="work">
+    <div class="section-head">
+        <span class="section-label">02 — PROJETOS</span>
+        <h2 class="section-title">Trabalho<br><em>Selecionado</em></h2>
+    </div>
+
+    <div class="projects-list">
+
+        <!-- PROJECT 1 -->
+        <div class="proj-item" data-idx="0">
+            <div class="proj-num">01</div>
+            <div class="proj-info">
+                <h3>Esfera 3D</h3>
+                <p>Controle por gestos com a mão via MediaPipe</p>
+            </div>
+            <div class="proj-tags">
+                <span>Three.js</span>
+                <span>MediaPipe</span>
+                <span>WebGL</span>
+            </div>
+            <a href="https://matheusmansanorodrigues.github.io/esfera_3d/" target="_blank" class="proj-link">
+                <i class="fa-solid fa-arrow-up-right"></i>
+            </a>
+            <div class="proj-preview">
+                <img src="assets/esfera_3d.webp" alt="Esfera 3D" loading="lazy">
+            </div>
+        </div>
+
+        <!-- PROJECT 2 -->
+        <div class="proj-item" data-idx="1">
+            <div class="proj-num">02</div>
+            <div class="proj-info">
+                <h3>Ótica Horizonte</h3>
+                <p>Site completo para ótica em Florianópolis</p>
+            </div>
+            <div class="proj-tags">
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
+            </div>
+            <a href="https://matheusmansanorodrigues.github.io/otica_horizonte/" target="_blank" class="proj-link">
+                <i class="fa-solid fa-arrow-up-right"></i>
+            </a>
+            <div class="proj-preview">
+                <img src="assets/otica_horizonte_h.webp" alt="Ótica Horizonte" loading="lazy">
+            </div>
+        </div>
+
+        <!-- PROJECT 3 -->
+        <div class="proj-item" data-idx="2">
+            <div class="proj-num">03</div>
+            <div class="proj-info">
+                <h3>Gestor de Tarefas</h3>
+                <p>CRUD completo com filtros e busca em tempo real</p>
+            </div>
+            <div class="proj-tags">
+                <span>JavaScript</span>
+                <span>LocalStorage</span>
+                <span>MVC</span>
+            </div>
+            <a href="https://matheusmansanorodrigues.github.io/Projeto-Tarefa/" target="_blank" class="proj-link">
+                <i class="fa-solid fa-arrow-up-right"></i>
+            </a>
+            <div class="proj-preview">
+                <img src="assets/minhas_tarefas_h.webp" alt="Gestor de Tarefas" loading="lazy">
+            </div>
+        </div>
+
+        <!-- PROJECT 4 -->
+        <div class="proj-item" data-idx="3">
+            <div class="proj-num">04</div>
+            <div class="proj-info">
+                <h3>Tomo do Mestre</h3>
+                <p>Guia medieval interativo multi-sistema de RPG</p>
+            </div>
+            <div class="proj-tags">
+                <span>JavaScript</span>
+                <span>JSON</span>
+                <span>CSS</span>
+            </div>
+            <a href="https://matheusmansanorodrigues.github.io/Guia_RPG/" target="_blank" class="proj-link">
+                <i class="fa-solid fa-arrow-up-right"></i>
+            </a>
+            <div class="proj-preview">
+                <img src="assets/tomo_mestre.webp" alt="Tomo do Mestre" loading="lazy">
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ══════════════════════════════════
+     ABOUT / SKILLS
+══════════════════════════════════ -->
+<section id="about">
+    <div class="about-grid">
+
+        <div class="about-left">
+            <span class="section-label">03 — SOBRE</span>
+            <h2 class="about-title">
+                Construo coisas<br>que <em>importam</em>
+            </h2>
+            <p class="about-text">
+                26 anos. Full-Stack Developer há 2 anos, apaixonado por resolver problemas reais com código limpo e interfaces que fazem sentido. Cada projeto é uma oportunidade de criar algo que as pessoas realmente usam — e que elas sentem a diferença.
             </p>
-            <div id="hero-actions">
-                <button class="btn-primary"
-                    onclick="document.getElementById('bento').scrollIntoView({behavior:'smooth'})">Ver meu
-                    trabalho</button>
-                <button class="btn-ghost"
-                    onclick="document.getElementById('footer').scrollIntoView({behavior:'smooth'})">Entrar em
-                    contato</button>
+            <p class="about-text">
+                Especialista em sistemas PHP, JavaScript moderno, bancos de dados MySQL e SQL Server, e experiências web tridimensionais com Three.js.
+            </p>
+
+            <div class="about-links">
+                <a href="https://github.com/matheusmansanorodrigues" target="_blank" class="about-link">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+                <a href="https://www.linkedin.com/in/matheusrrodrigues/" target="_blank" class="about-link">
+                    <i class="fa-brands fa-linkedin"></i> LinkedIn
+                </a>
+                <a href="mailto:matheusmansano1@gmail.com" class="about-link" id="copy-email">
+                    <i class="fa-solid fa-envelope"></i> Email
+                </a>
             </div>
         </div>
 
-        <div id="hero-right">
-            <div class="hero-card-stack" id="card-stack">
-
-                <!-- Card 1 — Esfera 3D -->
-                <div class="hcs-card">
-                    <img class="hcs-gif" src="assets/esfera_3d.webp" alt="Esfera 3D">
-                    <div class="hcs-body">
-                        <div class="hcs-label">VISÃO COMPUTACIONAL</div>
-                        <div class="hcs-title">Esfera 3D</div>
-                        <div class="hcs-sub">Controle por gestos com a mão</div>
+        <div class="about-right">
+            <!-- 3D Card foto -->
+            <div class="about-card-wrap" id="about-card">
+                <div class="about-card">
+                    <div class="about-card-inner">
+                        <img src="assets/eu.png" alt="Matheus Mansano" class="about-photo">
+                        <div class="about-card-overlay">
+                            <span>LONDRINA · PR</span>
+                            <span>REMOTO OK</span>
+                        </div>
                     </div>
-                    <a class="hcs-link" href="https://matheusmansanorodrigues.github.io/esfera_3d/" target="_blank" rel="noopener" title="Ver projeto">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </a>
-                </div>
-
-                <!-- Card 2 — Ótica Horizonte -->
-                <div class="hcs-card">
-                    <img class="hcs-gif" src="assets/otica_horizonte_h.webp" alt="Ótica Horizonte">
-                    <div class="hcs-body">
-                        <div class="hcs-label">LANDING PAGE</div>
-                        <div class="hcs-title">Ótica Horizonte</div>
-                        <div class="hcs-sub">Site completo para ótica em Florianópolis</div>
-                    </div>
-                    <a class="hcs-link" href="https://matheusmansanorodrigues.github.io/otica_horizonte/" target="_blank" rel="noopener" title="Ver projeto">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </a>
-                </div>
-
-                <!-- Card 3 — Gestor de Tarefas -->
-                <div class="hcs-card">
-                    <img class="hcs-gif" src="assets/minhas_tarefas_h.webp" alt="Gestor de Tarefas">
-                    <div class="hcs-body">
-                        <div class="hcs-label">PRODUTIVIDADE</div>
-                        <div class="hcs-title">Gestor de Tarefas</div>
-                        <div class="hcs-sub">CRUD com filtro e pesquisa</div>
-                    </div>
-                    <a class="hcs-link" href="https://matheusmansanorodrigues.github.io/Projeto-Tarefa/" target="_blank" rel="noopener" title="Ver projeto">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </a>
-                </div>
-
-                <!-- Card 4 — Tomo do Mestre -->
-                <div class="hcs-card">
-                    <img class="hcs-gif" src="assets/tomo_mestre.webp" alt="Tomo do Mestre">
-                    <div class="hcs-body">
-                        <div class="hcs-label">RPG · GUIA INTERATIVO</div>
-                        <div class="hcs-title">Tomo do Mestre</div>
-                        <div class="hcs-sub">Guia medieval multi-sistema de RPG</div>
-                    </div>
-                    <a class="hcs-link" href="https://matheusmansanorodrigues.github.io/Guia_RPG/" target="_blank" rel="noopener" title="Ver projeto">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </a>
-                </div>
-
-                <div class="stack-hint">
-                    <i class="fa-solid fa-hand-pointer"></i> arraste para explorar
+                    <div class="card-shine"></div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- ══════════════════════════════════════════════════════════
-        MARQUEE
-    ══════════════════════════════════════════════════════════ -->
-    <div id="marquee-wrap">
-        <div class="marquee-track">
-            <span>Full-Stack Dev</span><span class="accent">✦</span>
-            <span>PHP</span><span class="accent">✦</span>
-            <span>JavaScript</span><span class="accent">✦</span>
-            <span>MySQL</span><span class="accent">✦</span>
-            <span>UI Design</span><span class="accent">✦</span>
-            <span>2 Anos de XP</span><span class="accent">✦</span>
-            <span>6 Projetos</span><span class="accent">✦</span>
-            <span>Disponível</span><span class="accent">✦</span>
-            <span>Full-Stack Dev</span><span class="accent">✦</span>
-            <span>PHP</span><span class="accent">✦</span>
-            <span>JavaScript</span><span class="accent">✦</span>
-            <span>MySQL</span><span class="accent">✦</span>
-            <span>UI Design</span><span class="accent">✦</span>
-            <span>2 Anos de XP</span><span class="accent">✦</span>
-            <span>6 Projetos</span><span class="accent">✦</span>
-            <span>Disponível</span><span class="accent">✦</span>
+            <!-- Stack pills -->
+            <div class="stack-grid">
+                <div class="stack-col">
+                    <div class="stack-label">FRONT-END</div>
+                    <div class="stack-pills">
+                        <span class="spill">HTML5</span>
+                        <span class="spill">CSS3</span>
+                        <span class="spill">JavaScript</span>
+                        <span class="spill">jQuery</span>
+                        <span class="spill">Three.js</span>
+                    </div>
+                </div>
+                <div class="stack-col">
+                    <div class="stack-label">BACK-END</div>
+                    <div class="stack-pills">
+                        <span class="spill">PHP</span>
+                        <span class="spill">Java</span>
+                        <span class="spill">MySQL</span>
+                        <span class="spill">SQL Server</span>
+                    </div>
+                </div>
+                <div class="stack-col">
+                    <div class="stack-label">TOOLS</div>
+                    <div class="stack-pills">
+                        <span class="spill">Git</span>
+                        <span class="spill">VS Code</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</section>
 
-    <!-- ══════════════════════════════════════════════════════════
-        BENTO GRID
-    ══════════════════════════════════════════════════════════ -->
-    <div id="bento">
-
-        <!-- ABOUT — large -->
-        <div class="bento-card bc-about sr" data-reveal="about">
-            <div class="bc-pad" style="height:100%;display:flex;flex-direction:column;justify-content:space-between">
-                <div>
-                    <div class="bc-eyebrow">01 — Sobre mim</div>
-                    <h2 class="bc-h2">Matheus<br>Mansano<br>Rodrigues</h2>
-                    <p class="bc-body">
-                        26 anos. Full-Stack Developer há 2 anos.
-                        Gosto de resolver problemas reais com código limpo e interfaces que fazem sentido.
-                        Cada projeto é uma oportunidade de criar algo que as pessoas realmente usam.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- GIF 1 — coding vibes -->
-        <div class="bento-card bc-gif1 sr" style="transition-delay:.1s">
-            <div class="bc-gif-wrap">
-                <img src="assets/eu.png" alt="coding gif">
-                <div class="bc-gif-label">// while(true) { code(); }</div>
-            </div>
-        </div>
-
-        <!-- STATUS -->
-        <div class="bento-card bc-status sr" style="transition-delay:.15s" data-reveal="status">
-            <div class="bc-pad-sm">
-                <div class="bc-status-dot">online agora</div>
-                <div style="font-size:15px;font-weight:600;margin-bottom:4px">Disponível para projetos</div>
-                <div style="font-size:13px;color:var(--gray)">Respondo em menos de 24h</div>
-            </div>
-        </div>
-
-        <!-- EXPERIENCE -->
-        <div class="bento-card bc-exp sr" style="transition-delay:.2s" data-reveal="exp">
-            <div class="bc-pad-sm">
-                <div class="bc-eyebrow">Experiência</div>
-                <div style="font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:#776B5D;line-height:1">2
-                </div>
-                <div style="font-size:14px;color:#B0A695">anos construindo<br>aplicações web</div>
-            </div>
-        </div>
-
-        <!-- STACK -->
-        <div class="bento-card bc-stack sr" style="transition-delay:.25s">
-            <div class="bc-pad">
-                <div class="bc-eyebrow">02 — Stack</div>
-                <h3 class="bc-h2" style="font-size:22px">Ferramentas<br>que domino</h3>
-                <div class="stack-pills">
-                    <span class="pill">Java</span>
-                    <span class="pill">HTML5</span>
-                    <span class="pill">CSS3</span>
-                    <span class="pill">JavaScript</span>
-                    <span class="pill">jQuery</span>
-                    <span class="pill">Three.js</span>
-                    <span class="pill">PHP</span>
-                    <span class="pill">MySQL</span>
-                    <span class="pill">SQL Server</span>
-                    <span class="pill">Git</span>
-                    <span class="pill">VS Code</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- GAME — SNAKE -->
-        <div class="bento-card bc-gif2 sr" style="transition-delay:.3s">
-            <div class="bc-gif-wrap">
-                <div class="doom-monitor">
-                    <canvas id="snake-canvas"></canvas>
-
-                    <!-- Botão legenda -->
-                    <button id="snake-legend-btn" aria-label="Ver legenda do jogo" title="Legenda">
-                        <i class="fa-solid fa-circle-info"></i>
-                    </button>
-
-                    <!-- Botão pause -->
-                    <button id="snake-pause-btn" aria-label="Pausar jogo" title="Pausar (P)">
-                        <i class="fa-solid fa-pause"></i>
-                    </button>
-
-                    <!-- Botão fullscreen -->
-                    <button id="snake-fullscreen-btn" aria-label="Tela cheia" title="Tela cheia">
-                        <i class="fa-solid fa-expand"></i>
-                    </button>
-
-                    <!-- D-pad mobile controls -->
-                    <div id="dpad">
-                        <button class="dpad-btn" id="dp-up"   aria-label="Cima">
-                            <i class="fa-solid fa-chevron-up"></i>
-                        </button>
-                        <button class="dpad-btn" id="dp-left" aria-label="Esquerda">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </button>
-                        <div class="dpad-center"></div>
-                        <button class="dpad-btn" id="dp-right" aria-label="Direita">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </button>
-                        <button class="dpad-btn" id="dp-down"  aria-label="Baixo">
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </button>
-                    </div>
-
-                    <!-- Overlay de pause -->
-                    <div id="pause-overlay">
-                        <div class="pause-inner">
-                            <div class="pause-title">PAUSE</div>
-                            <div class="pause-hint">P · Espaço · tap para continuar</div>
-                        </div>
-                    </div>
-
-                    <div id="game-overlay">
-                        <div class="game-overlay-inner">
-                            <div class="game-title">SNAKE</div>
-                            <div class="game-sub">↑↓←→ · WASD · D-pad</div>
-                            <div class="game-fruits-legend">
-                                <span class="gfl-item"><span class="gfl-dot" style="background:#F3EEEA"></span>+10</span>
-                                <span class="gfl-item"><span class="gfl-dot" style="background:#e07b54"></span>+30</span>
-                                <span class="gfl-item"><span class="gfl-dot" style="background:#7ec8e3"></span>+50</span>
-                                <span class="gfl-item"><span class="gfl-dot" style="background:#c97fd4"></span>+100</span>
-                                <span class="gfl-item"><span class="gfl-dot" style="background:#f5d020;box-shadow:0 0 6px #f5d020"></span>+200</span>
-                            </div>
-                            <button class="game-start-btn" id="game-start-btn">
-                                <i class="fa-solid fa-play"></i> jogar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- MODAL LEGENDA SNAKE -->
-        <div id="snake-modal-backdrop">
-            <div id="snake-modal" role="dialog" aria-modal="true" aria-labelledby="snake-modal-title">
-                <div id="snake-modal-header">
-                    <span id="snake-modal-title"><i class="fa-solid fa-gamepad"></i> Guia do Jogo</span>
-                    <button id="snake-modal-close" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-
-                <div class="snake-modal-section">
-                    <div class="sms-label">🍎 Frutas & Pontos</div>
-                    <div class="sms-table">
-                        <div class="sms-row"><span class="sms-dot" style="background:#F3EEEA"></span><span class="sms-name">Normal</span><span class="sms-pts">+10 pts</span><span class="sms-info">Sempre presente · cresce 2</span></div>
-                        <div class="sms-row"><span class="sms-dot" style="background:#e07b54"></span><span class="sms-name">Laranja</span><span class="sms-pts">+30 pts</span><span class="sms-info">20% chance · dura ~6s · cresce 3</span></div>
-                        <div class="sms-row"><span class="sms-dot" style="background:#7ec8e3"></span><span class="sms-name">Azul</span><span class="sms-pts">+50 pts</span><span class="sms-info">12% chance · dura ~5s · cresce 4</span></div>
-                        <div class="sms-row"><span class="sms-dot" style="background:#c97fd4"></span><span class="sms-name">Roxo</span><span class="sms-pts">+100 pts</span><span class="sms-info">6% chance · dura ~4s · cresce 5</span></div>
-                        <div class="sms-row"><span class="sms-dot" style="background:#f5d020;box-shadow:0 0 8px #f5d020"></span><span class="sms-name">Amarela ★</span><span class="sms-pts">+200 pts</span><span class="sms-info">2% chance · dura ~3s · cresce 6</span></div>
-                    </div>
-                </div>
-
-                <div class="snake-modal-section">
-                    <div class="sms-label">🎨 Fases (a cada 200 pts)</div>
-                    <div class="sms-table">
-                        <div class="sms-row sms-phase"><span class="sms-phase-swatch" style="background:#0a0a0a;border-color:#B0A695"></span><span class="sms-phase-pts">0</span><span class="sms-phase-name">INÍCIO</span><span class="sms-phase-snake" style="background:#B0A695"></span></div>
-                        <div class="sms-row sms-phase"><span class="sms-phase-swatch" style="background:#0a0f1a;border-color:#7ec8e3"></span><span class="sms-phase-pts">200</span><span class="sms-phase-name">OCEANO</span><span class="sms-phase-snake" style="background:#7ec8e3"></span></div>
-                        <div class="sms-row sms-phase"><span class="sms-phase-swatch" style="background:#0f0a1a;border-color:#c97fd4"></span><span class="sms-phase-pts">400</span><span class="sms-phase-name">GALÁXIA</span><span class="sms-phase-snake" style="background:#c97fd4"></span></div>
-                        <div class="sms-row sms-phase"><span class="sms-phase-swatch" style="background:#1a0a0a;border-color:#e07b54"></span><span class="sms-phase-pts">600</span><span class="sms-phase-name">INFERNO</span><span class="sms-phase-snake" style="background:#e07b54"></span></div>
-                        <div class="sms-row sms-phase"><span class="sms-phase-swatch" style="background:#0a1a0a;border-color:#66bb6a"></span><span class="sms-phase-pts">800</span><span class="sms-phase-name">FLORESTA</span><span class="sms-phase-snake" style="background:#66bb6a"></span></div>
-                        <div class="sms-row sms-phase"><span class="sms-phase-swatch" style="background:#1a1500;border-color:#f5d020"></span><span class="sms-phase-pts">1000</span><span class="sms-phase-name">DOURADO</span><span class="sms-phase-snake" style="background:#f5d020"></span></div>
-                        <div class="sms-row sms-phase"><span class="sms-phase-swatch" style="background:#001a1a;border-color:#4dd0e1"></span><span class="sms-phase-pts">1200</span><span class="sms-phase-name">ABISSAL</span><span class="sms-phase-snake" style="background:#4dd0e1"></span></div>
-                        <div class="sms-row sms-phase sms-phase-neon"><span class="sms-phase-swatch" style="background:#1a001a;border-color:#f48fb1"></span><span class="sms-phase-pts">1400</span><span class="sms-phase-name">NEON ★</span><span class="sms-phase-snake" style="background:#f48fb1"></span></div>
-                    </div>
-                </div>
-
-                <div class="snake-modal-section">
-                    <div class="sms-label">⚡ Velocidade</div>
-                    <p class="sms-tip">A cobra acelera a cada 50 pts. Começa devagar e fica bem rápida no NEON — mas é possível chegar lá!</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- PROJECTS -->
-        <div class="bento-card bc-projects sr" style="transition-delay:.35s">
-            <div class="bc-pad">
-                <div class="bc-eyebrow">03 — Projetos</div>
-                <h3 class="bc-h2" style="font-size:22px">4 projetos<br>entregues</h3>
-                <div class="proj-list">
-                    <div class="proj-row" data-idx="0">
-                        <div class="proj-row-left">
-                            <span class="proj-num">01</span>
-                            <span class="proj-name">Esfera 3D</span>
-                        </div>
-                        <span class="proj-arrow">→</span>
-                    </div>
-                    <div class="proj-row" data-idx="1">
-                        <div class="proj-row-left">
-                            <span class="proj-num">02</span>
-                            <span class="proj-name">Ótica Horizonte</span>
-                        </div>
-                        <span class="proj-arrow">→</span>
-                    </div>
-                    <div class="proj-row" data-idx="2">
-                        <div class="proj-row-left">
-                            <span class="proj-num">03</span>
-                            <span class="proj-name">Gestor de Tarefas</span>
-                        </div>
-                        <span class="proj-arrow">→</span>
-                    </div>
-                    <div class="proj-row" data-idx="3">
-                        <div class="proj-row-left">
-                            <span class="proj-num">04</span>
-                            <span class="proj-name">Tomo do Mestre</span>
-                        </div>
-                        <span class="proj-arrow">→</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- CONTACT -->
-        <div class="bento-card bc-contact sr" style="transition-delay:.4s">
-            <div class="bc-pad bc-contact-inner">
-                <div class="bc-contact-text">
-                    <h3>Bora construir algo?</h3>
-                    <p>Manda uma mensagem — sem compromisso</p>
-                </div>
-                <button class="btn-primary btn-envia-wpp" style="white-space:nowrap;flex-shrink:0">
-                    Falar comigo →
-                </button>
-            </div>
-        </div>
-
-        <!-- QUOTE -->
-        <div class="bento-card bc-quote sr" style="transition-delay:.45s">
-            <div class="bc-pad bc-quote-inner">
-                <div class="bc-quote-mark">"</div>
-                <div class="bc-quote-text">
-                    Código bom é aquele que o próximo dev consegue entender — e o usuário nem percebe que existe.
-                </div>
-            </div>
-        </div>
-
+<!-- ══════════════════════════════════
+     TIMELINE
+══════════════════════════════════ -->
+<section id="timeline">
+    <div class="section-head">
+        <span class="section-label">04 — TRAJETÓRIA</span>
+        <h2 class="section-title">Experiência &<br><em>Educação</em></h2>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════════
-        CONTACT FORM
-    ══════════════════════════════════════════════════════════ -->
-    <section id="contact-section">
+    <div class="tl-grid">
+        <div class="tl-item reveal">
+            <div class="tl-year">2024 — Hoje</div>
+            <div class="tl-content">
+                <h3>Desenvolvedor Full-Stack</h3>
+                <div class="tl-co">Freelance · Projetos Autônomos</div>
+                <p>Landing pages, sistemas web completos, APIs e painéis administrativos para PMEs. PHP moderno, JavaScript e bancos relacionais em produção.</p>
+            </div>
+        </div>
+        <div class="tl-item reveal">
+            <div class="tl-year">2022 — 2024</div>
+            <div class="tl-content">
+                <h3>Especialização & Projetos Acadêmicos</h3>
+                <div class="tl-co">Desenvolvimento Web Avançado</div>
+                <p>Aprofundamento em Java OO, Three.js e computação gráfica no browser. Integração de MediaPipe para visão computacional em JavaScript nativo.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-        <!-- Left: copy -->
-        <div id="contact-left" class="sr">
-            <div class="contact-eyebrow">Contato</div>
-            <h2>Vamos construir<br>algo juntos?</h2>
-            <p>Estou disponível para novos projetos, freelas e oportunidades. Preencha o formulário e respondo em até
-                24h.</p>
+<!-- ══════════════════════════════════
+     CONTACT
+══════════════════════════════════ -->
+<section id="contact">
+    <div class="contact-wrap">
+        <div class="contact-text">
+            <span class="section-label">05 — CONTATO</span>
+            <h2 class="contact-title">
+                Vamos construir<br>algo <em>juntos</em>?
+            </h2>
+            <p>Disponível para freelas, projetos e oportunidades de emprego. Respondo em menos de 24h.</p>
+        </div>
 
-            <div class="contact-info-row">
+        <form id="contact-form" novalidate>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nome *</label>
+                    <input type="text" id="f-name" placeholder="Seu nome" required>
+                </div>
+                <div class="form-group">
+                    <label>Empresa</label>
+                    <input type="text" id="f-company" placeholder="Nome da empresa">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>E-mail *</label>
+                <input type="email" id="f-email" placeholder="seu@email.com" required>
+            </div>
+            <div class="form-group">
+                <label>Tipo de projeto</label>
+                <select id="f-type">
+                    <option value="" disabled selected>Selecione</option>
+                    <option value="site">Site / Landing Page</option>
+                    <option value="sistema">Sistema Web</option>
+                    <option value="painel">Painel Administrativo</option>
+                    <option value="api">API / Back-end</option>
+                    <option value="freela">Freela pontual</option>
+                    <option value="emprego">Oportunidade de emprego</option>
+                    <option value="outro">Outro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Mensagem *</label>
+                <textarea id="f-msg" rows="4" placeholder="Conte sobre o projeto..." required></textarea>
+            </div>
+            <button type="submit" class="send-btn">
+                <span class="send-text"><i class="fa-brands fa-whatsapp"></i> Enviar via WhatsApp</span>
+                <span class="send-arrow">→</span>
+            </button>
+        </form>
+
+        <div id="form-success">
+            <div class="success-icon"><i class="fa-solid fa-check"></i></div>
+            <h3>Mensagem enviada!</h3>
+            <p>Obrigado. Responderei em breve.</p>
+        </div>
+
+        <div class="contact-info">
+            <a href="mailto:matheusmansano1@gmail.com" class="ci-row">
                 <i class="fa-solid fa-envelope"></i>
-                <a href="mailto:matheusmansano1@gmail.com">matheusmansano1@gmail.com</a>
-            </div>
-            <div class="contact-info-row">
+                matheusmansano1@gmail.com
+            </a>
+            <a href="https://www.linkedin.com/in/matheusrrodrigues/" target="_blank" class="ci-row">
                 <i class="fa-brands fa-linkedin"></i>
-                <a href="https://www.linkedin.com/in/matheusrrodrigues/" target="_blank"
-                    rel="noopener">linkedin.com/in/matheusrrodrigues</a>
-            </div>
-            <div class="contact-info-row">
-                <i class="fa-brands fa-github"></i>
-                <a href="https://github.com/matheusmansanorodrigues" target="_blank"
-                    rel="noopener">github.com/matheusmansanorodrigues</a>
-            </div>
-            <div class="contact-info-row">
+                linkedin.com/in/matheusrrodrigues
+            </a>
+            <span class="ci-row">
                 <i class="fa-solid fa-location-dot"></i>
-                Brasil · Remoto
+                Londrina, PR · Remoto
+            </span>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════
+     FOOTER
+══════════════════════════════════ -->
+<footer id="footer">
+    <div class="footer-inner">
+        <div class="footer-logo" id="footer-logo">MATHEUS<span>.</span>DEV</div>
+        <div class="footer-copy">© 2026 · Feito com obsessão</div>
+        <div class="footer-socials">
+            <a href="https://github.com/matheusmansanorodrigues" target="_blank"><i class="fa-brands fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/matheusrrodrigues/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        </div>
+    </div>
+</footer>
+
+<!-- MODAL PROJETOS -->
+<div id="proj-modal-bg" class="modal-bg">
+    <div class="modal-box" role="dialog" aria-modal="true">
+        <button class="modal-x" id="close-proj"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-inner">
+            <div class="modal-media">
+                <img id="pm-img" src="" alt="">
+            </div>
+            <div class="modal-body">
+                <span class="modal-eyebrow">Estudo de Caso</span>
+                <h3 id="pm-title"></h3>
+                <div class="modal-sect">
+                    <div class="modal-sect-label">O Desafio</div>
+                    <p id="pm-challenge"></p>
+                </div>
+                <div class="modal-sect">
+                    <div class="modal-sect-label">Solução</div>
+                    <p id="pm-solution"></p>
+                </div>
+                <div class="modal-tags" id="pm-tags"></div>
+                <div class="modal-actions">
+                    <a id="pm-live" href="#" target="_blank" class="btn-accent">
+                        <i class="fa-solid fa-arrow-up-right"></i> Ver Projeto
+                    </a>
+                    <a id="pm-git" href="#" target="_blank" class="btn-outline">
+                        <i class="fa-brands fa-github"></i> Código
+                    </a>
+                </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <!-- Right: form -->
-        <div class="sr" style="transition-delay:.15s">
-            <form id="contact-form" novalidate>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="f-name">Nome</label>
-                        <input type="text" id="f-name" name="name" placeholder="Seu nome" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="f-company">Empresa</label>
-                        <input type="text" id="f-company" name="company" placeholder="Nome da empresa">
-                    </div>
+<!-- MODAL CURRÍCULO -->
+<div id="cv-modal-bg" class="modal-bg">
+    <div class="modal-box modal-box-cv" role="dialog" aria-modal="true">
+        <button class="modal-x" id="close-cv"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-inner modal-inner-cv">
+            <div class="cv-header">
+                <div>
+                    <h3>Matheus Mansano Rodrigues</h3>
+                    <p>Desenvolvedor Full-Stack</p>
                 </div>
-
-                <div class="form-group">
-                    <label for="f-email">E-mail</label>
-                    <input type="email" id="f-email" name="email" placeholder="seu@email.com" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="f-type">Tipo de projeto</label>
-                    <select id="f-type" name="type">
-                        <option value="" disabled selected>Selecione uma opção</option>
-                        <option value="site">Site / Landing Page</option>
-                        <option value="sistema">Sistema Web</option>
-                        <option value="painel">Painel Administrativo</option>
-                        <option value="api">API / Back-end</option>
-                        <option value="freela">Freela pontual</option>
-                        <option value="emprego">Oportunidade de emprego</option>
-                        <option value="outro">Outro</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="f-msg">Mensagem</label>
-                    <textarea id="f-msg" name="message" placeholder="Conte um pouco sobre o projeto ou oportunidade..."
-                        required></textarea>
-                </div>
-
-                <button type="submit" id="btn-envia-wpp">
-                    <span id="submit-text">
-                        <i class="fa-brands fa-whatsapp"></i> Enviar via WhatsApp
-                    </span>
-                    <i class="fa-solid fa-arrow-right" id="submit-icon"></i>
+                <button class="btn-outline" onclick="window.print()" style="cursor:pointer">
+                    <i class="fa-solid fa-print"></i> Imprimir
                 </button>
-
-            </form>
-
-            <!-- Success state (hidden by default) -->
-            <div id="form-success">
-                <i class="fa-solid fa-circle-check"></i>
-                <h3>Mensagem enviada!</h3>
-                <p>Obrigado pelo contato.<br>Responderei em breve.</p>
+            </div>
+            <div class="cv-grid">
+                <div class="cv-main">
+                    <div class="cv-sec">
+                        <div class="cv-sec-label">Resumo</div>
+                        <p>Full-Stack Developer com 2 anos de experiência criando aplicações robustas, interfaces refinadas e sistemas escaláveis. Especialista em resolver problemas reais com código limpo e arquiteturas eficientes.</p>
+                    </div>
+                    <div class="cv-sec">
+                        <div class="cv-sec-label">Experiência</div>
+                        <div class="cv-exp-item">
+                            <div class="cv-exp-head">
+                                <span class="cv-exp-role">Freelancer Full-Stack</span>
+                                <span class="cv-exp-date">2024 — Presente</span>
+                            </div>
+                            <div class="cv-exp-co">Projetos Autônomos</div>
+                            <p>Desenvolvimento e design completo de soluções web, modelagem de dados relacionais e criação de interfaces dinâmicas.</p>
+                        </div>
+                        <div class="cv-exp-item">
+                            <div class="cv-exp-head">
+                                <span class="cv-exp-role">Especialização & Projetos</span>
+                                <span class="cv-exp-date">2022 — 2024</span>
+                            </div>
+                            <div class="cv-exp-co">Desenvolvimento Web Avançado</div>
+                            <p>Java OO, computação tridimensional com Three.js/WebGL e integração de visão computacional com MediaPipe.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="cv-side">
+                    <div class="cv-sec">
+                        <div class="cv-sec-label">Contato</div>
+                        <div class="cv-contact-list">
+                            <div><i class="fa-solid fa-envelope"></i> matheusmansano1@gmail.com</div>
+                            <div><i class="fa-solid fa-location-dot"></i> Londrina, PR (Remoto)</div>
+                            <div><i class="fa-brands fa-linkedin"></i> /in/matheusrrodrigues</div>
+                            <div><i class="fa-brands fa-github"></i> /matheusmansanorodrigues</div>
+                        </div>
+                    </div>
+                    <div class="cv-sec">
+                        <div class="cv-sec-label">Habilidades</div>
+                        <div class="cv-pills">
+                            <span>JavaScript</span><span>PHP</span><span>Java</span>
+                            <span>MySQL</span><span>SQL Server</span><span>Three.js</span>
+                            <span>jQuery</span><span>HTML5</span><span>CSS3</span>
+                            <span>Git</span><span>UX/UI</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+</div>
 
-    </section>
-
-    <!-- ══════════════════════════════════════════════════════════
-        FOOTER
-    ══════════════════════════════════════════════════════════ -->
-    <footer id="footer">
-        <div id="footer-logo" title="✨ clique para uma surpresa">matheus<span>.</span>dev</div>
-        <div id="footer-copy">© 2026 · Matheus Mansano Rodrigues</div>
-    </footer>
-
-    <script src="script.js" defer></script>
+<script src="script.js"></script>
 </body>
-
 </html>
