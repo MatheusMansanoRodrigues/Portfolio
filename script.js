@@ -268,6 +268,15 @@ const projects = [
         tags: ['JavaScript', 'JSON', 'CSS Variables', 'Async/Await'],
         url: 'https://matheusmansanorodrigues.github.io/Guia_RPG/',
         git: 'https://github.com/matheusmansanorodrigues/Guia_RPG'
+    },
+    {
+        title: 'Nexus',
+        img: 'assets/nexus.png',
+        challenge: 'Projetar um portal ERP que combinasse dados operacionais complexos com uma estética premium, micro-interações fluídas e temas visuais totalmente dinâmicos.',
+        solution: 'Dashboard administrativo com glassmorphism, motor de temas em tempo real e UX pensada para gestão diária. Módulos de BI, financeiro, vendas, estoque e CRM integrados em uma interface moderna e responsiva.',
+        tags: ['JavaScript', 'CSS', 'Dashboard', 'ERP', 'Glassmorphism', 'UX'],
+        url: 'https://matheusmansanorodrigues.github.io/NexusERP/',
+        git: 'https://github.com/matheusmansanorodrigues/NexusERP'
     }
 ];
 
