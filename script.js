@@ -80,6 +80,37 @@ window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 60);
 }, { passive: true });
 
+/* ── MOBILE NAV ── */
+(function () {
+    const toggle = document.getElementById('nav-toggle');
+    const mobile = document.getElementById('nav-mobile');
+    if (!toggle || !mobile) return;
+
+    function closeMenu() {
+        toggle.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        mobile.classList.remove('open');
+        mobile.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    toggle.addEventListener('click', () => {
+        const isOpen = mobile.classList.toggle('open');
+        toggle.classList.toggle('open', isOpen);
+        toggle.setAttribute('aria-expanded', String(isOpen));
+        mobile.setAttribute('aria-hidden', String(!isOpen));
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    mobile.querySelectorAll('.nav-mobile-link').forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 900) closeMenu();
+    });
+})();
+
 /* ═══════════════════════════════════════════════════
    HERO CANVAS — PARTICLE FIELD
    WebGL-like effect with Canvas 2D, no deps
@@ -530,6 +561,92 @@ const projObs = new IntersectionObserver(entries => {
 }, { threshold: 0.1 });
 
 if (projItems[0]) projObs.observe(projItems[0]);
+
+/* ═══════════════════════════════════════════════════
+   PROJECT FLOAT PREVIEW — follows cursor on hover
+═══════════════════════════════════════════════════ */
+(function () {
+    if (!window.matchMedia('(pointer: fine) and (min-width: 1025px)').matches) return;
+
+    const float = document.createElement('div');
+    float.className = 'proj-float';
+    float.setAttribute('aria-hidden', 'true');
+    float.innerHTML = '<img src="" alt="">';
+    document.body.appendChild(float);
+
+    const img = float.querySelector('img');
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let active = false;
+    let rafId = null;
+
+    const OFFSET_X = 36;
+    const LERP = 0.14;
+
+    function getSize() {
+        const r = float.getBoundingClientRect();
+        return { w: r.width || 480, h: r.height || 320 };
+    }
+
+    function setPos(x, y) {
+        float.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    }
+
+    function clampPos(x, y) {
+        const { w, h } = getSize();
+        const pad = 16;
+        return {
+            x: Math.max(pad, Math.min(x, window.innerWidth - w - pad)),
+            y: Math.max(pad, Math.min(y, window.innerHeight - h - pad)),
+        };
+    }
+
+    function aim(e) {
+        const { h } = getSize();
+        const p = clampPos(e.clientX + OFFSET_X, e.clientY - h * 0.45);
+        targetX = p.x;
+        targetY = p.y;
+    }
+
+    function tick() {
+        currentX += (targetX - currentX) * LERP;
+        currentY += (targetY - currentY) * LERP;
+        setPos(currentX, currentY);
+        if (active) rafId = requestAnimationFrame(tick);
+    }
+
+    function show(item, e) {
+        const src = item.querySelector('.proj-preview img')?.getAttribute('src');
+        if (!src) return;
+
+        img.src = src;
+        img.alt = item.querySelector('.proj-info h3')?.textContent || '';
+        active = true;
+        float.classList.add('active');
+
+        aim(e);
+        currentX = targetX;
+        currentY = targetY;
+        setPos(currentX, currentY);
+
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(tick);
+    }
+
+    function hide() {
+        active = false;
+        float.classList.remove('active');
+        cancelAnimationFrame(rafId);
+    }
+
+    document.querySelectorAll('.proj-item').forEach(item => {
+        item.addEventListener('mouseenter', e => show(item, e));
+        item.addEventListener('mousemove', aim);
+        item.addEventListener('mouseleave', hide);
+    });
+})();
 
 /* ═══════════════════════════════════════════════════
    SMOOTH PARALLAX — handled in patch below
