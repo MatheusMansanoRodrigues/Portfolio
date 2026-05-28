@@ -65,7 +65,7 @@ document.addEventListener('mousemove', e => {
     requestAnimationFrame(lerpRing);
 })();
 
-const hoverEls = 'button, a, .proj-item, .spill, .about-link, .modal-x, .nav-cta, .nav-link, .footer-logo, .send-btn';
+const hoverEls = 'button, a, .proj-item, .spill, .about-link, .modal-x, .nav-cta, .nav-link, .footer-logo, .send-btn, .btn-outline, .btn-accent';
 document.querySelectorAll(hoverEls).forEach(el => {
     el.addEventListener('mouseenter', () => ring.classList.add('hover'));
     el.addEventListener('mouseleave', () => ring.classList.remove('hover'));

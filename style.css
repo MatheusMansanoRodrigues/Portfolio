@@ -55,7 +55,7 @@ body {
     background: var(--cream);
     border-radius: 50%;
     pointer-events: none;
-    z-index: 9998;
+    z-index: 10002;
     transform: translate(-50%, -50%);
     transition: width .2s, height .2s, background .2s;
 }
@@ -66,7 +66,7 @@ body {
     border: 1.5px solid rgba(240,235,225,0.5);
     border-radius: 50%;
     pointer-events: none;
-    z-index: 9997;
+    z-index: 10001;
     transform: translate(-50%, -50%);
     transition: width .35s var(--ease), height .35s var(--ease),
                 border-color .3s, transform .05s linear;
