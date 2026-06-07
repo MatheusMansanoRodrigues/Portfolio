@@ -2166,6 +2166,10 @@ section {
     gap: 16px;
 }
 
+.cv-header > div {
+    min-width: 0;
+}
+
 .cv-header h3 {
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(24px, 4vw, 32px);
@@ -2270,6 +2274,7 @@ section {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     color: var(--cream2);
+    overflow-wrap: anywhere;
 }
 
 .cv-contact-list i { color: var(--accent); margin-right: 8px; }
@@ -2288,6 +2293,43 @@ section {
     font-size: 11px;
     color: var(--cream2);
     font-family: 'JetBrains Mono', monospace;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 680px) {
+    .modal-box-cv {
+        width: calc(100vw - 20px);
+    }
+
+    .cv-header {
+        align-items: flex-start;
+    }
+
+    .cv-header .btn-outline {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .cv-highlight span {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 420px) {
+    .cv-header h3 {
+        font-size: 28px;
+        line-height: 0.95;
+    }
+
+    .cv-header p,
+    .cv-contact-list,
+    .cv-pills span {
+        font-size: 10px;
+    }
+
+    .cv-sec {
+        margin-bottom: 20px;
+    }
 }
 
 /* ═══════════════════════════════════════════════════
