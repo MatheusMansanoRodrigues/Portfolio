@@ -213,7 +213,7 @@ window.addEventListener('scroll', () => {
 const projects = [
     {
         title: 'Wever',
-        video: 'assets/portfa_wever.mp4',
+        video: 'https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/portfa_wever.mp4',
         challenge: 'Criar uma presença digital com impacto visual forte, navegação fluida e apresentação clara da marca, mantendo a experiência elegante em desktop e mobile.',
         solution: 'Interface responsiva com foco em direção visual, ritmo de animações e hierarquia de conteúdo. O resultado prioriza uma primeira impressão marcante e uma navegação simples até a ação principal.',
         tags: ['UI Design', 'Front-end', 'Responsivo', 'Brand Experience'],
@@ -222,7 +222,7 @@ const projects = [
     },
     {
         title: 'Esfera 3D',
-        img: 'assets/esfera_3d.webp',
+        img: 'https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/esfera_3d.webp',
         challenge: 'Processar coordenadas de rastreamento de mãos em tempo real no navegador sem causar gargalos na renderização 3D de alta contagem de polígonos.',
         solution: 'Processamento assíncrono via MediaPipe Hands com transferência direta dos tensores 3D para cena Three.js. Shaders de profundidade personalizados e suavização exponencial dupla nas coordenadas para eliminar tremores.',
         tags: ['JavaScript', 'Three.js', 'MediaPipe', 'WebGL', 'Canvas API'],
@@ -231,7 +231,7 @@ const projects = [
     },
     {
         title: 'Ótica Horizonte',
-        img: 'assets/otica_horizonte_h.webp',
+        img: 'https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/otica_horizonte_h.webp',
         challenge: 'Criar agendamento e catálogos visuais com excelente performance sob conexões móveis limitadas, representando uma ótica real.',
         solution: 'Landing page estática modular sem frameworks para máximo controle de carregamento. Lazy loading agressivo de imagens e compressão em WebP. Score perfeito no Lighthouse de SEO e Acessibilidade.',
         tags: ['HTML5', 'CSS3', 'JavaScript', 'WebP', 'SEO'],
@@ -240,7 +240,7 @@ const projects = [
     },
     {
         title: 'Gestor de Tarefas',
-        img: 'assets/minhas_tarefas_h.webp',
+        img: 'https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/minhas_tarefas_h.webp',
         challenge: 'Gerenciar estados complexos de persistência e filtros em tempo real de forma extremamente leve, sem depender de servidores ou bibliotecas.',
         solution: 'Motor de tarefas assíncrono em Vanilla JS sob modelo MVC, LocalStorage para leitura e gravação instantânea. Delegação de eventos inteligente e debounce linear nas filtragens.',
         tags: ['JavaScript', 'MVC', 'LocalStorage', 'HTML5', 'CSS3'],
@@ -249,7 +249,7 @@ const projects = [
     },
     {
         title: 'Tomo do Mestre',
-        img: 'assets/tomo_mestre.webp',
+        img: 'https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/tomo_mestre.webp',
         challenge: 'Estruturar um motor flexível que pudesse injetar, validar e renderizar múltiplos esquemas de RPG medievais sem requisições síncronas de servidor.',
         solution: 'Carregamento assíncrono modularizado de objetos RPG em JSON. Interface injeta dados em tempo real com transições suaves baseadas em variáveis CSS e design medieval refinado.',
         tags: ['JavaScript', 'JSON', 'CSS Variables', 'Async/Await'],
@@ -258,7 +258,7 @@ const projects = [
     },
     {
         title: 'Nexus',
-        img: 'assets/nexus.png',
+        img: 'https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/nexus.png',
         challenge: 'Projetar um portal ERP que combinasse dados operacionais complexos com uma estética premium, micro-interações fluídas e temas visuais totalmente dinâmicos.',
         solution: 'Dashboard administrativo com glassmorphism, motor de temas em tempo real e UX pensada para gestão diária. Módulos de BI, financeiro, vendas, estoque e CRM integrados em uma interface moderna e responsiva.',
         tags: ['JavaScript', 'CSS', 'Dashboard', 'ERP', 'Glassmorphism', 'UX'],
