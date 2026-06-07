@@ -530,7 +530,7 @@ const openCvBtn = document.getElementById('open-cv');
 function openCvModal()  { cvModalBg.classList.add('open'); document.body.style.overflow = 'hidden'; if (closeCv) closeCv.focus(); }
 function closeCvModal() { cvModalBg.classList.remove('open'); document.body.style.overflow = ''; }
 function printCurriculo() {
-    window.open('curriculo.html?print=1', '_blank', 'noopener,noreferrer');
+    window.open('curriculo.html?v=20260607&print=1', '_blank', 'noopener,noreferrer');
 }
 
 openCvBtn && openCvBtn.addEventListener('click', openCvModal);
