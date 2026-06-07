@@ -14,7 +14,6 @@
 
 <!-- CUSTOM CURSOR -->
 <div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
 
 <!-- NOISE OVERLAY -->
 <div class="noise"></div>
@@ -95,7 +94,7 @@
             </div>
             <div class="stat-div"></div>
             <div class="stat">
-                <span class="stat-num" data-target="5">0</span>
+                <span class="stat-num" data-target="6">0</span>
                 <span class="stat-label">Projetos</span>
             </div>
             <div class="stat-div"></div>
@@ -152,108 +151,154 @@
         <h2 class="section-title">Trabalho<br><em>Selecionado</em></h2>
     </div>
 
-    <div class="projects-list">
+    <div class="projects-carousel" id="projects-carousel" aria-label="Galeria 3D de projetos">
+        <div class="carousel-stage">
 
-        <!-- PROJECT 1 -->
-        <div class="proj-item" data-idx="0">
-            <div class="proj-num">01</div>
-            <div class="proj-info">
-                <h3>Esfera 3D</h3>
-                <p>Controle por gestos com a mão via MediaPipe</p>
-            </div>
-            <div class="proj-tags">
-                <span>Three.js</span>
-                <span>MediaPipe</span>
-                <span>WebGL</span>
-            </div>
-            <a href="https://matheusmansanorodrigues.github.io/esfera_3d/" target="_blank" class="proj-link">
-                <i class="fa-solid fa-arrow-up-right"></i>
-            </a>
-            <div class="proj-preview">
-                <img src="assets/esfera_3d.webp" alt="Esfera 3D" loading="lazy">
-            </div>
+            <!-- PROJECT 1 -->
+            <article class="project-card project-card-featured" data-idx="0">
+                <div class="project-cover">
+                    <video src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/portfa_wever.mp4" muted loop playsinline preload="metadata"></video>
+                    <!-- <img src="assets/portfa_wever.jpeg" alt="Preview do projeto Wever" loading="lazy"> -->
+                    <span class="proj-badge">Projeto destaque</span>
+                </div>
+                <div class="project-card-body">
+                    <div class="project-card-head">
+                        <span>01</span>
+                        <a href="https://wever.work" target="_blank" class="proj-link" aria-label="Abrir Wever">
+                            <i class="fa-solid fa-arrow-up-right"></i>
+                        </a>
+                    </div>
+                    <h3>Wever</h3>
+                    <p>Experiência web moderna para apresentação da marca</p>
+                    <div class="proj-tags">
+                        <span>UI Design</span>
+                        <span>Front-end</span>
+                        <span>Responsivo</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- PROJECT 2 -->
+            <article class="project-card" data-idx="1">
+                <div class="project-cover">
+                    <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/esfera_3d.webp" alt="Esfera 3D" loading="lazy">
+                </div>
+                <div class="project-card-body">
+                    <div class="project-card-head">
+                        <span>02</span>
+                        <a href="https://matheusmansanorodrigues.github.io/esfera_3d/" target="_blank" class="proj-link" aria-label="Abrir Esfera 3D">
+                            <i class="fa-solid fa-arrow-up-right"></i>
+                        </a>
+                    </div>
+                    <h3>Esfera 3D</h3>
+                    <p>Controle por gestos com a mão via MediaPipe</p>
+                    <div class="proj-tags">
+                        <span>Three.js</span>
+                        <span>MediaPipe</span>
+                        <span>WebGL</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- PROJECT 3 -->
+            <article class="project-card" data-idx="2">
+                <div class="project-cover">
+                    <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/otica_horizonte_h.webp" alt="Ótica Horizonte" loading="lazy">
+                </div>
+                <div class="project-card-body">
+                    <div class="project-card-head">
+                        <span>03</span>
+                        <a href="https://matheusmansanorodrigues.github.io/otica_horizonte/" target="_blank" class="proj-link" aria-label="Abrir Ótica Horizonte">
+                            <i class="fa-solid fa-arrow-up-right"></i>
+                        </a>
+                    </div>
+                    <h3>Ótica Horizonte</h3>
+                    <p>Site completo para ótica em Florianópolis</p>
+                    <div class="proj-tags">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- PROJECT 4 -->
+            <article class="project-card" data-idx="3">
+                <div class="project-cover">
+                    <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/minhas_tarefas_h.webp" alt="Gestor de Tarefas" loading="lazy">
+                </div>
+                <div class="project-card-body">
+                    <div class="project-card-head">
+                        <span>04</span>
+                        <a href="https://matheusmansanorodrigues.github.io/Projeto-Tarefa/" target="_blank" class="proj-link" aria-label="Abrir Gestor de Tarefas">
+                            <i class="fa-solid fa-arrow-up-right"></i>
+                        </a>
+                    </div>
+                    <h3>Gestor de Tarefas</h3>
+                    <p>CRUD completo com filtros e busca em tempo real</p>
+                    <div class="proj-tags">
+                        <span>JavaScript</span>
+                        <span>LocalStorage</span>
+                        <span>MVC</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- PROJECT 5 -->
+            <article class="project-card" data-idx="4">
+                <div class="project-cover">
+                    <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/tomo_mestre.webp" alt="Tomo do Mestre" loading="lazy">
+                </div>
+                <div class="project-card-body">
+                    <div class="project-card-head">
+                        <span>05</span>
+                        <a href="https://matheusmansanorodrigues.github.io/Guia_RPG/" target="_blank" class="proj-link" aria-label="Abrir Tomo do Mestre">
+                            <i class="fa-solid fa-arrow-up-right"></i>
+                        </a>
+                    </div>
+                    <h3>Tomo do Mestre</h3>
+                    <p>Guia medieval interativo multi-sistema de RPG</p>
+                    <div class="proj-tags">
+                        <span>JavaScript</span>
+                        <span>JSON</span>
+                        <span>CSS</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- PROJECT 6 -->
+            <article class="project-card" data-idx="5">
+                <div class="project-cover">
+                    <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/nexus.webp" alt="Nexus ERP" loading="lazy">
+                </div>
+                <div class="project-card-body">
+                    <div class="project-card-head">
+                        <span>06</span>
+                        <a href="https://matheusmansanorodrigues.github.io/NexusERP/" target="_blank" class="proj-link" aria-label="Abrir Nexus ERP">
+                            <i class="fa-solid fa-arrow-up-right"></i>
+                        </a>
+                    </div>
+                    <h3>Nexus</h3>
+                    <p>Dashboard ERP premium com glassmorphism e temas dinâmicos</p>
+                    <div class="proj-tags">
+                        <span>JavaScript</span>
+                        <span>CSS</span>
+                        <span>Dashboard</span>
+                    </div>
+                </div>
+            </article>
+
         </div>
 
-        <!-- PROJECT 2 -->
-        <div class="proj-item" data-idx="1">
-            <div class="proj-num">02</div>
-            <div class="proj-info">
-                <h3>Ótica Horizonte</h3>
-                <p>Site completo para ótica em Florianópolis</p>
-            </div>
-            <div class="proj-tags">
-                <span>HTML</span>
-                <span>CSS</span>
-                <span>JavaScript</span>
-            </div>
-            <a href="https://matheusmansanorodrigues.github.io/otica_horizonte/" target="_blank" class="proj-link">
-                <i class="fa-solid fa-arrow-up-right"></i>
-            </a>
-            <div class="proj-preview">
-                <img src="assets/otica_horizonte_h.webp" alt="Ótica Horizonte" loading="lazy">
-            </div>
+        <div class="carousel-ui" aria-label="Controles do carrossel">
+            <button class="carousel-btn" type="button" data-carousel-prev aria-label="Projeto anterior">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div class="carousel-dots" aria-hidden="true"></div>
+            <button class="carousel-btn" type="button" data-carousel-next aria-label="Próximo projeto">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
         </div>
-
-        <!-- PROJECT 3 -->
-        <div class="proj-item" data-idx="2">
-            <div class="proj-num">03</div>
-            <div class="proj-info">
-                <h3>Gestor de Tarefas</h3>
-                <p>CRUD completo com filtros e busca em tempo real</p>
-            </div>
-            <div class="proj-tags">
-                <span>JavaScript</span>
-                <span>LocalStorage</span>
-                <span>MVC</span>
-            </div>
-            <a href="https://matheusmansanorodrigues.github.io/Projeto-Tarefa/" target="_blank" class="proj-link">
-                <i class="fa-solid fa-arrow-up-right"></i>
-            </a>
-            <div class="proj-preview">
-                <img src="assets/minhas_tarefas_h.webp" alt="Gestor de Tarefas" loading="lazy">
-            </div>
-        </div>
-
-        <!-- PROJECT 4 -->
-        <div class="proj-item" data-idx="3">
-            <div class="proj-num">04</div>
-            <div class="proj-info">
-                <h3>Tomo do Mestre</h3>
-                <p>Guia medieval interativo multi-sistema de RPG</p>
-            </div>
-            <div class="proj-tags">
-                <span>JavaScript</span>
-                <span>JSON</span>
-                <span>CSS</span>
-            </div>
-            <a href="https://matheusmansanorodrigues.github.io/Guia_RPG/" target="_blank" class="proj-link">
-                <i class="fa-solid fa-arrow-up-right"></i>
-            </a>
-            <div class="proj-preview">
-                <img src="assets/tomo_mestre.webp" alt="Tomo do Mestre" loading="lazy">
-            </div>
-        </div>
-
-        <!-- PROJECT 5 -->
-        <div class="proj-item" data-idx="4">
-            <div class="proj-num">05</div>
-            <div class="proj-info">
-                <h3>Nexus</h3>
-                <p>Dashboard ERP premium com glassmorphism e temas dinâmicos</p>
-            </div>
-            <div class="proj-tags">
-                <span>JavaScript</span>
-                <span>CSS</span>
-                <span>Dashboard</span>
-            </div>
-            <a href="https://matheusmansanorodrigues.github.io/NexusERP/" target="_blank" class="proj-link">
-                <i class="fa-solid fa-arrow-up-right"></i>
-            </a>
-            <div class="proj-preview">
-                <img src="assets/nexus.png" alt="Nexus ERP" loading="lazy">
-            </div>
-        </div>
-
     </div>
 </section>
 
@@ -293,7 +338,7 @@
             <div class="about-card-wrap" id="about-card">
                 <div class="about-card">
                     <div class="about-card-inner">
-                        <img src="assets/eu.jpeg" alt="Matheus Mansano" class="about-photo">
+                        <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/eu.webp" alt="Matheus Mansano" class="about-photo">
                         <div class="about-card-overlay">
                             <span>LONDRINA · PR</span>
                             <span>REMOTO OK</span>
@@ -445,7 +490,7 @@
 <footer id="footer">
     <div class="footer-inner">
         <div class="footer-logo" id="footer-logo">MATHEUS<span>.</span>DEV</div>
-        <div class="footer-copy">© 2026 · Feito com obsessão</div>
+        <div class="footer-copy">© 2026 · Matheus Mansano Rodrigues</div>
         <div class="footer-socials">
             <a href="https://github.com/matheusmansanorodrigues" target="_blank"><i class="fa-brands fa-github"></i></a>
             <a href="https://www.linkedin.com/in/matheusrrodrigues/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
@@ -458,7 +503,7 @@
     <div class="modal-box" role="dialog" aria-modal="true">
         <button class="modal-x" id="close-proj"><i class="fa-solid fa-xmark"></i></button>
         <div class="modal-inner">
-            <div class="modal-media">
+            <div class="modal-media" id="pm-media">
                 <img id="pm-img" src="" alt="">
             </div>
             <div class="modal-body">

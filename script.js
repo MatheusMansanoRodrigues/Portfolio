@@ -45,34 +45,12 @@ function animCount(el, target, duration) {
 }
 
 /* ── CUSTOM CURSOR ── */
-const dot  = document.getElementById('cursor-dot');
-const ring = document.getElementById('cursor-ring');
-let ringX = 0, ringY = 0;
-let curX = 0, curY = 0;
+const dot = document.getElementById('cursor-dot');
 
 document.addEventListener('mousemove', e => {
-    curX = e.clientX; curY = e.clientY;
-    dot.style.left = curX + 'px';
-    dot.style.top  = curY + 'px';
+    dot.style.left = e.clientX + 'px';
+    dot.style.top = e.clientY + 'px';
 });
-
-// Ring lags behind with lerp
-;(function lerpRing() {
-    ringX += (curX - ringX) * 0.12;
-    ringY += (curY - ringY) * 0.12;
-    ring.style.left = ringX + 'px';
-    ring.style.top  = ringY + 'px';
-    requestAnimationFrame(lerpRing);
-})();
-
-const hoverEls = 'button, a, .proj-item, .spill, .about-link, .modal-x, .nav-cta, .nav-link, .footer-logo, .send-btn, .btn-outline, .btn-accent';
-document.querySelectorAll(hoverEls).forEach(el => {
-    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
-    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
-});
-
-document.addEventListener('mousedown', () => ring.classList.add('click'));
-document.addEventListener('mouseup',   () => ring.classList.remove('click'));
 
 /* ── NAV SCROLL ── */
 const nav = document.getElementById('nav');
@@ -234,6 +212,15 @@ window.addEventListener('scroll', () => {
 ═══════════════════════════════════════════════════ */
 const projects = [
     {
+        title: 'Wever',
+        video: 'assets/portfa_wever.mp4',
+        challenge: 'Criar uma presença digital com impacto visual forte, navegação fluida e apresentação clara da marca, mantendo a experiência elegante em desktop e mobile.',
+        solution: 'Interface responsiva com foco em direção visual, ritmo de animações e hierarquia de conteúdo. O resultado prioriza uma primeira impressão marcante e uma navegação simples até a ação principal.',
+        tags: ['UI Design', 'Front-end', 'Responsivo', 'Brand Experience'],
+        url: 'https://wever.work',
+        git: ''
+    },
+    {
         title: 'Esfera 3D',
         img: 'assets/esfera_3d.webp',
         challenge: 'Processar coordenadas de rastreamento de mãos em tempo real no navegador sem causar gargalos na renderização 3D de alta contagem de polígonos.',
@@ -283,9 +270,119 @@ const projects = [
 const projModalBg = document.getElementById('proj-modal-bg');
 const closeProj   = document.getElementById('close-proj');
 
+function formatPlayerTime(seconds) {
+    if (!Number.isFinite(seconds)) return '00:00';
+    const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+    return `${mins}:${secs}`;
+}
+
+function mountProjectPlayer(mediaEl, project) {
+    mediaEl.innerHTML = `
+        <div class="project-player is-paused">
+            <video class="project-player-video" src="${project.video}" muted loop playsinline preload="metadata"></video>
+            <button class="project-player-hit" type="button" aria-label="Reproduzir video do projeto">
+                <span><i class="fa-solid fa-play"></i></span>
+            </button>
+            <div class="project-player-controls">
+                <button class="player-toggle" type="button" aria-label="Reproduzir ou pausar">
+                    <i class="fa-solid fa-play"></i>
+                </button>
+                <div class="player-progress">
+                    <div class="player-progress-fill"></div>
+                    <input type="range" min="0" max="100" value="0" aria-label="Progresso do video">
+                </div>
+                <span class="player-time">00:00</span>
+                <button class="player-mute" type="button" aria-label="Ativar ou desativar som">
+                    <i class="fa-solid fa-volume-xmark"></i>
+                </button>
+                <button class="player-fullscreen" type="button" aria-label="Maximizar video">
+                    <i class="fa-solid fa-expand"></i>
+                </button>
+            </div>
+        </div>
+    `;
+
+    const player = mediaEl.querySelector('.project-player');
+    const video = mediaEl.querySelector('.project-player-video');
+    const hit = mediaEl.querySelector('.project-player-hit');
+    const toggle = mediaEl.querySelector('.player-toggle');
+    const mute = mediaEl.querySelector('.player-mute');
+    const fullscreen = mediaEl.querySelector('.player-fullscreen');
+    const progress = mediaEl.querySelector('.player-progress input');
+    const progressFill = mediaEl.querySelector('.player-progress-fill');
+    const time = mediaEl.querySelector('.player-time');
+
+    function setPlaying(isPlaying) {
+        player.classList.toggle('is-playing', isPlaying);
+        player.classList.toggle('is-paused', !isPlaying);
+        toggle.innerHTML = `<i class="fa-solid fa-${isPlaying ? 'pause' : 'play'}"></i>`;
+    }
+
+    function togglePlay() {
+        if (video.paused) {
+            video.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+        } else {
+            video.pause();
+            setPlaying(false);
+        }
+    }
+
+    function updateProgress() {
+        const pct = video.duration ? (video.currentTime / video.duration) * 100 : 0;
+        progress.value = pct;
+        progressFill.style.width = `${pct}%`;
+        time.textContent = formatPlayerTime(video.currentTime);
+    }
+
+    hit.addEventListener('click', togglePlay);
+    toggle.addEventListener('click', togglePlay);
+    video.addEventListener('click', togglePlay);
+    video.addEventListener('timeupdate', updateProgress);
+    video.addEventListener('loadedmetadata', updateProgress);
+    video.addEventListener('play', () => setPlaying(true));
+    video.addEventListener('pause', () => setPlaying(false));
+
+    progress.addEventListener('input', () => {
+        if (!video.duration) return;
+        video.currentTime = (Number(progress.value) / 100) * video.duration;
+        updateProgress();
+    });
+
+    mute.addEventListener('click', () => {
+        video.muted = !video.muted;
+        mute.innerHTML = `<i class="fa-solid fa-volume-${video.muted ? 'xmark' : 'high'}"></i>`;
+    });
+
+    fullscreen.addEventListener('click', () => {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+            return;
+        }
+
+        if (player.requestFullscreen) {
+            player.requestFullscreen();
+        } else if (video.webkitEnterFullscreen) {
+            video.webkitEnterFullscreen();
+        }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+        const isFullscreen = document.fullscreenElement === player;
+        fullscreen.innerHTML = `<i class="fa-solid fa-${isFullscreen ? 'compress' : 'expand'}"></i>`;
+    });
+}
+
 function openProjModal(idx) {
     const p = projects[idx];
-    document.getElementById('pm-img').src = p.img;
+    const mediaEl = document.getElementById('pm-media');
+
+    if (p.video) {
+        mountProjectPlayer(mediaEl, p);
+    } else {
+        mediaEl.innerHTML = `<img id="pm-img" src="${p.img}" alt="${p.title}">`;
+    }
+
     document.getElementById('pm-title').textContent = p.title;
     document.getElementById('pm-challenge').textContent = p.challenge;
     document.getElementById('pm-solution').textContent = p.solution;
@@ -294,7 +391,9 @@ function openProjModal(idx) {
     tagsEl.innerHTML = p.tags.map(t => `<span>${t}</span>`).join('');
 
     document.getElementById('pm-live').href = p.url;
-    document.getElementById('pm-git').href  = p.git;
+    const gitBtn = document.getElementById('pm-git');
+    gitBtn.href = p.git || '#';
+    gitBtn.style.display = p.git ? '' : 'none';
 
     projModalBg.classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -304,9 +403,10 @@ function openProjModal(idx) {
 function closeProjModal() {
     projModalBg.classList.remove('open');
     document.body.style.overflow = '';
+    document.getElementById('pm-media').innerHTML = '';
 }
 
-document.querySelectorAll('.proj-item').forEach(item => {
+document.querySelectorAll('.project-card').forEach(item => {
     item.addEventListener('click', e => {
         if (e.target.closest('.proj-link')) return; // let link open normally
         openProjModal(parseInt(item.dataset.idx));
@@ -548,113 +648,96 @@ if (navCta) {
 }
 
 /* ═══════════════════════════════════════════════════
-   PROJECT ITEMS — STAGGER REVEAL
-═══════════════════════════════════════════════════ */
-const projItems = document.querySelectorAll('.proj-item');
-const projObs = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const items = document.querySelectorAll('.proj-item');
-            items.forEach((item, i) => {
-                item.style.opacity = '0';
-                item.style.transform = 'translateX(-20px)';
-                item.style.transition = `opacity .6s var(--ease) ${i * 100}ms, transform .6s var(--ease) ${i * 100}ms`;
-                setTimeout(() => {
-                    item.style.opacity = '1';
-                    item.style.transform = 'translateX(0)';
-                }, 50);
-            });
-            projObs.disconnect();
-        }
-    });
-}, { threshold: 0.1 });
-
-if (projItems[0]) projObs.observe(projItems[0]);
-
-/* ═══════════════════════════════════════════════════
-   PROJECT FLOAT PREVIEW — follows cursor on hover
+   PROJECTS — 3D CAROUSEL
 ═══════════════════════════════════════════════════ */
 (function () {
-    if (!window.matchMedia('(pointer: fine) and (min-width: 1025px)').matches) return;
+    const carousel = document.getElementById('projects-carousel');
+    if (!carousel) return;
 
-    const float = document.createElement('div');
-    float.className = 'proj-float';
-    float.setAttribute('aria-hidden', 'true');
-    float.innerHTML = '<img src="" alt="">';
-    document.body.appendChild(float);
+    const cards = [...carousel.querySelectorAll('.project-card')];
+    const prev = carousel.querySelector('[data-carousel-prev]');
+    const next = carousel.querySelector('[data-carousel-next]');
+    const dotsWrap = carousel.querySelector('.carousel-dots');
+    let active = 0;
 
-    const img = float.querySelector('img');
-    let targetX = 0;
-    let targetY = 0;
-    let currentX = 0;
-    let currentY = 0;
-    let active = false;
-    let rafId = null;
+    carousel.tabIndex = 0;
 
-    const OFFSET_X = 36;
-    const LERP = 0.14;
-
-    function getSize() {
-        const r = float.getBoundingClientRect();
-        return { w: r.width || 480, h: r.height || 320 };
-    }
-
-    function setPos(x, y) {
-        float.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-    }
-
-    function clampPos(x, y) {
-        const { w, h } = getSize();
-        const pad = 16;
-        return {
-            x: Math.max(pad, Math.min(x, window.innerWidth - w - pad)),
-            y: Math.max(pad, Math.min(y, window.innerHeight - h - pad)),
-        };
-    }
-
-    function aim(e) {
-        const { h } = getSize();
-        const p = clampPos(e.clientX + OFFSET_X, e.clientY - h * 0.45);
-        targetX = p.x;
-        targetY = p.y;
-    }
-
-    function tick() {
-        currentX += (targetX - currentX) * LERP;
-        currentY += (targetY - currentY) * LERP;
-        setPos(currentX, currentY);
-        if (active) rafId = requestAnimationFrame(tick);
-    }
-
-    function show(item, e) {
-        const src = item.querySelector('.proj-preview img')?.getAttribute('src');
-        if (!src) return;
-
-        img.src = src;
-        img.alt = item.querySelector('.proj-info h3')?.textContent || '';
-        active = true;
-        float.classList.add('active');
-
-        aim(e);
-        currentX = targetX;
-        currentY = targetY;
-        setPos(currentX, currentY);
-
-        cancelAnimationFrame(rafId);
-        rafId = requestAnimationFrame(tick);
-    }
-
-    function hide() {
-        active = false;
-        float.classList.remove('active');
-        cancelAnimationFrame(rafId);
-    }
-
-    document.querySelectorAll('.proj-item').forEach(item => {
-        item.addEventListener('mouseenter', e => show(item, e));
-        item.addEventListener('mousemove', aim);
-        item.addEventListener('mouseleave', hide);
+    cards.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'carousel-dot';
+        dot.type = 'button';
+        dot.setAttribute('aria-label', `Ir para projeto ${i + 1}`);
+        dot.addEventListener('click', () => goTo(i));
+        dotsWrap.appendChild(dot);
     });
+
+    const dots = [...dotsWrap.querySelectorAll('.carousel-dot')];
+
+    function shortestOffset(index) {
+        const total = cards.length;
+        let offset = index - active;
+        if (offset > total / 2) offset -= total;
+        if (offset < -total / 2) offset += total;
+        return offset;
+    }
+
+    function updateVideos() {
+        cards.forEach((card, i) => {
+            const video = card.querySelector('video');
+            if (!video) return;
+
+            if (i === active) {
+                video.play().catch(() => {});
+            } else {
+                video.pause();
+            }
+        });
+    }
+
+    function render() {
+        cards.forEach((card, i) => {
+            const offset = shortestOffset(i);
+            const abs = Math.abs(offset);
+            const direction = Math.sign(offset);
+            const visible = abs <= 2;
+
+            card.classList.toggle('is-active', offset === 0);
+            card.style.zIndex = String(20 - abs);
+            card.style.opacity = visible ? String(1 - abs * 0.24) : '0';
+            card.style.pointerEvents = visible ? 'auto' : 'none';
+            card.style.filter = abs > 0 ? `blur(${abs * 0.2}px)` : '';
+
+            const x = offset * 58;
+            const rotate = direction * -26;
+            const z = abs * -160;
+            const scale = 1 - abs * 0.09;
+            card.style.transform = `translateX(calc(-50% + ${x}%)) translateZ(${z}px) rotateY(${rotate}deg) scale(${scale})`;
+        });
+
+        dots.forEach((dot, i) => dot.classList.toggle('is-active', i === active));
+        updateVideos();
+    }
+
+    function goTo(index) {
+        active = (index + cards.length) % cards.length;
+        render();
+    }
+
+    prev && prev.addEventListener('click', () => goTo(active - 1));
+    next && next.addEventListener('click', () => goTo(active + 1));
+
+    carousel.addEventListener('keydown', e => {
+        if (e.key === 'ArrowLeft') goTo(active - 1);
+        if (e.key === 'ArrowRight') goTo(active + 1);
+    });
+
+    cards.forEach((card, i) => {
+        card.addEventListener('mouseenter', () => {
+            if (i !== active) goTo(i);
+        });
+    });
+
+    render();
 })();
 
 /* ═══════════════════════════════════════════════════
@@ -666,11 +749,9 @@ if (projItems[0]) projObs.observe(projItems[0]);
 ═══════════════════════════════════════════════════ */
 document.addEventListener('mouseleave', () => {
     dot.style.opacity = '0';
-    ring.style.opacity = '0';
 });
 document.addEventListener('mouseenter', () => {
     dot.style.opacity = '1';
-    ring.style.opacity = '1';
 });
 
 /* ── SMOOTH PARALLAX — desativa em mobile para evitar overflow ── */
