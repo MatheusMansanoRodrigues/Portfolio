@@ -67,6 +67,7 @@ window.addEventListener('scroll', () => {
     function closeMenu() {
         toggle.classList.remove('open');
         toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Abrir menu');
         mobile.classList.remove('open');
         mobile.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
@@ -76,12 +77,18 @@ window.addEventListener('scroll', () => {
         const isOpen = mobile.classList.toggle('open');
         toggle.classList.toggle('open', isOpen);
         toggle.setAttribute('aria-expanded', String(isOpen));
+        toggle.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
         mobile.setAttribute('aria-hidden', String(!isOpen));
         document.body.style.overflow = isOpen ? 'hidden' : '';
     });
 
     mobile.querySelectorAll('.nav-mobile-link').forEach(link => {
         link.addEventListener('click', closeMenu);
+    });
+
+    mobile.querySelector('[data-open-cv]')?.addEventListener('click', () => {
+        closeMenu();
+        openCvModal();
     });
 
     window.addEventListener('resize', () => {
@@ -530,7 +537,7 @@ const openCvBtn = document.getElementById('open-cv');
 function openCvModal()  { cvModalBg.classList.add('open'); document.body.style.overflow = 'hidden'; if (closeCv) closeCv.focus(); }
 function closeCvModal() { cvModalBg.classList.remove('open'); document.body.style.overflow = ''; }
 function printCurriculo() {
-    window.open('curriculo.html?v=20260607&print=1', '_blank', 'noopener,noreferrer');
+    window.open('curriculo.html?v=20260607-5&print=1', '_blank', 'noopener,noreferrer');
 }
 
 openCvBtn && openCvBtn.addEventListener('click', openCvModal);
@@ -760,10 +767,16 @@ if (navCta) {
     if (!carousel) return;
 
     const cards = [...carousel.querySelectorAll('.project-card')];
+    const stage = carousel.querySelector('.carousel-stage');
     const prev = carousel.querySelector('[data-carousel-prev]');
     const next = carousel.querySelector('[data-carousel-next]');
     const dotsWrap = carousel.querySelector('.carousel-dots');
     let active = 0;
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchDeltaX = 0;
+    let isHorizontalSwipe = false;
+    let suppressClick = false;
 
     carousel.tabIndex = 0;
 
@@ -800,11 +813,13 @@ if (navCta) {
     }
 
     function render() {
+        const isMobile = window.innerWidth <= 640;
+
         cards.forEach((card, i) => {
             const offset = shortestOffset(i);
             const abs = Math.abs(offset);
             const direction = Math.sign(offset);
-            const visible = abs <= 2;
+            const visible = abs <= (isMobile ? 1 : 2);
 
             card.classList.toggle('is-active', offset === 0);
             card.style.zIndex = String(20 - abs);
@@ -812,10 +827,10 @@ if (navCta) {
             card.style.pointerEvents = visible ? 'auto' : 'none';
             card.style.filter = abs > 0 ? `blur(${abs * 0.2}px)` : '';
 
-            const x = offset * 58;
-            const rotate = direction * -26;
-            const z = abs * -160;
-            const scale = 1 - abs * 0.09;
+            const x = offset * (isMobile ? 34 : 58);
+            const rotate = direction * (isMobile ? -12 : -26);
+            const z = abs * (isMobile ? -80 : -160);
+            const scale = 1 - abs * (isMobile ? 0.06 : 0.09);
             card.style.transform = `translateX(calc(-50% + ${x}%)) translateZ(${z}px) rotateY(${rotate}deg) scale(${scale})`;
         });
 
@@ -828,8 +843,58 @@ if (navCta) {
         render();
     }
 
+    function startSwipe(e) {
+        const touch = e.touches[0];
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+        touchDeltaX = 0;
+        isHorizontalSwipe = false;
+    }
+
+    function moveSwipe(e) {
+        if (!touchStartX) return;
+
+        const touch = e.touches[0];
+        const deltaX = touch.clientX - touchStartX;
+        const deltaY = touch.clientY - touchStartY;
+        touchDeltaX = deltaX;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
+            isHorizontalSwipe = true;
+            e.preventDefault();
+        }
+    }
+
+    function endSwipe() {
+        if (!touchStartX) return;
+
+        if (isHorizontalSwipe && Math.abs(touchDeltaX) > 45) {
+            suppressClick = true;
+            goTo(active + (touchDeltaX < 0 ? 1 : -1));
+            setTimeout(() => { suppressClick = false; }, 350);
+        }
+
+        touchStartX = 0;
+        touchStartY = 0;
+        touchDeltaX = 0;
+        isHorizontalSwipe = false;
+    }
+
     prev && prev.addEventListener('click', () => goTo(active - 1));
     next && next.addEventListener('click', () => goTo(active + 1));
+
+    carousel.addEventListener('click', e => {
+        if (!suppressClick) return;
+        e.preventDefault();
+        e.stopPropagation();
+    }, true);
+
+    if (stage) {
+        stage.addEventListener('touchstart', startSwipe, { passive: true });
+        stage.addEventListener('touchmove', moveSwipe, { passive: false });
+        stage.addEventListener('touchend', endSwipe);
+        stage.addEventListener('touchcancel', endSwipe);
+    }
 
     carousel.addEventListener('keydown', e => {
         if (e.key === 'ArrowLeft') goTo(active - 1);
@@ -842,6 +907,7 @@ if (navCta) {
         });
     });
 
+    window.addEventListener('resize', render, { passive: true });
     render();
 })();
 
