@@ -65,6 +65,11 @@ body {
     box-shadow: 0 0 14px rgba(255,77,0,0.45);
 }
 
+.project-player:fullscreen #cursor-dot {
+    display: block;
+    z-index: 10002;
+}
+
 /* ═══════════════════════════════════════════════════
    LOADER
 ═══════════════════════════════════════════════════ */
@@ -2198,6 +2203,35 @@ section {
 }
 
 .cv-sec p, .cv-main p { font-size: 13px; color: var(--cream2); line-height: 1.6; }
+
+.cv-highlight {
+    display: grid;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.cv-highlight span {
+    padding: 9px 12px;
+    border: 1px solid rgba(255, 77, 0, 0.18);
+    border-radius: 12px;
+    background: rgba(255, 77, 0, 0.08);
+    color: var(--cream);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.cv-mini-list {
+    display: grid;
+    gap: 10px;
+}
+
+.cv-mini-list p {
+    margin: 0;
+}
+
+.cv-mini-list strong {
+    color: var(--cream);
+}
 
 .cv-exp-item { margin-bottom: 18px; }
 

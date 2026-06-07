@@ -328,6 +328,116 @@ function mountProjectPlayer(mediaEl, project) {
         }
     }
 
+    function setMuted(isMuted) {
+        video.muted = isMuted;
+        mute.innerHTML = `<i class="fa-solid fa-volume-${video.muted ? 'xmark' : 'high'}"></i>`;
+    }
+
+    function toggleMute() {
+        setMuted(!video.muted);
+    }
+
+    function toggleFullscreen() {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+            return;
+        }
+
+        if (player.requestFullscreen) {
+            player.requestFullscreen();
+        } else if (video.webkitEnterFullscreen) {
+            video.webkitEnterFullscreen();
+        }
+    }
+
+    function seekBy(seconds) {
+        if (!video.duration) return;
+        video.currentTime = Math.max(0, Math.min(video.duration, video.currentTime + seconds));
+        updateProgress();
+    }
+
+    function setVolumeBy(delta) {
+        video.volume = Math.max(0, Math.min(1, video.volume + delta));
+        if (video.volume > 0) setMuted(false);
+    }
+
+    function seekToPercent(percent) {
+        if (!video.duration) return;
+        video.currentTime = video.duration * percent;
+        updateProgress();
+    }
+
+    function isTypingTarget(target) {
+        if (!target) return false;
+        const tag = target.tagName;
+        const textInputTypes = ['email', 'number', 'password', 'search', 'tel', 'text', 'url'];
+
+        return target.isContentEditable ||
+            tag === 'TEXTAREA' ||
+            tag === 'SELECT' ||
+            (tag === 'INPUT' && textInputTypes.includes(target.type));
+    }
+
+    function handleKeyboardShortcuts(e) {
+        if (!projModalBg.classList.contains('open') || !document.body.contains(player) || isTypingTarget(e.target)) return;
+
+        const key = e.key.toLowerCase();
+
+        if (key >= '0' && key <= '9') {
+            e.preventDefault();
+            seekToPercent(Number(key) / 10);
+            return;
+        }
+
+        switch (key) {
+            case ' ':
+            case 'k':
+                e.preventDefault();
+                togglePlay();
+                break;
+            case 'm':
+                e.preventDefault();
+                toggleMute();
+                break;
+            case 'f':
+                e.preventDefault();
+                toggleFullscreen();
+                break;
+            case 'arrowleft':
+                e.preventDefault();
+                seekBy(-5);
+                break;
+            case 'arrowright':
+                e.preventDefault();
+                seekBy(5);
+                break;
+            case 'j':
+                e.preventDefault();
+                seekBy(-10);
+                break;
+            case 'l':
+                e.preventDefault();
+                seekBy(10);
+                break;
+            case 'arrowup':
+                e.preventDefault();
+                setVolumeBy(0.05);
+                break;
+            case 'arrowdown':
+                e.preventDefault();
+                setVolumeBy(-0.05);
+                break;
+            case 'home':
+                e.preventDefault();
+                seekToPercent(0);
+                break;
+            case 'end':
+                e.preventDefault();
+                seekToPercent(1);
+                break;
+        }
+    }
+
     function updateProgress() {
         const pct = video.duration ? (video.currentTime / video.duration) * 100 : 0;
         progress.value = pct;
@@ -349,26 +459,18 @@ function mountProjectPlayer(mediaEl, project) {
         updateProgress();
     });
 
-    mute.addEventListener('click', () => {
-        video.muted = !video.muted;
-        mute.innerHTML = `<i class="fa-solid fa-volume-${video.muted ? 'xmark' : 'high'}"></i>`;
-    });
-
-    fullscreen.addEventListener('click', () => {
-        if (document.fullscreenElement) {
-            document.exitFullscreen();
-            return;
-        }
-
-        if (player.requestFullscreen) {
-            player.requestFullscreen();
-        } else if (video.webkitEnterFullscreen) {
-            video.webkitEnterFullscreen();
-        }
-    });
+    mute.addEventListener('click', toggleMute);
+    fullscreen.addEventListener('click', toggleFullscreen);
+    document.addEventListener('keydown', handleKeyboardShortcuts);
 
     document.addEventListener('fullscreenchange', () => {
         const isFullscreen = document.fullscreenElement === player;
+        document.body.classList.toggle('video-fullscreen', isFullscreen);
+
+        if (dot) {
+            (isFullscreen ? player : document.body).appendChild(dot);
+        }
+
         fullscreen.innerHTML = `<i class="fa-solid fa-${isFullscreen ? 'compress' : 'expand'}"></i>`;
     });
 }
@@ -427,6 +529,9 @@ const openCvBtn = document.getElementById('open-cv');
 
 function openCvModal()  { cvModalBg.classList.add('open'); document.body.style.overflow = 'hidden'; if (closeCv) closeCv.focus(); }
 function closeCvModal() { cvModalBg.classList.remove('open'); document.body.style.overflow = ''; }
+function printCurriculo() {
+    window.open('curriculo.html?print=1', '_blank', 'noopener,noreferrer');
+}
 
 openCvBtn && openCvBtn.addEventListener('click', openCvModal);
 closeCv   && closeCv.addEventListener('click', closeCvModal);
