@@ -108,7 +108,12 @@ window.addEventListener('scroll', () => {
     let W, H, mx = -999, my = -999;
     const particles = [];
     const COLS = ['255,77,0', '240,235,225', '136,136,136', '255,140,66'];
-    const COUNT = 120;
+
+    function getParticleCount() {
+        if (window.innerWidth <= 480) return 220;
+        if (window.innerWidth <= 768) return 190;
+        return 150;
+    }
 
     function resize() {
         W = canvas.width  = canvas.offsetWidth;
@@ -123,13 +128,13 @@ window.addEventListener('scroll', () => {
             this.ox = this.x;
             this.oy = this.y;
             this.vx = (Math.random() - 0.5) * 0.3;
-            this.vy = -Math.random() * 0.4 - 0.1;
+            this.vy = -Math.random() * 0.45 - 0.18;
             this.size = Math.random() * 2.5 + 0.5;
             this.opacity = Math.random() * 0.6 + 0.1;
             this.color = COLS[Math.floor(Math.random() * COLS.length)];
             this.life = Math.random() * 0.005 + 0.001;
             this.age  = 0;
-            this.maxAge = 200 + Math.random() * 300;
+            this.maxAge = Math.ceil((this.y + 60) / Math.abs(this.vy)) + Math.random() * 120;
             this.connected = false;
         }
         update() {
@@ -137,7 +142,7 @@ window.addEventListener('scroll', () => {
             const dx = this.x - mx;
             const dy = this.y - my;
             const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 120) {
+            if (dist > 0 && dist < 120) {
                 const force = (120 - dist) / 120;
                 this.x += dx / dist * force * 2;
                 this.y += dy / dist * force * 2;
@@ -164,7 +169,7 @@ window.addEventListener('scroll', () => {
     function init() {
         resize();
         particles.length = 0;
-        for (let i = 0; i < COUNT; i++) particles.push(new Particle());
+        for (let i = 0; i < getParticleCount(); i++) particles.push(new Particle());
     }
 
     let t = 0;
@@ -537,7 +542,7 @@ const openCvBtn = document.getElementById('open-cv');
 function openCvModal()  { cvModalBg.classList.add('open'); document.body.style.overflow = 'hidden'; if (closeCv) closeCv.focus(); }
 function closeCvModal() { cvModalBg.classList.remove('open'); document.body.style.overflow = ''; }
 function printCurriculo() {
-    window.open('curriculo.html?v=20260607-5&print=1', '_blank', 'noopener,noreferrer');
+    window.open('curriculo.html?v=20260607-7&print=1', '_blank', 'noopener,noreferrer');
 }
 
 openCvBtn && openCvBtn.addEventListener('click', openCvModal);
