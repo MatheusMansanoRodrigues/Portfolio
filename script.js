@@ -233,13 +233,13 @@ const projects = [
         git: ''
     },
     {
-        title: 'Esfera 3D',
-        img: 'https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/esfera_3d.webp',
-        challenge: 'Processar coordenadas de rastreamento de mãos em tempo real no navegador sem causar gargalos na renderização 3D de alta contagem de polígonos.',
-        solution: 'Processamento assíncrono via MediaPipe Hands com transferência direta dos tensores 3D para cena Three.js. Shaders de profundidade personalizados e suavização exponencial dupla nas coordenadas para eliminar tremores.',
-        tags: ['JavaScript', 'Three.js', 'MediaPipe', 'WebGL', 'Canvas API'],
-        url: 'https://matheusmansanorodrigues.github.io/esfera_3d/',
-        git: 'https://github.com/matheusmansanorodrigues/esfera_3d'
+        title: "Purr'Coffee",
+        img: 'https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/purr_coffe.png',
+        challenge: 'Implementar um fluxo completo de pedidos em uma aplicação, mantendo carrinho, histórico e preferências sincronizados entre múltiplas páginas sem backend ou framework.',
+        solution: 'Arquitetura multi-page em HTML, CSS e JavaScript, com persistência via localStorage para carrinho, pedidos e estados da interface. Integração PIX baseada no padrão EMVCo/BR Code, com geração de payload TLV, cálculo CRC16-CCITT, QR Code via QRCode.js e suporte a cópia do código PIX.', 
+        tags: ['JavaScript', 'HTML5', 'CSS3', 'LocalStorage', 'PIX', 'QRCode.js'], 
+        url: 'https://matheusmansanorodrigues.github.io/purr_coffee/',
+        git: 'https://github.com/matheusmansanorodrigues/purr_coffee'
     },
     {
         title: 'Ótica Horizonte',
