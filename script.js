@@ -493,6 +493,10 @@ function openProjModal(idx) {
 
     if (p.video) {
         mountProjectPlayer(mediaEl, p);
+    } else if(p.title === "Purr'Coffee") {
+        mediaEl.style.backgroundColor = '#fff3d4';
+        mediaEl.innerHTML = `<img id="pm-img" src="${p.img}" alt="${p.title}" style="width: 70%; margin: 0 auto;">`;
+        
     } else {
         mediaEl.innerHTML = `<img id="pm-img" src="${p.img}" alt="${p.title}">`;
     }
