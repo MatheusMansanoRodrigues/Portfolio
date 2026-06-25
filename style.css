@@ -55,8 +55,22 @@ svg {
 }
 
 /* ═══════════════════════════════════════════════════
+   INTERACTIVE BACKGROUND
+ ═══════════════════════════════════════════════════ */
+#interactive-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    background: transparent;
+}
+
+/* ═══════════════════════════════════════════════════
    NOISE OVERLAY
-═══════════════════════════════════════════════════ */
+ ═══════════════════════════════════════════════════ */
 .noise {
     position: fixed; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
@@ -809,6 +823,23 @@ section {
     section { padding: 48px 16px; }
 }
 
+/* #work is now the first section — clear the fixed nav */
+#work {
+    padding-top: calc(100px + 80px);
+}
+
+@media (max-width: 1024px) {
+    #work { padding-top: calc(80px + 70px); }
+}
+
+@media (max-width: 768px) {
+    #work { padding-top: calc(80px + 100px); }
+}
+
+@media (max-width: 480px) {
+    #work { padding-top: calc(70px + 90px); }
+}
+
 .section-label {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
@@ -827,7 +858,7 @@ section {
 
 .section-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(44px, 8vw, 100px);
+    font-size: clamp(44px, 8vw, 60px);
     line-height: 0.95;
     letter-spacing: 0.01em;
     color: var(--cream);
@@ -1310,9 +1341,17 @@ section {
 /* ═══════════════════════════════════════════════════
    ABOUT
 ═══════════════════════════════════════════════════ */
-#about { padding-top: 0; }
+#about {
+    padding-top: 0;
+    scroll-margin-top: 100px;
+}
 
-@media (max-width: 768px) { #about { padding-top: 0; } }
+@media (max-width: 768px) {
+    #about {
+        padding-top: 0;
+        scroll-margin-top: 80px;
+    }
+}
 
 .about-grid {
     display: grid;
@@ -1584,7 +1623,7 @@ section {
    CONTACT
 ═══════════════════════════════════════════════════ */
 #contact {
-    background: var(--bg2);
+    background: transparent;
     max-width: 100%;
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
@@ -1701,10 +1740,11 @@ section {
 
 .form-group textarea { min-height: 110px; }
 
+/* ── SEND BUTTON — animated 3-phase ── */
 .send-btn {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     width: 100%;
     padding: 16px 24px;
     background: var(--accent);
@@ -1715,10 +1755,11 @@ section {
     border: none;
     border-radius: 14px;
     cursor: pointer;
-    transition: background .2s, transform .2s var(--spring), box-shadow .2s;
+    transition: background .3s, transform .2s var(--spring), box-shadow .2s;
     position: relative;
     overflow: hidden;
     -webkit-tap-highlight-color: transparent;
+    min-height: 54px;
 }
 
 .send-btn::before {
@@ -1728,22 +1769,78 @@ section {
     background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
     opacity: 0;
     transition: opacity .3s;
+    pointer-events: none;
 }
 
-.send-btn:hover {
+.send-btn:not(:disabled):hover {
     background: #e04300;
     transform: translateY(-2px);
     box-shadow: 0 12px 30px rgba(255,77,0,0.3);
 }
 
-.send-btn:hover::before { opacity: 1; }
+.send-btn:not(:disabled):hover::before { opacity: 1; }
 
-.send-arrow {
+/* — shared layer styles — */
+.send-btn-content,
+.send-sending,
+.send-done {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    inset: 0;
+    justify-content: center;
+    transition: transform .45s cubic-bezier(0.16,1,0.3,1), opacity .35s ease;
+    will-change: transform, opacity;
+}
+
+/* DEFAULT: idle visible */
+.send-btn-content  { transform: translateY(0);    opacity: 1; }
+.send-sending      { transform: translateY(100%); opacity: 0; }
+.send-done         { transform: translateY(100%); opacity: 0; }
+
+/* SENDING state */
+.send-btn.is-sending .send-btn-content { transform: translateY(-100%); opacity: 0; }
+.send-btn.is-sending .send-sending     { transform: translateY(0);     opacity: 1; }
+.send-btn.is-sending .send-done        { transform: translateY(100%);  opacity: 0; }
+
+/* DONE state */
+.send-btn.is-done .send-btn-content { transform: translateY(-100%); opacity: 0; }
+.send-btn.is-done .send-sending     { transform: translateY(-100%); opacity: 0; }
+.send-btn.is-done .send-done        { transform: translateY(0);     opacity: 1; }
+
+/* Done state — green tint */
+.send-btn.is-done { background: #16a34a; box-shadow: 0 12px 30px rgba(22,163,74,0.3); }
+
+/* Arrow in idle state */
+.send-btn-content .send-arrow {
     font-size: 20px;
     transition: transform .3s var(--ease);
 }
+.send-btn:not(:disabled):hover .send-arrow { transform: translateX(5px); }
 
-.send-btn:hover .send-arrow { transform: translateX(4px); }
+/* — Bouncing dots (sending state) — */
+.send-dots {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.send-dots span {
+    display: block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--cream);
+    animation: dotBounce 1s ease-in-out infinite;
+}
+
+.send-dots span:nth-child(2) { animation-delay: .15s; }
+.send-dots span:nth-child(3) { animation-delay: .30s; }
+
+@keyframes dotBounce {
+    0%, 80%, 100% { transform: translateY(0);    opacity: .5; }
+    40%            { transform: translateY(-7px); opacity: 1;  }
+}
 
 /* Form success */
 #form-success {
