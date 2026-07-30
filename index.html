@@ -2,545 +2,123 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f7f4">
     <title>MMr</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23FF4D00'/%3E%3C/svg%3E">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cabinet+Grotesk:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=20260607-7">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="orbiting">
+    <div class="three-scene" id="three-scene" aria-hidden="true"></div>
 
-<!-- INTERACTIVE BACKGROUND CANVAS -->
-<canvas id="interactive-bg"></canvas>
+    <main class="site intro-mode">
+        <header class="topbar">
+            <div class="origin"><span>Do Brasil</span><span>para o mundo</span></div>
+            <div class="availability"><span>Disponível para projetos</span><span>em 2026</span></div>
+            <nav class="menu" aria-label="Menu principal">
+                <a href="#">Index</a>
+                <a href="https://github.com/matheusmansanorodrigues" target="_blank" rel="noopener">Github</a>
+                <a href="#">Contact</a>
+            </nav>
+            <a class="talk" href="mailto:matheusmansano1@gmail.com">Let's talk</a>
+        </header>
 
-<!-- CUSTOM CURSOR -->
-<div id="cursor-dot"></div>
-
-<!-- NOISE OVERLAY -->
-<div class="noise"></div>
-
-<!-- LOADING SCREEN -->
-<div id="loader">
-    <div class="loader-inner">
-        <div class="loader-line"></div>
-        <div class="loader-text">
-            <span class="loader-name">MATHEUS.DEV</span>
-            <span class="loader-pct" id="loader-pct">0</span>
-        </div>
-    </div>
-</div>
-
-<!-- NAV -->
-<nav id="nav">
-    <a href="#" class="nav-logo">MMr<span class="dot">.</span></a>
-    <div class="nav-center">
-        <a href="#work" class="nav-link" data-text="Projetos">Projetos</a>
-        <a href="#about" class="nav-link" data-text="Sobre">Sobre</a>
-        <a href="#contact" class="nav-link" data-text="Contato">Contato</a>
-    </div>
-    <div class="nav-actions">
-        <button class="nav-cta" id="open-cv">
-            <span>Currículo</span>
-            <i class="fa-solid fa-arrow-up-right"></i>
-        </button>
-        <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </div>
-</nav>
-
-<div class="nav-mobile" id="nav-mobile" aria-hidden="true">
-    <a href="#work" class="nav-mobile-link">Projetos</a>
-    <a href="#about" class="nav-mobile-link">Sobre</a>
-    <a href="#contact" class="nav-mobile-link">Contato</a>
-    <button class="nav-mobile-link nav-mobile-cv" type="button" data-open-cv>Currículo</button>
-</div>
-
-
-
-<!-- ══════════════════════════════════
-     PROJECTS
-══════════════════════════════════ -->
-<section id="work">
-    <div class="projects-carousel" id="projects-carousel" aria-label="Galeria 3D de projetos">
-        <div class="carousel-stage">
-
-            <!-- PROJECT 1 -->
-            <article class="project-card project-card-featured" data-idx="0">
-                <div class="project-cover">
-                    <video src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/portfa_wever.mp4" muted loop playsinline preload="metadata"></video>
-                    <!-- <img src="assets/portfa_wever.jpeg" alt="Preview do projeto Wever" loading="lazy"> -->
-                    <span class="proj-badge">Projeto destaque</span>
-                </div>
-                <div class="project-card-body">
-                    <div class="project-card-head">
-                        <span>01</span>
-                        <a href="https://wever.work" target="_blank" class="proj-link" aria-label="Abrir Wever">
-                            <i class="fa-solid fa-arrow-up-right"></i>
-                        </a>
-                    </div>
-                    <h3>Wever</h3>
-                    <p>Experiência web moderna para apresentação da marca</p>
-                    <div class="proj-tags">
-                        <span>UI Design</span>
-                        <span>Front-end</span>
-                        <span>Responsivo</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- PROJECT 2 -->
-            <article class="project-card" data-idx="1">
-                <div class="project-cover" style="background-color: #fff3d4">
-                    <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/purr_coffe.png" alt="Purr'Coffee" loading="lazy">
-                </div>
-                <div class="project-card-body">
-                    <div class="project-card-head">
-                        <span>02</span>
-                        <a href="https://matheusmansanorodrigues.github.io/purr_coffee/" target="_blank" class="proj-link" aria-label="Abrir Purr'Coffee">
-                            <i class="fa-solid fa-arrow-up-right"></i>
-                        </a>
-                    </div>
-                    <h3>Purr'Coffee</h3>
-                    <p>Arquitetura multi-page em HTML, CSS e JavaScript, com persistência via localStorage para carrinho</p>
-                    <div class="proj-tags">
-                        <span>UI Design</span>
-                        <span>Front-end</span>
-                        <span>Responsivo</span>
-                        <span>LocalStorage</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- PROJECT 3 -->
-            <article class="project-card" data-idx="2">
-                <div class="project-cover">
-                    <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/otica_horizonte_h.webp" alt="Ótica Horizonte" loading="lazy">
-                </div>
-                <div class="project-card-body">
-                    <div class="project-card-head">
-                        <span>03</span>
-                        <a href="https://matheusmansanorodrigues.github.io/otica_horizonte/" target="_blank" class="proj-link" aria-label="Abrir Ótica Horizonte">
-                            <i class="fa-solid fa-arrow-up-right"></i>
-                        </a>
-                    </div>
-                    <h3>Ótica Horizonte</h3>
-                    <p>Site completo para ótica em Florianópolis</p>
-                    <div class="proj-tags">
-                        <span>HTML</span>
-                        <span>CSS</span>
-                        <span>JavaScript</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- PROJECT 4 -->
-            <article class="project-card" data-idx="3">
-                <div class="project-cover">
-                    <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/minhas_tarefas_h.webp" alt="Gestor de Tarefas" loading="lazy">
-                </div>
-                <div class="project-card-body">
-                    <div class="project-card-head">
-                        <span>04</span>
-                        <a href="https://matheusmansanorodrigues.github.io/Projeto-Tarefa/" target="_blank" class="proj-link" aria-label="Abrir Gestor de Tarefas">
-                            <i class="fa-solid fa-arrow-up-right"></i>
-                        </a>
-                    </div>
-                    <h3>Gestor de Tarefas</h3>
-                    <p>CRUD completo com filtros e busca em tempo real</p>
-                    <div class="proj-tags">
-                        <span>JavaScript</span>
-                        <span>LocalStorage</span>
-                        <span>MVC</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- PROJECT 5 -->
-            <article class="project-card" data-idx="4">
-                <div class="project-cover">
-                    <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/tomo_mestre.webp" alt="Tomo do Mestre" loading="lazy">
-                </div>
-                <div class="project-card-body">
-                    <div class="project-card-head">
-                        <span>05</span>
-                        <a href="https://matheusmansanorodrigues.github.io/Guia_RPG/" target="_blank" class="proj-link" aria-label="Abrir Tomo do Mestre">
-                            <i class="fa-solid fa-arrow-up-right"></i>
-                        </a>
-                    </div>
-                    <h3>Tomo do Mestre</h3>
-                    <p>Guia medieval interativo multi-sistema de RPG</p>
-                    <div class="proj-tags">
-                        <span>JavaScript</span>
-                        <span>JSON</span>
-                        <span>CSS</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- PROJECT 6 -->
-            <article class="project-card" data-idx="5">
-                <div class="project-cover">
-                    <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/nexus.webp" alt="Nexus ERP" loading="lazy">
-                </div>
-                <div class="project-card-body">
-                    <div class="project-card-head">
-                        <span>06</span>
-                        <a href="https://matheusmansanorodrigues.github.io/NexusERP/" target="_blank" class="proj-link" aria-label="Abrir Nexus ERP">
-                            <i class="fa-solid fa-arrow-up-right"></i>
-                        </a>
-                    </div>
-                    <h3>Nexus</h3>
-                    <p>Dashboard ERP premium com glassmorphism e temas dinâmicos</p>
-                    <div class="proj-tags">
-                        <span>JavaScript</span>
-                        <span>CSS</span>
-                        <span>Dashboard</span>
-                    </div>
-                </div>
-            </article>
-
-        </div>
-
-        <div class="carousel-ui" aria-label="Controles do carrossel">
-            <button class="carousel-btn" type="button" data-carousel-prev aria-label="Projeto anterior">
-                <i class="fa-solid fa-arrow-left"></i>
-            </button>
-            <div class="carousel-dots" aria-hidden="true"></div>
-            <button class="carousel-btn" type="button" data-carousel-next aria-label="Próximo projeto">
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-        </div>
-    </div>
-</section>
-
-<!-- ══════════════════════════════════
-     ABOUT / SKILLS
-══════════════════════════════════ -->
-<section id="about">
-    <div class="about-grid">
-
-        <div class="about-left">
-            <span class="section-label">02 — SOBRE</span>
-            <h2 class="about-title">
-                Construo coisas<br>que <em>importam</em>
-            </h2>
-            <p class="about-text">
-                26 anos. Full-Stack Developer há 2 anos, apaixonado por resolver problemas reais com código limpo e interfaces que fazem sentido. Cada projeto é uma oportunidade de criar algo que as pessoas realmente usam — e que elas sentem a diferença.
-            </p>
-            <p class="about-text">
-                Especialista em sistemas PHP, JavaScript moderno, bancos de dados MySQL e SQL Server, e experiências web tridimensionais com Three.js.
-            </p>
-
-            <div class="about-links">
-                <a href="https://github.com/matheusmansanorodrigues" target="_blank" class="about-link">
-                    <i class="fa-brands fa-github"></i> GitHub
+        <section class="stage" id="index" aria-label="Projetos selecionados">
+            <div class="orbit" id="orbit">
+                <a class="project" style="--i:0" href="https://wever.work" target="_blank" rel="noopener"
+                   data-title="Wever"
+                   data-description="Website institucional com experiência visual imersiva, navegação fluida e apresentação clara da marca.">
+                    <video src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/portfa_wever.mp4" muted loop autoplay playsinline></video>
+                    <span class="project-label">Wever — Website</span>
                 </a>
-                <a href="https://www.linkedin.com/in/matheusrrodrigues/" target="_blank" class="about-link">
-                    <i class="fa-brands fa-linkedin"></i> LinkedIn
+                <a class="project purr" style="--i:1" href="https://matheusmansanorodrigues.github.io/purr_coffee/" target="_blank" rel="noopener"
+                   data-title="Purr Coffee"
+                   data-description="Landing page para cafeteria, criada com identidade acolhedora, ilustrações autorais e interface responsiva.">
+                    <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/purr_coffe.png" alt="Purr Coffee">
+                    <span class="project-label">Purr Coffee — Website</span>
                 </a>
-                <a href="mailto:matheusmansano1@gmail.com" class="about-link" id="copy-email">
-                    <i class="fa-solid fa-envelope"></i> Email
+                <a class="project" style="--i:2" href="https://matheusmansanorodrigues.github.io/otica_horizonte/" target="_blank" rel="noopener"
+                   data-title="Ótica Horizonte"
+                   data-description="Website comercial responsivo para apresentar produtos, serviços e facilitar o contato com clientes.">
+                    <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/otica_horizonte_h.webp" alt="Ótica Horizonte">
+                    <span class="project-label">Ótica Horizonte — Website</span>
+                </a>
+                <a class="project" style="--i:3" href="https://matheusmansanorodrigues.github.io/Projeto-Tarefa/" target="_blank" rel="noopener"
+                   data-title="Tasks"
+                   data-description="Aplicação web para organizar tarefas e acompanhar atividades em uma interface objetiva e intuitiva.">
+                    <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/minhas_tarefas_h.webp" alt="Gestor de Tarefas">
+                    <span class="project-label">Tasks — Web app</span>
+                </a>
+                <a class="project" style="--i:4" href="https://matheusmansanorodrigues.github.io/Guia_RPG/" target="_blank" rel="noopener"
+                   data-title="Tomo do Mestre"
+                   data-description="Aplicação de apoio para RPG, reunindo recursos e informações em uma experiência temática e interativa.">
+                    <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/tomo_mestre.webp" alt="Tomo do Mestre">
+                    <span class="project-label">Tomo do Mestre — Web app</span>
+                </a>
+                <a class="project" style="--i:5" href="https://matheusmansanorodrigues.github.io/NexusERP/" target="_blank" rel="noopener"
+                   data-title="Nexus ERP"
+                   data-description="Dashboard de gestão com visão centralizada de indicadores, processos e informações operacionais.">
+                    <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/nexus.webp" alt="Nexus ERP">
+                    <span class="project-label">Nexus — Dashboard</span>
                 </a>
             </div>
-        </div>
 
-        <div class="about-right">
-            <!-- 3D Card foto -->
-            <div class="about-card-wrap" id="about-card">
-                <div class="about-card">
-                    <div class="about-card-inner">
-                        <img src="https://pub-91486f16a8e141ee830953618836f634.r2.dev/imgs/eu.webp" alt="Matheus Mansano" class="about-photo">
-                        <div class="about-card-overlay">
-                            <span>LONDRINA · PR</span>
-                            <span>REMOTO OK</span>
-                        </div>
-                    </div>
-                    <div class="card-shine"></div>
-                </div>
-            </div>
-
-            <!-- Stack pills -->
-            <div class="stack-grid">
-                <div class="stack-col">
-                    <div class="stack-label">FRONT-END</div>
-                    <div class="stack-pills">
-                        <span class="spill">HTML5</span>
-                        <span class="spill">CSS3</span>
-                        <span class="spill">JavaScript</span>
-                        <span class="spill">jQuery</span>
-                        <span class="spill">Three.js</span>
-                    </div>
-                </div>
-                <div class="stack-col">
-                    <div class="stack-label">BACK-END</div>
-                    <div class="stack-pills">
-                        <span class="spill">PHP</span>
-                        <span class="spill">Java</span>
-                        <span class="spill">MySQL</span>
-                        <span class="spill">SQL Server</span>
-                    </div>
-                </div>
-                <div class="stack-col">
-                    <div class="stack-label">TOOLS</div>
-                    <div class="stack-pills">
-                        <span class="spill">Git</span>
-                        <span class="spill">VS Code</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ══════════════════════════════════
-     TIMELINE
-══════════════════════════════════ -->
-<section id="timeline">
-    <div class="section-head">
-        <span class="section-label">03 — TRAJETÓRIA</span>
-        <h2 class="section-title">Experiência &<br><em>Educação</em></h2>
-    </div>
-
-    <div class="tl-grid">
-        <div class="tl-item reveal">
-            <div class="tl-year">2024 — Hoje</div>
-            <div class="tl-content">
-                <h3>Desenvolvedor Full-Stack</h3>
-                <div class="tl-co">Freelance · Projetos Autônomos</div>
-                <p>Landing pages, sistemas web completos, APIs e painéis administrativos para PMEs. PHP moderno, JavaScript e bancos relacionais em produção.</p>
-            </div>
-        </div>
-        <div class="tl-item reveal">
-            <div class="tl-year">2022 — 2024</div>
-            <div class="tl-content">
-                <h3>Especialização & Projetos Acadêmicos</h3>
-                <div class="tl-co">Desenvolvimento Web Avançado</div>
-                <p>Aprofundamento em Java OO, Three.js e computação gráfica no browser. Integração de MediaPipe para visão computacional em JavaScript nativo.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ══════════════════════════════════
-     CONTACT
-══════════════════════════════════ -->
-<section id="contact">
-    <div class="contact-wrap">
-        <div class="contact-text">
-            <span class="section-label">04 — CONTATO</span>
-            <h2 class="contact-title">
-                Vamos construir<br>algo <em>juntos</em>?
-            </h2>
-            <p>Disponível para freelas, projetos e oportunidades de emprego. Respondo em menos de 24h.</p>
-        </div>
-
-        <form id="contact-form" novalidate>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nome *</label>
-                    <input type="text" id="f-name" placeholder="Seu nome" required>
-                </div>
-                <div class="form-group">
-                    <label>Empresa</label>
-                    <input type="text" id="f-company" placeholder="Nome da empresa">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>E-mail *</label>
-                <input type="email" id="f-email" placeholder="seu@email.com" required>
-            </div>
-            <div class="form-group">
-                <label>Tipo de projeto</label>
-                <select id="f-type">
-                    <option value="" disabled selected>Selecione</option>
-                    <option value="site">Site / Landing Page</option>
-                    <option value="sistema">Sistema Web</option>
-                    <option value="painel">Painel Administrativo</option>
-                    <option value="api">API / Back-end</option>
-                    <option value="freela">Freela pontual</option>
-                    <option value="emprego">Oportunidade de emprego</option>
-                    <option value="outro">Outro</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Mensagem *</label>
-                <textarea id="f-msg" rows="4" placeholder="Conte sobre o projeto..." required></textarea>
-            </div>
-            <button type="submit" class="send-btn" id="send-btn">
-                <span class="send-btn-content">
-                    <span class="send-label">Enviar</span>
-                    <span class="send-arrow">→</span>
-                </span>
-                <span class="send-sending">
-                    <span class="send-dots"><span></span><span></span><span></span></span>
-                    <span>Enviando</span>
-                </span>
-                <span class="send-done">
-                    <i class="fa-solid fa-check"></i>
-                    <span>Enviado!</span>
-                </span>
+            <button class="studio-title" id="mode-toggle" type="button" aria-label="Alternar visualização dos projetos">
+                Matheus Mansano<sup>™</sup>
             </button>
-        </form>
+        </section>
 
-        <div id="form-success">
-            <div class="success-icon"><i class="fa-solid fa-check"></i></div>
-            <h3>Mensagem enviada!</h3>
-            <p>Obrigado. Responderei em breve.</p>
-        </div>
+        <span class="hint">Click or scroll</span>
 
-        <div class="contact-info">
-            <a href="mailto:matheusmansano1@gmail.com" class="ci-row">
-                <i class="fa-solid fa-envelope"></i>
-                matheusmansano1@gmail.com
-            </a>
-            <a href="https://www.linkedin.com/in/matheusrrodrigues/" target="_blank" class="ci-row">
-                <i class="fa-brands fa-linkedin"></i>
-                linkedin.com/in/matheusrrodrigues
-            </a>
-            <span class="ci-row">
-                <i class="fa-solid fa-location-dot"></i>
-                Londrina, PR · Remoto
-            </span>
-        </div>
-    </div>
-</section>
+        <a class="honors" href="https://github.com/matheusmansanorodrigues" target="_blank" rel="noopener" aria-label="Ver GitHub">
+            <strong>Dev.</strong><span>Works</span>
+        </a>
 
-<!-- ══════════════════════════════════
-     FOOTER
-══════════════════════════════════ -->
-<footer id="footer">
-    <div class="footer-inner">
-        <div class="footer-logo" id="footer-logo">MATHEUS<span>.</span>DEV</div>
-        <div class="footer-copy">© 2026 · Matheus Mansano Rodrigues</div>
-        <div class="footer-socials">
-            <a href="https://github.com/matheusmansanorodrigues" target="_blank"><i class="fa-brands fa-github"></i></a>
-            <a href="https://www.linkedin.com/in/matheusrrodrigues/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-        </div>
-    </div>
-</footer>
-
-<!-- MODAL PROJETOS -->
-<div id="proj-modal-bg" class="modal-bg">
-    <div class="modal-box" role="dialog" aria-modal="true">
-        <button class="modal-x" id="close-proj"><i class="fa-solid fa-xmark"></i></button>
-        <div class="modal-inner">
-            <div class="modal-media" id="pm-media">
-                <img id="pm-img" src="" alt="">
+        <footer class="footer" id="about">
+            <div class="about-copy">
+                <span class="about-kicker">About me</span>
+                <p class="manifesto">
+                    Desenvolvedor Full-Stack que transforma problemas complexos em produtos digitais claros, rápidos e confiáveis — da ideia ao deploy.
+                </p>
+                <p class="about-stack">PHP · JavaScript · React · Node.js · SQL · UX/UI</p>
             </div>
-            <div class="modal-body">
-                <span class="modal-eyebrow">Estudo de Caso</span>
-                <h3 id="pm-title"></h3>
-                <div class="modal-sect">
-                    <div class="modal-sect-label">O Desafio</div>
-                    <p id="pm-challenge"></p>
-                </div>
-                <div class="modal-sect">
-                    <div class="modal-sect-label">Solução</div>
-                    <p id="pm-solution"></p>
-                </div>
-                <div class="modal-tags" id="pm-tags"></div>
-                <div class="modal-actions">
-                    <a id="pm-live" href="#" target="_blank" class="btn-accent">
-                        <i class="fa-solid fa-arrow-up-right"></i> Ver Projeto
-                    </a>
-                    <a id="pm-git" href="#" target="_blank" class="btn-outline">
-                        <i class="fa-brands fa-github"></i> Código
-                    </a>
-                </div>
+            <div class="social">
+                <a href="https://github.com/matheusmansanorodrigues" target="_blank" rel="noopener">Github</a>
+                <a href="https://www.linkedin.com/in/matheusrrodrigues/" target="_blank" rel="noopener">LinkedIn</a>
+                <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
             </div>
-        </div>
-    </div>
-</div>
+            <div class="contact" id="contact">
+                <a href="mailto:matheusmansano1@gmail.com">matheusmansano1@gmail.com</a>
+                <span>Londrina — PR, Brazil</span>
+            </div>
+        </footer>
+    </main>
 
-<!-- MODAL CURRÍCULO -->
-<div id="cv-modal-bg" class="modal-bg">
-    <div class="modal-box modal-box-cv" role="dialog" aria-modal="true">
-        <button class="modal-x" id="close-cv"><i class="fa-solid fa-xmark"></i></button>
-        <div class="modal-inner modal-inner-cv">
-            <div class="cv-header">
-                <div>
-                    <h3>Matheus Mansano Rodrigues</h3>
-                    <p>Desenvolvedor Full-Stack · Front-end · Back-end</p>
-                </div>
-                <button class="btn-outline" onclick="printCurriculo()" style="cursor:pointer">
-                    <i class="fa-solid fa-print"></i> Imprimir
-                </button>
+    <div class="project-modal" id="project-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="project-modal-title">
+        <button class="project-modal-backdrop" type="button" data-project-modal-close aria-label="Fechar detalhes"></button>
+        <article class="project-modal-card">
+            <button class="project-modal-close" type="button" data-project-modal-close aria-label="Fechar detalhes">
+                <span aria-hidden="true">×</span>
+            </button>
+            <div class="project-modal-media" id="project-modal-media"></div>
+            <div class="project-modal-copy">
+                <span class="project-modal-kicker">Selected project</span>
+                <h2 id="project-modal-title"></h2>
+                <p id="project-modal-description"></p>
+                <a class="project-modal-link" id="project-modal-link" href="#" target="_blank" rel="noopener">
+                    Ver projeto <span aria-hidden="true">↗</span>
+                </a>
             </div>
-            <div class="cv-grid">
-                <div class="cv-main">
-                    <div class="cv-sec">
-                        <div class="cv-sec-label">Resumo</div>
-                        <p>Desenvolvedor Full-Stack com foco em interfaces modernas, sistemas web responsivos e soluções digitais completas. Atuo da concepção visual ao código, combinando UI/UX, front-end, back-end e banco de dados para entregar produtos claros, rápidos e fáceis de usar.</p>
-                        <div class="cv-highlight">
-                            <span>2+ anos criando aplicações web</span>
-                            <span>Sites, dashboards, ERPs e sistemas sob medida</span>
-                            <span>Disponível para remoto e projetos freelance</span>
-                        </div>
-                    </div>
-                    <div class="cv-sec">
-                        <div class="cv-sec-label">Experiência</div>
-                        <div class="cv-exp-item">
-                            <div class="cv-exp-head">
-                                <span class="cv-exp-role">Freelancer Full-Stack</span>
-                                <span class="cv-exp-date">2024 — Presente</span>
-                            </div>
-                            <div class="cv-exp-co">Projetos Autônomos</div>
-                            <p>Desenvolvimento completo de sites, landing pages, sistemas web e dashboards, com atenção à experiência do usuário, performance, responsividade e organização do código.</p>
-                        </div>
-                        <div class="cv-exp-item">
-                            <div class="cv-exp-head">
-                                <span class="cv-exp-role">Especialização & Projetos</span>
-                                <span class="cv-exp-date">2022 — 2024</span>
-                            </div>
-                            <div class="cv-exp-co">Desenvolvimento Web Avançado</div>
-                            <p>Aprofundamento em Java OO, arquitetura de aplicações, bancos relacionais, computação tridimensional com Three.js/WebGL e experiências interativas com MediaPipe.</p>
-                        </div>
-                    </div>
-                    <div class="cv-sec">
-                        <div class="cv-sec-label">Projetos em Destaque</div>
-                        <div class="cv-mini-list">
-                            <p><strong>Nexus ERP:</strong> dashboard administrativo com glassmorphism, temas dinâmicos e módulos de gestão.</p>
-                            <p><strong>Ótica Horizonte:</strong> site institucional completo para ótica, com foco em navegação clara e conversão.</p>
-                            <p><strong>Gestor de Tarefas:</strong> CRUD com filtros, busca em tempo real e persistência local.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="cv-side">
-                    <div class="cv-sec">
-                        <div class="cv-sec-label">Contato</div>
-                        <div class="cv-contact-list">
-                            <div><i class="fa-solid fa-envelope"></i> matheusmansano1@gmail.com</div>
-                            <div><i class="fa-solid fa-location-dot"></i> Londrina, PR (Remoto)</div>
-                            <div><i class="fa-brands fa-linkedin"></i> /in/matheusrrodrigues</div>
-                            <div><i class="fa-brands fa-github"></i> /matheusmansanorodrigues</div>
-                        </div>
-                    </div>
-                    <div class="cv-sec">
-                        <div class="cv-sec-label">Formação</div>
-                        <div class="cv-mini-list">
-                            <p><strong>Análise e Desenvolvimento de Sistemas</strong><br>Formação voltada a desenvolvimento, lógica, banco de dados e engenharia de software.</p>
-                        </div>
-                    </div>
-                    <div class="cv-sec">
-                        <div class="cv-sec-label">Habilidades</div>
-                        <div class="cv-pills">
-                            <span>JavaScript</span><span>PHP</span><span>Java</span>
-                            <span>MySQL</span><span>SQL Server</span><span>Three.js</span>
-                            <span>jQuery</span><span>HTML5</span><span>CSS3</span>
-                            <span>Git</span><span>UX/UI</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </article>
     </div>
-</div>
 
-<script src="script.js?v=20260607-7"></script>
+    <div class="figma-cursor" id="figma-cursor" aria-hidden="true">
+        <svg viewBox="0 0 24 30" aria-hidden="true">
+            <path d="M2 1.5v22.2l5.7-5.3 4.2 9.2 4.3-2-4.1-8.8h8.1z" fill="#7c3aed" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+        <span>VOCÊ</span>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.1/three.min.js" defer></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
