@@ -501,7 +501,33 @@
 
     window.addEventListener("mousedown", () => figmaCursor.classList.add("pressed"));
     window.addEventListener("mouseup", () => figmaCursor.classList.remove("pressed"));
-    window.addEventListener("resize", () => threeEffect?.resize());
+
+    const keepProjectInViewport = (project) => {
+        project.style.setProperty("--hover-shift-x", "0px");
+        project.style.setProperty("--hover-shift-y", "0px");
+
+        requestAnimationFrame(() => {
+            if (!project.matches(":hover")) return;
+
+            const margin = innerWidth <= 700 ? 10 : 18;
+            const rect = project.getBoundingClientRect();
+            let shiftX = 0;
+            let shiftY = 0;
+
+            if (rect.left < margin) shiftX += margin - rect.left;
+            if (rect.right > innerWidth - margin) shiftX -= rect.right - (innerWidth - margin);
+            if (rect.top < margin) shiftY += margin - rect.top;
+            if (rect.bottom > innerHeight - margin) shiftY -= rect.bottom - (innerHeight - margin);
+
+            project.style.setProperty("--hover-shift-x", `${shiftX.toFixed(2)}px`);
+            project.style.setProperty("--hover-shift-y", `${shiftY.toFixed(2)}px`);
+        });
+    };
+
+    window.addEventListener("resize", () => {
+        threeEffect?.resize();
+        projects.filter((project) => project.matches(":hover")).forEach(keepProjectInViewport);
+    });
 
     projects.forEach((project) => {
         project.addEventListener("mouseenter", () => {
@@ -510,12 +536,14 @@
             currentVelocity = 0;
             speedBoost = 0;
             document.body.classList.add("cards-paused");
-            openProjectModal(project);
+            keepProjectInViewport(project);
         });
 
         project.addEventListener("mouseleave", () => {
             if (isProjectModalOpen) return;
 
+            project.style.setProperty("--hover-shift-x", "0px");
+            project.style.setProperty("--hover-shift-y", "0px");
             const stillHovering = projects.some((item) => item.matches(":hover"));
             hoverPaused = stillHovering;
             document.body.classList.toggle("cards-paused", stillHovering);
@@ -528,7 +556,14 @@
         project.addEventListener("click", (event) => {
             event.preventDefault();
             event.stopPropagation();
-            if (isIntro) exitIntro();
+
+            if (isIntro) {
+                exitIntro();
+                setTimeout(() => openProjectModal(project), reducedMotion ? 20 : 1120);
+                return;
+            }
+
+            if (!isTransitioning) openProjectModal(project);
         });
     });
 

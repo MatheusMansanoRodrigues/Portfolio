@@ -159,6 +159,8 @@ button {
     --angle: calc((var(--i) * 60deg) + var(--turn));
     --radius-x: min(15vw, 214px);
     --radius-y: min(18vh, 154px);
+    --hover-shift-x: 0px;
+    --hover-shift-y: 0px;
     position: absolute;
     z-index: calc(10 - var(--i));
     top: 50%;
@@ -250,6 +252,36 @@ body.orbiting .project {
 .project:hover .project-label {
     opacity: 1;
     transform: none;
+}
+
+.project-cta {
+    position: absolute;
+    z-index: 4;
+    right: 8px;
+    bottom: 7px;
+    padding: 4px 7px 3px;
+    border: 1px solid rgba(10, 10, 10, .18);
+    border-radius: 999px;
+    background: rgba(247, 247, 244, .92);
+    color: var(--ink);
+    font-size: 6px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    opacity: 0;
+    transform: translateY(5px);
+    transition: opacity .25s ease, transform .25s ease, color .25s ease, background .25s ease;
+    pointer-events: none;
+}
+
+body.scrolling .project-cta {
+    opacity: .88;
+    transform: none;
+}
+
+body.scrolling .project:hover .project-cta {
+    opacity: 1;
+    background: var(--blue);
+    color: #fff;
 }
 
 .frame {
@@ -496,6 +528,7 @@ body.scrolling:not(.transitioning) .project:hover {
     z-index: 100;
     transform:
         translate(calc(-50% + var(--x)), -50%)
+        translate(var(--hover-shift-x), var(--hover-shift-y))
         scale(1.1);
     box-shadow:
         0 1px 0 rgba(255, 255, 255, .85) inset,
@@ -851,6 +884,20 @@ body.cards-active .project {
     body.scrolling .project {
         --x: calc((var(--track) - 5.5) * 72vw);
         width: 72vw;
+    }
+
+    body.scrolling:not(.transitioning) .project:hover {
+        transform:
+            translate(calc(-50% + var(--x)), -50%)
+            translate(var(--hover-shift-x), var(--hover-shift-y))
+            scale(1.04);
+    }
+
+    .project-cta {
+        right: 7px;
+        bottom: 7px;
+        padding: 5px 8px 4px;
+        font-size: 7px;
     }
 
     .project-modal {
