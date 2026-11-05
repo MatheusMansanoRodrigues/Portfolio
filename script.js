@@ -1,606 +1,600 @@
 (() => {
-    const orbit = document.getElementById("orbit");
-    const toggle = document.getElementById("mode-toggle");
-    const stage = document.getElementById("index");
-    const site = document.querySelector(".site");
-    const figmaCursor = document.getElementById("figma-cursor");
-    const threeHost = document.getElementById("three-scene");
-    const projectModal = document.getElementById("project-modal");
-    const projectModalMedia = document.getElementById("project-modal-media");
-    const projectModalTitle = document.getElementById("project-modal-title");
-    const projectModalDescription = document.getElementById("project-modal-description");
-    const projectModalLink = document.getElementById("project-modal-link");
-    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let isIntro = true;
-    let isTransitioning = false;
-    let stripOffset = window.innerWidth * 0.96;
-    let currentVelocity = 0;
-    let targetDirection = 1;
-    let speedBoost = 0;
-    let previousFrame = performance.now();
-    let cursorX = -40;
-    let cursorY = -40;
-    let cursorTargetX = -40;
-    let cursorTargetY = -40;
-    let pointerX = 0;
-    let pointerY = 0;
-    let threeEffect = null;
-    let hoverPaused = false;
-    let isProjectModalOpen = false;
-    let lastFocusedProject = null;
+'use strict';
 
-    const originals = [...orbit.querySelectorAll(".project")];
-    originals.forEach((project, index) => {
-        project.style.setProperty("--track", index);
+/* ================================================================
+   CONFIG
+   ================================================================ */
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isMobile      = () => window.innerWidth < 768;
+const isFinePtr     = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
 
-        const clone = project.cloneNode(true);
-        clone.classList.add("project-clone");
-        clone.style.setProperty("--track", index + originals.length);
-        clone.setAttribute("aria-hidden", "true");
-        clone.tabIndex = -1;
-        orbit.appendChild(clone);
-    });
-    const projects = [...orbit.querySelectorAll(".project")];
+/* ================================================================
+   CURSOR DO USUÁRIO — estilo Figma
+   ================================================================ */
+const userCursorEl = document.getElementById('cursor');
+const cursorLabel  = document.getElementById('cursor-label');
+let ux = window.innerWidth / 2, uy = window.innerHeight / 2;
+let tx = ux, ty = uy;
 
-    // Start with spinning orbit
-    orbit.classList.add("spinning");
+if (isFinePtr && !reducedMotion) {
+    document.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
 
-    const createThreeEffect = () => {
-        if (reducedMotion || !window.THREE || !threeHost) return null;
-
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 30);
-        const renderer = new THREE.WebGLRenderer({
-            alpha: true,
-            antialias: Math.min(devicePixelRatio, 2) <= 1.5,
-            powerPreference: "high-performance"
-        });
-        const group = new THREE.Group();
-        const stripGroup = new THREE.Group();
-        const materials = [];
-
-        camera.position.z = 6.2;
-        renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-        renderer.setSize(innerWidth, innerHeight);
-        renderer.setClearColor(0x000000, 0);
-        threeHost.appendChild(renderer.domElement);
-        scene.add(group);
-        scene.add(stripGroup);
-
-        const knotMaterial = new THREE.MeshBasicMaterial({
-            color: 0x2563eb,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.24
-        });
-        const knot = new THREE.Mesh(
-            new THREE.TorusKnotGeometry(1.42, 0.38, 180, 18, 2, 3),
-            knotMaterial
-        );
-        knot.rotation.x = Math.PI * 0.5;
-        group.add(knot);
-        materials.push(knotMaterial);
-
-        const haloMaterial = new THREE.MeshBasicMaterial({
-            color: 0x0a0a0a,
-            transparent: true,
-            opacity: 0.16
-        });
-        const halo = new THREE.Mesh(
-            new THREE.TorusGeometry(2.05, 0.008, 6, 180),
-            haloMaterial
-        );
-        halo.rotation.x = Math.PI * 0.68;
-        halo.rotation.y = Math.PI * 0.12;
-        group.add(halo);
-        materials.push(haloMaterial);
-
-        const particleCount = innerWidth < 700 ? 520 : 1100;
-        const positions = new Float32Array(particleCount * 3);
-        const colors = new Float32Array(particleCount * 3);
-        const blue = new THREE.Color(0x2563eb);
-        const black = new THREE.Color(0x0a0a0a);
-
-        for (let index = 0; index < particleCount; index++) {
-            const progress = index / particleCount;
-            const angle = progress * Math.PI * 24;
-            const radius = 1.8 + Math.sin(index * 1.73) * 0.65 + Math.random() * 0.35;
-            const vertical = (progress - 0.5) * 4.6;
-            const offset = index * 3;
-            const color = index % 5 === 0 ? black : blue;
-
-            positions[offset] = Math.cos(angle) * radius;
-            positions[offset + 1] = vertical + Math.sin(angle * 0.5) * 0.34;
-            positions[offset + 2] = Math.sin(angle) * radius;
-            colors[offset] = color.r;
-            colors[offset + 1] = color.g;
-            colors[offset + 2] = color.b;
-        }
-
-        const particleGeometry = new THREE.BufferGeometry();
-        particleGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-        particleGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-
-        const particleMaterial = new THREE.PointsMaterial({
-            size: innerWidth < 700 ? 0.026 : 0.018,
-            vertexColors: true,
-            transparent: true,
-            opacity: 0.5,
-            sizeAttenuation: true
-        });
-        const particles = new THREE.Points(particleGeometry, particleMaterial);
-        particles.rotation.z = Math.PI * 0.5;
-        group.add(particles);
-        materials.push(particleMaterial);
-
-        const gridGeometry = new THREE.PlaneGeometry(14, 3.6, 42, 10);
-        const gridBasePositions = Float32Array.from(gridGeometry.attributes.position.array);
-        const gridMaterial = new THREE.MeshBasicMaterial({
-            color: 0x2563eb,
-            wireframe: true,
-            transparent: true,
-            opacity: 0,
-            depthWrite: false
-        });
-        const grid = new THREE.Mesh(gridGeometry, gridMaterial);
-        grid.position.z = -1.4;
-        stripGroup.add(grid);
-
-        const streakCount = innerWidth < 700 ? 50 : 110;
-        const streakPositions = new Float32Array(streakCount * 6);
-        for (let index = 0; index < streakCount; index++) {
-            const offset = index * 6;
-            const x = (Math.random() - 0.5) * 15;
-            const y = (Math.random() - 0.5) * 4.4;
-            const z = -0.8 - Math.random() * 2.8;
-            const length = 0.08 + Math.random() * 0.32;
-            streakPositions.set([x, y, z, x + length, y, z], offset);
-        }
-        const streakGeometry = new THREE.BufferGeometry();
-        streakGeometry.setAttribute("position", new THREE.BufferAttribute(streakPositions, 3));
-        const streakMaterial = new THREE.LineBasicMaterial({
-            color: 0x0a0a0a,
-            transparent: true,
-            opacity: 0
-        });
-        const streaks = new THREE.LineSegments(streakGeometry, streakMaterial);
-        stripGroup.add(streaks);
-
-        const projectIntroCards = () => {
-            group.updateMatrixWorld(true);
-            knot.updateMatrixWorld(true);
-
-            projects.slice(0, originals.length).forEach((project, index) => {
-                const t = (index / originals.length) * Math.PI * 2 + performance.now() * 0.00034;
-                const majorRadius = 1.42;
-                const minorRadius = 0.38;
-                const p = 2;
-                const q = 3;
-                const point = new THREE.Vector3(
-                    (majorRadius + minorRadius * Math.cos(q * t)) * Math.cos(p * t),
-                    (majorRadius + minorRadius * Math.cos(q * t)) * Math.sin(p * t),
-                    minorRadius * Math.sin(q * t)
-                );
-                const nextT = t + 0.025;
-                const nextPoint = new THREE.Vector3(
-                    (majorRadius + minorRadius * Math.cos(q * nextT)) * Math.cos(p * nextT),
-                    (majorRadius + minorRadius * Math.cos(q * nextT)) * Math.sin(p * nextT),
-                    minorRadius * Math.sin(q * nextT)
-                );
-
-                point.applyMatrix4(knot.matrixWorld);
-                nextPoint.applyMatrix4(knot.matrixWorld);
-                const worldDepth = point.z;
-                point.project(camera);
-                nextPoint.project(camera);
-
-                const x = point.x * innerWidth * 0.5;
-                const y = -point.y * innerHeight * 0.5;
-                const nextX = nextPoint.x * innerWidth * 0.5;
-                const nextY = -nextPoint.y * innerHeight * 0.5;
-                const depth = THREE.MathUtils.clamp(0.9 + worldDepth * 0.12, 0.76, 1.12);
-                const rotation = Math.atan2(nextY - y, nextX - x) * 180 / Math.PI;
-
-                project.style.setProperty("--intro-x", `${x.toFixed(2)}px`);
-                project.style.setProperty("--intro-y", `${y.toFixed(2)}px`);
-                project.style.setProperty("--intro-scale", depth.toFixed(3));
-                project.style.setProperty("--intro-rotate", `${(rotation * 0.18).toFixed(2)}deg`);
-                project.style.zIndex = String(Math.round(20 + worldDepth * 8));
-            });
-        };
-
-        return {
-            renderer,
-            scene,
-            camera,
-            group,
-            knot,
-            halo,
-            particles,
-            stripGroup,
-            grid,
-            gridBasePositions,
-            gridMaterial,
-            streaks,
-            streakMaterial,
-            materials,
-            transition: 0,
-            transitionTarget: 0,
-            resize() {
-                camera.aspect = innerWidth / innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-                renderer.setSize(innerWidth, innerHeight);
-            },
-            exit() {
-                this.transitionTarget = 1;
-                threeHost.classList.add("is-exiting");
-            },
-            render(time, elapsed) {
-                const easing = 1 - Math.exp(-elapsed / 300);
-                this.transition += (this.transitionTarget - this.transition) * easing;
-
-                const drift = time * 0.00018;
-                this.group.rotation.y = drift + pointerX * 0.16;
-                this.group.rotation.x += ((pointerY * -0.12) - this.group.rotation.x) * 0.035;
-                this.knot.rotation.z = time * 0.00012;
-                this.knot.rotation.y = time * 0.00009;
-                this.halo.rotation.z = -time * 0.00016;
-                this.particles.rotation.x = time * 0.000035;
-
-                const scale = 1 + this.transition * 1.65;
-                this.group.scale.setScalar(scale);
-                this.group.position.z = this.transition * 0.9;
-                this.materials.forEach((material) => {
-                    material.opacity = material.userData.baseOpacity
-                        ? material.userData.baseOpacity * (1 - this.transition)
-                        : material.opacity;
-                });
-
-                this.gridMaterial.opacity = 0.09 * this.transition;
-                this.streakMaterial.opacity = 0.22 * this.transition;
-                this.stripGroup.rotation.x += ((pointerY * -0.035) - this.stripGroup.rotation.x) * 0.04;
-                this.stripGroup.rotation.y += ((pointerX * 0.045) - this.stripGroup.rotation.y) * 0.04;
-                this.streaks.position.x = -((time * 0.00022) % 0.9);
-
-                const gridPositions = this.grid.geometry.attributes.position;
-                for (let index = 0; index < gridPositions.count; index++) {
-                    const offset = index * 3;
-                    const x = this.gridBasePositions[offset];
-                    const y = this.gridBasePositions[offset + 1];
-                    gridPositions.setZ(
-                        index,
-                        Math.sin(x * 0.85 + time * 0.0012 + y * 1.2) * 0.13
-                    );
-                }
-                gridPositions.needsUpdate = true;
-
-                if (isIntro) {
-                    projectIntroCards();
-                }
-
-                renderer.render(scene, camera);
-            }
-        };
+    const tickCursor = () => {
+        ux += (tx - ux) * 0.22;
+        uy += (ty - uy) * 0.22;
+        userCursorEl.style.transform = `translate(${ux}px,${uy}px) translate(-50%,-50%)`;
+        requestAnimationFrame(tickCursor);
     };
+    tickCursor();
 
-    threeEffect = createThreeEffect();
-    if (threeEffect) {
-        threeEffect.materials.forEach((material) => {
-            material.userData.baseOpacity = material.opacity;
+    document.querySelectorAll('a,button,[role=button]').forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+
+    // label do cursor nos cards
+    document.querySelectorAll('.work-card').forEach(card => {
+        const name = card.querySelector('.work-name');
+        card.addEventListener('mouseenter', () => {
+            if (!name) return;
+            cursorLabel.textContent = name.textContent.toUpperCase();
+            userCursorEl.classList.add('has-label');
         });
-    } else {
-        document.body.classList.add("three-unavailable");
+        card.addEventListener('mouseleave', () => userCursorEl.classList.remove('has-label'));
+    });
+}
+
+/* ================================================================
+   CANVAS
+   ================================================================ */
+const canvas = document.getElementById('bg-canvas');
+const ctx    = canvas.getContext('2d');
+let W, H;
+
+const resize = () => { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; };
+resize();
+window.addEventListener('resize', resize, { passive: true });
+
+/* ================================================================
+   AGENTES — cursores colaborativos
+   ================================================================ */
+const AGENT_COLORS = [
+    { name: 'Ana',     hex: '#3b82f6', r: 59,  g: 130, b: 246 },
+    { name: 'Carlos',  hex: '#a855f7', r: 168, g: 85,  b: 247 },
+    { name: 'Julia',   hex: '#22c55e', r: 34,  g: 197, b: 94  },
+    { name: 'Dev',     hex: '#f59e0b', r: 245, g: 158, b: 11  },
+];
+
+// Fases do agente
+const PHASE = { IDLE: 0, MOVING: 1, SELECTING: 2, DRAWING: 3, WAITING: 4 };
+
+class Agent {
+    constructor(color, index) {
+        this.color  = color;
+        this.index  = index;
+        this.x      = Math.random() * W;
+        this.y      = Math.random() * H;
+        this.tx     = this.x; // target x
+        this.ty     = this.y; // target y
+        this.phase  = PHASE.IDLE;
+        this.timer  = 60 + Math.random() * 120;
+        this.speed  = 14 + Math.random() * 8;
+
+        // seleção sendo desenhada
+        this.selX   = 0; this.selY  = 0;
+        this.selW   = 0; this.selH  = 0;
+        this.selProgress = 0; // 0→1
+
+        // bloco já construído
+        this.builtBlocks = [];
+
+        // label flutuante
+        this.labelAlpha = 0;
+        this.labelText  = '';
+
+        // elemento alvo
+        this.targetEl   = null;
+        this.targetRect = null;
+
+        // trail do cursor
+        this.trail = [];
     }
 
-    const stageCardsHorizontally = () => {
-        const spacing = Math.min(innerWidth * 0.09, 112);
+    // Vai até um elemento da página
+    aimAtElement(el) {
+        const r = el.getBoundingClientRect();
+        this.targetEl   = el;
+        this.targetRect = r;
+        this.tx = r.left + r.width  * (.15 + Math.random() * .7);
+        this.ty = r.top  + r.height * (.15 + Math.random() * .7);
+        this.phase = PHASE.MOVING;
+        this.labelText = this.color.name;
+    }
 
-        originals.forEach((project, index) => {
-            const x = (index - (originals.length - 1) / 2) * spacing;
-            project.style.setProperty("--intro-x", `${x.toFixed(2)}px`);
-            project.style.setProperty("--intro-y", "0px");
-            project.style.setProperty("--intro-scale", "1");
-            project.style.setProperty("--intro-rotate", "0deg");
-            project.style.zIndex = String(20 - index);
-            project.style.setProperty("--card-wave", "0px");
-            project.style.setProperty("--card-tilt", "0deg");
-            project.style.setProperty("--card-scale", "1");
+    update(agents) {
+        this.timer--;
+
+        // trail
+        this.trail.push({ x: this.x, y: this.y });
+        if (this.trail.length > 12) this.trail.shift();
+
+        switch (this.phase) {
+
+            case PHASE.IDLE:
+                if (this.timer <= 0) {
+                    // Só elementos ainda não construídos e dentro da viewport atual
+                    // Evita containers genéricos (about-right, about-grid) — só elementos com conteúdo real
+                    const targets = Array.from(document.querySelectorAll(
+                        '.hero-badge, .hero-word, .hero-role, .hero-actions, .work-card, .about-left, .code-card, .stat-card, .contact-title, .section-head'
+                    )).filter(el => {
+                        if (el.classList.contains('agent-built')) return false;
+                        const r = el.getBoundingClientRect();
+                        // visível na tela + tamanho mínimo real
+                        return r.top >= -40 && r.bottom <= window.innerHeight + 40
+                            && r.width > 40 && r.height > 20;
+                    });
+                    if (targets.length) {
+                        this.aimAtElement(targets[Math.floor(Math.random() * targets.length)]);
+                    }
+                    this.timer = 30 + Math.random() * 40;
+                }
+                break;
+
+            case PHASE.MOVING: {
+                const dx = this.tx - this.x;
+                const dy = this.ty - this.y;
+                const d  = Math.hypot(dx, dy);
+                if (d < 3) {
+                    this.x = this.tx; this.y = this.ty;
+                    this.phase = PHASE.SELECTING;
+                    this.selProgress = 0;
+                    // Recalcula o rect agora (pode ter scrollado)
+                    if (this.targetEl) {
+                        const r = this.targetEl.getBoundingClientRect();
+                        // Se o elemento saiu da tela, abandona
+                        if (r.top < -60 || r.bottom > window.innerHeight + 60) {
+                            this.phase = PHASE.IDLE;
+                            this.timer = 10;
+                            this.targetEl = null;
+                            break;
+                        }
+                        this.targetRect = r;
+                        this.selX = r.left   - 4;
+                        this.selY = r.top    - 4;
+                        this.selW = r.width  + 8;
+                        this.selH = r.height + 8;
+                    }
+                    this.labelAlpha = 1;
+                } else {
+                    this.x += (dx / d) * Math.min(this.speed, d);
+                    this.y += (dy / d) * Math.min(this.speed, d);
+                    // Atualiza target se scrollou
+                    if (this.targetEl) {
+                        const r = this.targetEl.getBoundingClientRect();
+                        this.tx = r.left + r.width  * (.15 + Math.random() * .001);
+                        this.ty = r.top  + r.height * (.15 + Math.random() * .001);
+                    }
+                }
+                break;
+            }
+
+            case PHASE.SELECTING:
+                this.selProgress = Math.min(1, this.selProgress + 0.12);
+                if (this.selProgress >= 1) {
+                    this.phase = PHASE.DRAWING;
+                    this.timer = 20;
+                    // Dispara a revelação do elemento alvo
+                    if (this.targetEl && !this.targetEl.classList.contains('agent-built')) {
+                        this.targetEl.classList.add('agent-built');
+                        this.targetEl.classList.add('revealed');
+                    }
+                }
+                break;
+
+            case PHASE.DRAWING:
+                if (this.timer <= 0) {
+                    this.phase = PHASE.WAITING;
+                    this.timer = 40 + Math.random() * 40;
+                    this.labelAlpha = 0;
+                }
+                break;
+
+            case PHASE.WAITING:
+                this.labelAlpha *= 0.95;
+                if (this.timer <= 0) {
+                    this.phase = PHASE.IDLE;
+                    this.timer = 15 + Math.random() * 25;
+                    this.targetEl = null;
+                }
+                break;
+        }
+    }
+
+    draw() {
+        const { r, g, b } = this.color;        const alpha = this.phase === PHASE.IDLE ? 0.4 : 0.95;
+
+        // trail
+        this.trail.forEach((pt, i) => {
+            const a = (i / this.trail.length) * 0.25 * alpha;
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${r},${g},${b},${a})`;
+            ctx.fill();
         });
-    };
 
-    const openProjectModal = (project) => {
-        if (!project || !projectModal || isIntro || isTransitioning) return;
+        // seleção sendo desenhada
+        if ((this.phase === PHASE.SELECTING || this.phase === PHASE.DRAWING) && this.targetEl) {
+            // Atualiza posição em tempo real (scroll move o elemento)
+            const rect = this.targetEl.getBoundingClientRect();
+            this.selX = rect.left   - 4;
+            this.selY = rect.top    - 4;
+            this.selW = rect.width  + 8;
+            this.selH = rect.height + 8;
 
-        const sourceMedia = project.querySelector("img, video");
-        const title = project.dataset.title
-            || project.querySelector(".project-label")?.textContent?.split("—")[0]?.trim()
-            || "Projeto";
-        const description = project.dataset.description || "";
-        const href = project.getAttribute("href") || "#";
-        const sameProject = lastFocusedProject
-            && lastFocusedProject.dataset.title === project.dataset.title
-            && lastFocusedProject.getAttribute("href") === href;
+            const p  = this.selProgress;
+            const sx = this.selX, sy = this.selY;
+            const sw = this.selW * p, sh = this.selH * p;
 
-        if (isProjectModalOpen && sameProject) {
-            hoverPaused = true;
-            currentVelocity = 0;
-            speedBoost = 0;
-            document.body.classList.add("cards-paused", "project-modal-open");
-            return;
-        }
+            ctx.save();
+            ctx.strokeStyle = `rgba(${r},${g},${b},${0.7 * p})`;
+            ctx.fillStyle   = `rgba(${r},${g},${b},${0.06 * p})`;
+            ctx.lineWidth   = 1.5;
+            ctx.setLineDash([4, 3]);
 
-        projectModalMedia.replaceChildren();
-        if (sourceMedia) {
-            const media = sourceMedia.cloneNode(true);
-            media.removeAttribute("id");
-            if (media.tagName === "VIDEO") {
-                media.muted = true;
-                media.loop = true;
-                media.autoplay = true;
-                media.playsInline = true;
-                media.controls = true;
+            ctx.fillRect(sx, sy, sw, sh);
+            ctx.strokeRect(sx, sy, sw, sh);
+            ctx.setLineDash([]);
+
+            // Cantos de seleção
+            if (p > 0.5) {
+                const cs = 8;
+                const pa = (p - .5) * 2;
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = `rgba(${r},${g},${b},${pa})`;
+                drawCorner(ctx, sx,      sy,      cs,  1,  1);
+                drawCorner(ctx, sx + sw, sy,      cs, -1,  1);
+                drawCorner(ctx, sx,      sy + sh, cs,  1, -1);
+                drawCorner(ctx, sx + sw, sy + sh, cs, -1, -1);
+
+                // Label de dimensão
+                if (p > 0.8) {
+                    ctx.fillStyle = `rgba(${r},${g},${b},${(p - .8) * 5})`;
+                    ctx.font = 'bold 9px Inter, sans-serif';
+                    ctx.fillText(
+                        `${Math.round(this.selW)} × ${Math.round(this.selH)}`,
+                        sx + 4, sy - 6
+                    );
+                }
             }
-            projectModalMedia.appendChild(media);
-            if (media.tagName === "VIDEO") {
-                media.play().catch(() => {});
+            ctx.restore();
+        }
+
+        // Cursor arrow
+        drawArrow(ctx, this.x, this.y, r, g, b, alpha);
+
+        // Label do agente
+        if (this.labelAlpha > 0.02) {
+            ctx.save();
+            ctx.fillStyle   = `rgba(${r},${g},${b},${this.labelAlpha})`;
+            ctx.font        = 'bold 10px Inter, sans-serif';
+            ctx.fillText(this.labelText, this.x + 14, this.y + 22);
+            // fundo da label
+            const tw = ctx.measureText(this.labelText).width;
+            ctx.fillStyle = `rgba(${r},${g},${b},${this.labelAlpha * 0.15})`;
+            ctx.fillRect(this.x + 11, this.y + 12, tw + 6, 13);
+            ctx.restore();
+        }
+    }
+}
+
+function drawCorner(ctx, x, y, size, dx, dy) {
+    ctx.beginPath();
+    ctx.moveTo(x + dx * size, y);
+    ctx.lineTo(x, y);
+    ctx.lineTo(x, y + dy * size);
+    ctx.stroke();
+}
+
+function drawArrow(ctx, x, y, r, g, b, alpha) {
+    ctx.save();
+    ctx.fillStyle   = `rgba(${r},${g},${b},${alpha})`;
+    ctx.strokeStyle = `rgba(0,0,0,${alpha * 0.6})`;
+    ctx.lineWidth   = 1;
+    // seta tipo cursor do SO
+    ctx.beginPath();
+    ctx.moveTo(x,      y);
+    ctx.lineTo(x,      y + 14);
+    ctx.lineTo(x + 3,  y + 11);
+    ctx.lineTo(x + 5,  y + 16);
+    ctx.lineTo(x + 6.5,y + 15.5);
+    ctx.lineTo(x + 4.5,y + 10.5);
+    ctx.lineTo(x + 8,  y + 10.5);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+}
+
+/* ================================================================
+   PARTÍCULAS BG
+   ================================================================ */
+class BgParticle {
+    constructor() { this.reset(true); }
+    reset(cold) {
+        this.x  = Math.random() * W;
+        this.y  = cold ? Math.random() * H : (Math.random() > .5 ? -4 : H + 4);
+        this.vx = (Math.random() - .5) * .12;
+        this.vy = (Math.random() - .5) * .12;
+        this.r  = Math.random() * 1.2 + .4;
+        this.a  = Math.random() * .08 + .02;
+    }
+    update() {
+        this.x += this.vx; this.y += this.vy;
+        if (this.x < -6 || this.x > W + 6 || this.y < -6 || this.y > H + 6) this.reset(false);
+    }
+}
+
+const PART_COUNT = isMobile() ? 20 : 50;
+const particles  = Array.from({ length: PART_COUNT }, () => new BgParticle());
+
+/* ================================================================
+   AGENTES INIT
+   ================================================================ */
+const NUM_AGENTS = isMobile() ? 2 : 4;
+const agents = AGENT_COLORS.slice(0, NUM_AGENTS).map((c, i) => new Agent(c, i));
+
+// Escalonar os agentes para não agirem todos ao mesmo tempo
+agents.forEach((a, i) => { a.timer = 5 + i * 20; });
+
+/* ================================================================
+   LOOP PRINCIPAL
+   ================================================================ */
+const loop = () => {
+    ctx.clearRect(0, 0, W, H);
+
+    // Fundo partículas
+    particles.forEach(p => {
+        p.update();
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(59,130,246,${p.a})`;
+        ctx.fill();
+    });
+
+    // Conexões
+    for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const d  = Math.hypot(dx, dy);
+            if (d < 100) {
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.strokeStyle = `rgba(59,130,246,${(1 - d / 100) * 0.035})`;
+                ctx.lineWidth   = 0.6;
+                ctx.stroke();
             }
         }
+    }
 
-        projectModalTitle.textContent = title;
-        projectModalDescription.textContent = description;
-        projectModalLink.href = href;
-
-        lastFocusedProject = project;
-        isProjectModalOpen = true;
-        hoverPaused = true;
-        currentVelocity = 0;
-        speedBoost = 0;
-        document.body.classList.add("cards-paused", "project-modal-open");
-        projectModal.setAttribute("aria-hidden", "false");
-        requestAnimationFrame(() => projectModal.classList.add("is-open"));
-    };
-
-    const closeProjectModal = () => {
-        if (!isProjectModalOpen || !projectModal) return;
-
-        isProjectModalOpen = false;
-        projectModal.classList.remove("is-open");
-        projectModal.setAttribute("aria-hidden", "true");
-        document.body.classList.remove("project-modal-open");
-
-        const stillHovering = projects.some((item) => item.matches(":hover"));
-        hoverPaused = stillHovering;
-        document.body.classList.toggle("cards-paused", stillHovering);
-
-        const modalVideo = projectModalMedia.querySelector("video");
-        modalVideo?.pause();
-        setTimeout(() => {
-            if (!isProjectModalOpen) projectModalMedia.replaceChildren();
-        }, 350);
-
-        lastFocusedProject?.focus({ preventScroll: true });
-    };
-
-    const exitIntro = () => {
-        if (!isIntro) return;
-        isIntro = false;
-        orbit.classList.remove("spinning");
-        site.classList.remove("intro-mode");
-        threeEffect?.exit();
-        stageCardsHorizontally();
-
-        if (reducedMotion) {
-            document.body.classList.remove("orbiting");
-            document.body.classList.add("scrolling");
-            orbit.style.transform = `translate3d(${stripOffset}px, 0, 0)`;
-            return;
-        }
-
-        isTransitioning = true;
-        document.body.classList.add("transitioning");
-
-        // Congela linha reta e só depois abre a faixa horizontal.
-        requestAnimationFrame(() => {
-            document.body.classList.remove("orbiting");
-            document.body.classList.add("scrolling");
-            orbit.style.transform = `translate3d(${stripOffset}px, 0, 0)`;
+    // Agentes
+    if (!reducedMotion) {
+        agents.forEach(a => {
+            a.update(agents);
+            a.draw();
         });
+    }
 
+    requestAnimationFrame(loop);
+};
+loop();
+
+/* ================================================================
+   BUILD INICIAL — agentes constroem o hero sequencialmente
+   ================================================================ */
+if (!reducedMotion) {
+    // Nav aparece rápido
+    setTimeout(() => {
+        const nav = document.querySelector('.nav-inner');
+        if (nav) nav.classList.add('build-done');
+    }, 200);
+
+    // Hero: cada agente vai até um elemento em sequência
+    const heroTargets = [
+        '.hero-badge',
+        '.hero-word:first-child',
+        '.hero-word.hero-word--dim',
+        '.hero-role',
+        '.hero-actions',
+    ];
+
+    heroTargets.forEach((sel, i) => {
+        const el = document.querySelector(sel);
+        if (!el) return;
+        const agent = agents[i % agents.length];
         setTimeout(() => {
-            isTransitioning = false;
-            document.body.classList.remove("transitioning");
-            document.body.classList.add("cards-active");
-        }, 1100);
-    };
-
-    const setDirection = (direction) => {
-        targetDirection = direction === 'up' ? -1 : 1;
-    };
-
-    window.addEventListener("wheel", (event) => {
-        if (isIntro) {
-            exitIntro();
-        }
-
-        if (hoverPaused) return;
-
-        if (event.deltaY !== 0) {
-            setDirection(event.deltaY > 0 ? 'down' : 'up');
-            const delta = Math.abs(event.deltaY) * (event.deltaMode === 1 ? 16 : 1);
-            speedBoost = Math.min(4, speedBoost + Math.min(delta / 90, 1.6));
-        }
-    }, { passive: true });
-
-    toggle.addEventListener("click", () => {
-        if (isIntro) {
-            exitIntro();
-        }
+            if (!el.classList.contains('agent-built')) {
+                agent.aimAtElement(el);
+            }
+        }, 200 + i * 180);
     });
 
-    stage.addEventListener("click", (event) => {
-        if (isIntro && !event.target.closest(".project")) {
-            exitIntro();
+} else {
+    // Sem animação: tudo visível de imediato
+    document.querySelectorAll('.nav-inner').forEach(el => el.classList.add('build-done'));
+    document.querySelectorAll('[data-reveal]').forEach(el => {
+        el.classList.add('revealed');
+        el.classList.add('agent-built');
+    });
+}
+
+/* ================================================================
+   SCROLL REVEAL + DECONSTRUCT — agentes constroem e desconstroem
+   ================================================================ */
+const revealEls = document.querySelectorAll('[data-reveal]');
+
+revealEls.forEach(el => {
+    const delay = el.dataset.delay ? parseInt(el.dataset.delay, 10) : 0;
+    el.style.transitionDelay = delay + 'ms';
+});
+
+// Agenda um agente para construir o elemento
+function agentBuild(el) {
+    if (reducedMotion || isMobile()) {
+        el.classList.add('revealed');
+        el.classList.add('agent-built');
+        return;
+    }
+    const free = agents.find(a => a.phase === PHASE.IDLE || a.phase === PHASE.WAITING);
+    if (free) {
+        setTimeout(() => {
+            // Verifica se ainda não foi construído por outro agente entretempos
+            if (!el.classList.contains('agent-built')) {
+                free.aimAtElement(el);
+            }
+        }, parseInt(el.dataset.delay || 0, 10));
+    } else {
+        // Sem agente livre: revela direto
+        el.classList.add('revealed');
+        el.classList.add('agent-built');
+    }
+}
+
+// Destrói o elemento — some e reseta para poder ser reconstruído
+function agentDestroy(el) {
+    el.classList.remove('revealed');
+    el.classList.remove('agent-built');
+    el.classList.remove('agent-build-in');
+    // Pequeno delay para a transição CSS sair suave
+    el.style.transitionDelay = '0ms';
+}
+
+const revealIO = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting) {
+            // Entrou na viewport — reconstrói se ainda não estiver construído
+            if (!e.target.classList.contains('agent-built')) {
+                agentBuild(e.target);
+            }
+        } else {
+            // Saiu da viewport — descreconstrói para recriar ao voltar
+            const r = e.target.getBoundingClientRect();
+            // Só "destrói" se saiu pelo topo (usuário scrollou para baixo e voltou)
+            // boundingRect.bottom < 0 significa que saiu pelo topo
+            if (r.bottom < 0) {
+                agentDestroy(e.target);
+                // Restaura o delay original para a próxima reconstrução
+                const delay = e.target.dataset.delay ? parseInt(e.target.dataset.delay, 10) : 0;
+                e.target.style.transitionDelay = delay + 'ms';
+            }
         }
     });
+}, {
+    threshold: 0.05,
+    rootMargin: '0px 0px -10px 0px'
+});
 
-    window.addEventListener("keydown", (event) => {
-        if (isProjectModalOpen) {
-            if (event.key === "Escape") closeProjectModal();
-            return;
-        }
+revealEls.forEach(el => revealIO.observe(el));
 
-        if (event.key === "ArrowDown" || event.key === "ArrowUp" || event.key === "Enter") {
-            if (isIntro) {
-                exitIntro();
-            }
-            if (event.key !== "Enter") {
-                setDirection(event.key === "ArrowDown" ? 'down' : 'up');
-            }
-            speedBoost = Math.max(speedBoost, 1);
-        }
+// Quando agente termina de "construir", revela o elemento CSS
+const checkBuilt = setInterval(() => {
+    document.querySelectorAll('.agent-built:not(.revealed)').forEach(el => {
+        el.classList.add('revealed');
     });
+}, 100);
 
-    let touchStartY = 0;
-    window.addEventListener("touchstart", (e) => {
-        touchStartY = e.touches[0].clientY;
-    }, { passive: true });
+/* ================================================================
+   NAVBAR
+   ================================================================ */
+const navInner = document.querySelector('.nav-inner');
+const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+const allSects = document.querySelectorAll('section[id]');
 
-    window.addEventListener("touchmove", (e) => {
-        if (isIntro) {
-            exitIntro();
-        }
-        const touchY = e.touches[0].clientY;
-        const delta = Math.abs(touchY - touchStartY);
-        const direction = touchY > touchStartY ? 'up' : 'down';
+window.addEventListener('scroll', () => {
+    navInner.classList.toggle('nav-scrolled', window.scrollY > 60);
+}, { passive: true });
 
-        if (delta > 10) {
-            if (!hoverPaused) {
-                setDirection(direction);
-                speedBoost = Math.min(3, speedBoost + delta / 45);
-            }
-            touchStartY = touchY;
-        }
-    }, { passive: true });
-
-    window.addEventListener("mousemove", (event) => {
-        cursorTargetX = event.clientX;
-        cursorTargetY = event.clientY;
-        pointerX = (event.clientX / innerWidth) * 2 - 1;
-        pointerY = (event.clientY / innerHeight) * 2 - 1;
-        figmaCursor.classList.add("visible");
-        figmaCursor.classList.toggle(
-            "interactive",
-            Boolean(event.target.closest("a, button, .project"))
+const sectionIO = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        navLinks.forEach(a =>
+            a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id)
         );
     });
+}, { threshold: .3 });
+allSects.forEach(s => sectionIO.observe(s));
 
-    document.documentElement.addEventListener("mouseleave", () => {
-        figmaCursor.classList.remove("visible");
+/* ================================================================
+   MOBILE MENU
+   ================================================================ */
+const burger  = document.getElementById('nav-burger');
+const mobMenu = document.getElementById('mob-menu');
+
+const openMob = () => {
+    burger.classList.add('open');
+    burger.setAttribute('aria-expanded', 'true');
+    mobMenu.style.display = 'flex';
+    requestAnimationFrame(() => mobMenu.classList.add('open'));
+    mobMenu.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+};
+
+const closeMob = () => {
+    burger.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+    mobMenu.classList.remove('open');
+    mobMenu.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    setTimeout(() => { mobMenu.style.display = ''; }, 320);
+};
+
+burger.addEventListener('click', () =>
+    mobMenu.classList.contains('open') ? closeMob() : openMob()
+);
+mobMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMob));
+
+/* ================================================================
+   SMOOTH SCROLL
+   ================================================================ */
+const navEl = document.getElementById('nav');
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (!target) return;
+        e.preventDefault();
+        const offset = navEl.getBoundingClientRect().height + 20;
+        window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
     });
+});
 
-    window.addEventListener("mousedown", () => figmaCursor.classList.add("pressed"));
-    window.addEventListener("mouseup", () => figmaCursor.classList.remove("pressed"));
-
-    const keepProjectInViewport = (project) => {
-        project.style.setProperty("--hover-shift-x", "0px");
-        project.style.setProperty("--hover-shift-y", "0px");
-
-        requestAnimationFrame(() => {
-            if (!project.matches(":hover")) return;
-
-            const margin = innerWidth <= 700 ? 10 : 18;
-            const rect = project.getBoundingClientRect();
-            let shiftX = 0;
-            let shiftY = 0;
-
-            if (rect.left < margin) shiftX += margin - rect.left;
-            if (rect.right > innerWidth - margin) shiftX -= rect.right - (innerWidth - margin);
-            if (rect.top < margin) shiftY += margin - rect.top;
-            if (rect.bottom > innerHeight - margin) shiftY -= rect.bottom - (innerHeight - margin);
-
-            project.style.setProperty("--hover-shift-x", `${shiftX.toFixed(2)}px`);
-            project.style.setProperty("--hover-shift-y", `${shiftY.toFixed(2)}px`);
+/* ================================================================
+   TILT 3D
+   ================================================================ */
+if (isFinePtr && !reducedMotion) {
+    document.querySelectorAll('.work-card, .code-card, .stat-card').forEach(card => {
+        const max = card.classList.contains('stat-card') ? 8 : 4;
+        card.addEventListener('mousemove', e => {
+            const r  = card.getBoundingClientRect();
+            const nx = (e.clientX - r.left) / r.width  - .5;
+            const ny = (e.clientY - r.top)  / r.height - .5;
+            const ty = card.classList.contains('work-card') ? -6 : -3;
+            card.style.transform = `translateY(${ty}px) rotateX(${ny * -max}deg) rotateY(${nx * max}deg)`;
         });
-    };
-
-    window.addEventListener("resize", () => {
-        threeEffect?.resize();
-        projects.filter((project) => project.matches(":hover")).forEach(keepProjectInViewport);
+        card.addEventListener('mouseleave', () => { card.style.transform = ''; });
     });
+}
 
-    projects.forEach((project) => {
-        project.addEventListener("mouseenter", () => {
-            if (isIntro || isTransitioning) return;
-            hoverPaused = true;
-            currentVelocity = 0;
-            speedBoost = 0;
-            document.body.classList.add("cards-paused");
-            keepProjectInViewport(project);
-        });
-
-        project.addEventListener("mouseleave", () => {
-            if (isProjectModalOpen) return;
-
-            project.style.setProperty("--hover-shift-x", "0px");
-            project.style.setProperty("--hover-shift-y", "0px");
-            const stillHovering = projects.some((item) => item.matches(":hover"));
-            hoverPaused = stillHovering;
-            document.body.classList.toggle("cards-paused", stillHovering);
-            if (!stillHovering) {
-                currentVelocity = 0;
-                speedBoost = 0;
-            }
-        });
-
-        project.addEventListener("click", (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-
-            if (isIntro) {
-                exitIntro();
-                setTimeout(() => openProjectModal(project), reducedMotion ? 20 : 1120);
-                return;
-            }
-
-            if (!isTransitioning) openProjectModal(project);
-        });
+/* ================================================================
+   DATA-SIZE label nos cards
+   ================================================================ */
+const setCardSizes = () => {
+    document.querySelectorAll('.work-card').forEach(card => {
+        const r = card.getBoundingClientRect();
+        card.dataset.size = `${Math.round(r.width)} × ${Math.round(r.height)}`;
     });
+};
+setCardSizes();
+window.addEventListener('resize', setCardSizes, { passive: true });
 
-    projectModal?.querySelectorAll("[data-project-modal-close]").forEach((button) => {
-        button.addEventListener("click", closeProjectModal);
-    });
-
-    const animateStrip = (time) => {
-        const elapsed = Math.min(time - previousFrame, 50);
-        previousFrame = time;
-
-        if (!isIntro && !isTransitioning) {
-            const loopDistance = window.innerWidth * (innerWidth <= 760 ? 4.32 : 1.92);
-            const halfLoop = loopDistance / 2;
-            const baseVelocity = reducedMotion || hoverPaused ? 0 : loopDistance / 15000;
-            const targetVelocity = baseVelocity * (1 + speedBoost) * targetDirection;
-            const easing = 1 - Math.exp(-elapsed / (hoverPaused ? 90 : 260));
-
-            currentVelocity += (targetVelocity - currentVelocity) * easing;
-            speedBoost *= Math.exp(-elapsed / (hoverPaused ? 120 : 420));
-            stripOffset -= currentVelocity * elapsed;
-
-            if (stripOffset < -halfLoop) stripOffset += loopDistance;
-            if (stripOffset >= halfLoop) stripOffset -= loopDistance;
-
-            orbit.style.transform = `translate3d(${stripOffset}px, 0, 0)`;
-        }
-
-        threeEffect?.render(time, elapsed);
-
-        const cursorEasing = reducedMotion ? 1 : 1 - Math.exp(-elapsed / 28);
-        cursorX += (cursorTargetX - cursorX) * cursorEasing;
-        cursorY += (cursorTargetY - cursorY) * cursorEasing;
-        figmaCursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
-
-        requestAnimationFrame(animateStrip);
-    };
-
-    requestAnimationFrame(animateStrip);
 })();
