@@ -213,7 +213,7 @@ body.cursor-hover .cursor-cross {
 }
 
 .agent-built {
-    animation: agent-select-flash .6s ease forwards;
+    animation: agent-select-flash .25s ease forwards;
 }
 
 /* ================================================================
@@ -221,43 +221,31 @@ body.cursor-hover .cursor-cross {
    ================================================================ */
 .hero-badge {
     opacity: 0;
-    transform: translateY(10px);
-    transition: opacity .5s var(--easeOut), transform .5s var(--easeOut);
+    transform: translateY(6px);
+    transition: opacity .18s var(--easeOut), transform .18s var(--easeOut);
 }
-.hero-badge.revealed {
-    opacity: 1;
-    transform: none;
-}
+.hero-badge.revealed { opacity: 1; transform: none; }
 
 .hero-word {
     opacity: 0;
     clip-path: inset(0 0 100% 0);
-    transition: clip-path .55s var(--easeOut), opacity .3s ease;
+    transition: clip-path .22s var(--easeOut), opacity .15s ease;
 }
-.hero-word.revealed {
-    clip-path: inset(0 0 0% 0);
-    opacity: 1;
-}
+.hero-word.revealed { clip-path: inset(0 0 0% 0); opacity: 1; }
 
 .hero-role {
     opacity: 0;
-    transform: translateY(14px);
-    transition: opacity .55s var(--easeOut), transform .55s var(--easeOut);
+    transform: translateY(8px);
+    transition: opacity .2s var(--easeOut), transform .2s var(--easeOut);
 }
-.hero-role.revealed {
-    opacity: 1;
-    transform: none;
-}
+.hero-role.revealed { opacity: 1; transform: none; }
 
 .hero-actions {
     opacity: 0;
-    transform: translateY(14px);
-    transition: opacity .55s var(--easeOut), transform .55s var(--easeOut);
+    transform: translateY(8px);
+    transition: opacity .2s var(--easeOut), transform .2s var(--easeOut);
 }
-.hero-actions.revealed {
-    opacity: 1;
-    transform: none;
-}
+.hero-actions.revealed { opacity: 1; transform: none; }
 
 /* ================================================================
    NAVBAR
@@ -288,7 +276,7 @@ body.cursor-hover .cursor-cross {
     transform: scaleX(.6) scaleY(.5);
     opacity: 0;
     transform-origin: center top;
-    transition: transform .55s var(--easeOut), opacity .4s ease, border-color .3s ease;
+    transition: transform .28s var(--easeOut), opacity .2s ease, border-color .3s ease;
 }
 
 .nav-inner.build-done {
@@ -1072,8 +1060,8 @@ body.cursor-hover .cursor-cross {
    ================================================================ */
 [data-reveal] {
     opacity: 0;
-    transform: translateY(24px);
-    transition: opacity .7s var(--easeOut), transform .7s var(--easeOut);
+    transform: translateY(14px);
+    transition: opacity .22s var(--easeOut), transform .22s var(--easeOut);
 }
 
 [data-reveal].revealed {
@@ -1081,9 +1069,9 @@ body.cursor-hover .cursor-cross {
     transform: none;
 }
 
-/* Saída pelo topo — some mais rápido e para cima */
+/* Saída pelo topo — instantânea */
 [data-reveal]:not(.revealed) {
-    transition: opacity .35s ease, transform .35s ease;
+    transition: opacity .15s ease, transform .15s ease;
 }
 
 /* ================================================================

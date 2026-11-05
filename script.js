@@ -78,7 +78,7 @@ class Agent {
         this.ty     = this.y; // target y
         this.phase  = PHASE.IDLE;
         this.timer  = 60 + Math.random() * 120;
-        this.speed  = 14 + Math.random() * 8;
+        this.speed  = 28 + Math.random() * 14;
 
         // seleção sendo desenhada
         this.selX   = 0; this.selY  = 0;
@@ -136,7 +136,7 @@ class Agent {
                     if (targets.length) {
                         this.aimAtElement(targets[Math.floor(Math.random() * targets.length)]);
                     }
-                    this.timer = 30 + Math.random() * 40;
+                    this.timer = 8 + Math.random() * 12;
                 }
                 break;
 
@@ -179,10 +179,10 @@ class Agent {
             }
 
             case PHASE.SELECTING:
-                this.selProgress = Math.min(1, this.selProgress + 0.12);
+                this.selProgress = Math.min(1, this.selProgress + 0.22);
                 if (this.selProgress >= 1) {
                     this.phase = PHASE.DRAWING;
-                    this.timer = 20;
+                    this.timer = 8;
                     // Dispara a revelação do elemento alvo
                     if (this.targetEl && !this.targetEl.classList.contains('agent-built')) {
                         this.targetEl.classList.add('agent-built');
@@ -194,7 +194,7 @@ class Agent {
             case PHASE.DRAWING:
                 if (this.timer <= 0) {
                     this.phase = PHASE.WAITING;
-                    this.timer = 40 + Math.random() * 40;
+                    this.timer = 12 + Math.random() * 18;
                     this.labelAlpha = 0;
                 }
                 break;
@@ -203,7 +203,7 @@ class Agent {
                 this.labelAlpha *= 0.95;
                 if (this.timer <= 0) {
                     this.phase = PHASE.IDLE;
-                    this.timer = 15 + Math.random() * 25;
+                    this.timer = 5 + Math.random() * 10;
                     this.targetEl = null;
                 }
                 break;
@@ -344,7 +344,7 @@ const NUM_AGENTS = isMobile() ? 0 : 4;
 const agents = AGENT_COLORS.slice(0, NUM_AGENTS).map((c, i) => new Agent(c, i));
 
 // Escalonar os agentes para não agirem todos ao mesmo tempo
-agents.forEach((a, i) => { a.timer = 5 + i * 20; });
+agents.forEach((a, i) => { a.timer = 2 + i * 8; });
 
 /* ================================================================
    LOOP PRINCIPAL
@@ -398,7 +398,7 @@ if (!reducedMotion) {
     setTimeout(() => {
         const nav = document.querySelector('.nav-inner');
         if (nav) nav.classList.add('build-done');
-    }, 200);
+    }, 80);
 
     if (isMobile()) {
         // Mobile: sem agentes, revela hero sequencialmente com CSS
@@ -412,7 +412,7 @@ if (!reducedMotion) {
             setTimeout(() => {
                 el.classList.add('agent-built');
                 el.classList.add('revealed');
-            }, 250 + i * 160);
+            }, 80 + i * 60);
         });
     } else {
         // Desktop: cada agente vai até um elemento do hero em sequência
@@ -426,7 +426,7 @@ if (!reducedMotion) {
             const agent = agents[i % agents.length];
             setTimeout(() => {
                 if (!el.classList.contains('agent-built')) agent.aimAtElement(el);
-            }, 200 + i * 180);
+            }, 80 + i * 100);
         });
     }
 
