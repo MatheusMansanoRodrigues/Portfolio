@@ -334,13 +334,13 @@ class BgParticle {
     }
 }
 
-const PART_COUNT = isMobile() ? 20 : 50;
+const PART_COUNT = isMobile() ? 15 : 50;
 const particles  = Array.from({ length: PART_COUNT }, () => new BgParticle());
 
 /* ================================================================
    AGENTES INIT
    ================================================================ */
-const NUM_AGENTS = isMobile() ? 2 : 4;
+const NUM_AGENTS = isMobile() ? 0 : 4;
 const agents = AGENT_COLORS.slice(0, NUM_AGENTS).map((c, i) => new Agent(c, i));
 
 // Escalonar os agentes para não agirem todos ao mesmo tempo
@@ -391,7 +391,7 @@ const loop = () => {
 loop();
 
 /* ================================================================
-   BUILD INICIAL — agentes constroem o hero sequencialmente
+   BUILD INICIAL — hero
    ================================================================ */
 if (!reducedMotion) {
     // Nav aparece rápido
@@ -400,30 +400,40 @@ if (!reducedMotion) {
         if (nav) nav.classList.add('build-done');
     }, 200);
 
-    // Hero: cada agente vai até um elemento em sequência
-    const heroTargets = [
-        '.hero-badge',
-        '.hero-word:first-child',
-        '.hero-word.hero-word--dim',
-        '.hero-role',
-        '.hero-actions',
-    ];
-
-    heroTargets.forEach((sel, i) => {
-        const el = document.querySelector(sel);
-        if (!el) return;
-        const agent = agents[i % agents.length];
-        setTimeout(() => {
-            if (!el.classList.contains('agent-built')) {
-                agent.aimAtElement(el);
-            }
-        }, 200 + i * 180);
-    });
+    if (isMobile()) {
+        // Mobile: sem agentes, revela hero sequencialmente com CSS
+        const heroTargets = [
+            '.hero-badge', '.hero-word:first-child',
+            '.hero-word.hero-word--dim', '.hero-role', '.hero-actions',
+        ];
+        heroTargets.forEach((sel, i) => {
+            const el = document.querySelector(sel);
+            if (!el) return;
+            setTimeout(() => {
+                el.classList.add('agent-built');
+                el.classList.add('revealed');
+            }, 250 + i * 160);
+        });
+    } else {
+        // Desktop: cada agente vai até um elemento do hero em sequência
+        const heroTargets = [
+            '.hero-badge', '.hero-word:first-child',
+            '.hero-word.hero-word--dim', '.hero-role', '.hero-actions',
+        ];
+        heroTargets.forEach((sel, i) => {
+            const el = document.querySelector(sel);
+            if (!el) return;
+            const agent = agents[i % agents.length];
+            setTimeout(() => {
+                if (!el.classList.contains('agent-built')) agent.aimAtElement(el);
+            }, 200 + i * 180);
+        });
+    }
 
 } else {
     // Sem animação: tudo visível de imediato
     document.querySelectorAll('.nav-inner').forEach(el => el.classList.add('build-done'));
-    document.querySelectorAll('[data-reveal]').forEach(el => {
+    document.querySelectorAll('[data-reveal], .hero-badge, .hero-word, .hero-role, .hero-actions').forEach(el => {
         el.classList.add('revealed');
         el.classList.add('agent-built');
     });
@@ -449,13 +459,9 @@ function agentBuild(el) {
     const free = agents.find(a => a.phase === PHASE.IDLE || a.phase === PHASE.WAITING);
     if (free) {
         setTimeout(() => {
-            // Verifica se ainda não foi construído por outro agente entretempos
-            if (!el.classList.contains('agent-built')) {
-                free.aimAtElement(el);
-            }
+            if (!el.classList.contains('agent-built')) free.aimAtElement(el);
         }, parseInt(el.dataset.delay || 0, 10));
     } else {
-        // Sem agente livre: revela direto
         el.classList.add('revealed');
         el.classList.add('agent-built');
     }
@@ -463,10 +469,11 @@ function agentBuild(el) {
 
 // Destrói o elemento — some e reseta para poder ser reconstruído
 function agentDestroy(el) {
+    // Mobile: não destrói para não causar flicker em scroll
+    if (isMobile()) return;
     el.classList.remove('revealed');
     el.classList.remove('agent-built');
     el.classList.remove('agent-build-in');
-    // Pequeno delay para a transição CSS sair suave
     el.style.transitionDelay = '0ms';
 }
 
@@ -569,9 +576,9 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 });
 
 /* ================================================================
-   TILT 3D
+   TILT 3D — só desktop com mouse fino
    ================================================================ */
-if (isFinePtr && !reducedMotion) {
+if (isFinePtr && !reducedMotion && !isMobile()) {
     document.querySelectorAll('.work-card, .code-card, .stat-card').forEach(card => {
         const max = card.classList.contains('stat-card') ? 8 : 4;
         card.addEventListener('mousemove', e => {
@@ -586,15 +593,17 @@ if (isFinePtr && !reducedMotion) {
 }
 
 /* ================================================================
-   DATA-SIZE label nos cards
+   DATA-SIZE label nos cards — só desktop
    ================================================================ */
-const setCardSizes = () => {
-    document.querySelectorAll('.work-card').forEach(card => {
-        const r = card.getBoundingClientRect();
-        card.dataset.size = `${Math.round(r.width)} × ${Math.round(r.height)}`;
-    });
-};
-setCardSizes();
-window.addEventListener('resize', setCardSizes, { passive: true });
+if (!isMobile()) {
+    const setCardSizes = () => {
+        document.querySelectorAll('.work-card').forEach(card => {
+            const r = card.getBoundingClientRect();
+            card.dataset.size = `${Math.round(r.width)} × ${Math.round(r.height)}`;
+        });
+    };
+    setCardSizes();
+    window.addEventListener('resize', setCardSizes, { passive: true });
+}
 
 })();
