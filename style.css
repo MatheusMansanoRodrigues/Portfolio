@@ -578,11 +578,11 @@ body.cursor-hover .cursor-cross {
 .hero-name {
     display: flex;
     flex-direction: column;
-    font-size: clamp(72px, 12vw, 160px);
+    font-size: clamp(64px, 11vw, 148px);
     font-weight: 900;
-    line-height: .92;
-    letter-spacing: -.065em;
-    margin-bottom: 32px;
+    line-height: .96;
+    letter-spacing: -.055em;
+    margin-bottom: 36px;
 }
 
 .hero-word {
@@ -1060,8 +1060,8 @@ body.cursor-hover .cursor-cross {
    ================================================================ */
 [data-reveal] {
     opacity: 0;
-    transform: translateY(14px);
-    transition: opacity .22s var(--easeOut), transform .22s var(--easeOut);
+    transform: translateY(16px);
+    transition: opacity .5s var(--easeOut), transform .5s var(--easeOut), clip-path .55s var(--easeOut);
 }
 
 [data-reveal].revealed {
@@ -1225,6 +1225,14 @@ body.cursor-hover .cursor-cross {
     .hero-name { font-size: clamp(40px, 13vw, 62px); }
     .hero-actions { max-width: 100%; }
     .btn-solid--lg { font-size: 12px; padding: 0 16px; }
+}
+
+/* ── telas baixas (laptops) — evita hero espremido ── */
+@media (max-height: 780px) and (min-width: 769px) {
+    .hero { padding: 96px 32px 110px; }
+    .hero-name { font-size: clamp(56px, 9.5vw, 120px); margin-bottom: 28px; }
+    .hero-badge { margin-bottom: 32px; }
+    .hero-role { margin-bottom: 40px; }
 }
 
 /* ================================================================

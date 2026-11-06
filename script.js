@@ -130,7 +130,7 @@ class Agent {
                         if (el.classList.contains('agent-built')) return false;
                         const r = el.getBoundingClientRect();
                         // visível na tela + tamanho mínimo real
-                        return r.top >= -40 && r.bottom <= window.innerHeight + 40
+                        return r.top < window.innerHeight + 40 && r.bottom > -40
                             && r.width > 40 && r.height > 20;
                     });
                     if (targets.length) {
@@ -152,7 +152,15 @@ class Agent {
                     if (this.targetEl) {
                         const r = this.targetEl.getBoundingClientRect();
                         // Se o elemento saiu da tela, abandona
-                        if (r.top < -60 || r.bottom > window.innerHeight + 60) {
+                        if (r.bottom < -60 || r.top > window.innerHeight + 60) {
+                            // Se ainda está visível (ex.: scroll suave em andamento),
+                            // reenfileira a construção para não ficar invisível
+                            if (this.targetEl && !this.targetEl.classList.contains('agent-built')) {
+                                const tr = this.targetEl.getBoundingClientRect();
+                                if (tr.bottom > 0 && tr.top < window.innerHeight) {
+                                    agentBuild(this.targetEl);
+                                }
+                            }
                             this.phase = PHASE.IDLE;
                             this.timer = 10;
                             this.targetEl = null;
@@ -346,6 +354,32 @@ const agents = AGENT_COLORS.slice(0, NUM_AGENTS).map((c, i) => new Agent(c, i));
 // Escalonar os agentes para não agirem todos ao mesmo tempo
 agents.forEach((a, i) => { a.timer = 2 + i * 8; });
 
+// Fila de construção — cada bloco espera um agente livre
+const buildQueue = [];
+const queuedBuilds = new WeakSet();
+const isAgentFree = agent => agent.phase === PHASE.IDLE || agent.phase === PHASE.WAITING;
+
+function processBuildQueue() {
+    const now = performance.now();
+    while (buildQueue.length) {
+        const index = buildQueue.findIndex(item => item.due <= now);
+        if (index === -1) return;
+
+        const free = agents.find(isAgentFree);
+        if (!free) return;
+
+        const [item] = buildQueue.splice(index, 1);
+        queuedBuilds.delete(item.el);
+
+        if (item.el.classList.contains('agent-built') || item.el.classList.contains('revealed')) continue;
+
+        const r = item.el.getBoundingClientRect();
+        if (r.bottom < -100 || r.top > window.innerHeight + 100 || r.width === 0) continue;
+
+        free.aimAtElement(item.el);
+    }
+}
+
 /* ================================================================
    LOOP PRINCIPAL
    ================================================================ */
@@ -379,6 +413,7 @@ const loop = () => {
     }
 
     // Agentes
+    if (buildQueue.length) processBuildQueue();
     if (!reducedMotion) {
         agents.forEach(a => {
             a.update(agents);
@@ -456,15 +491,14 @@ function agentBuild(el) {
         el.classList.add('agent-built');
         return;
     }
-    const free = agents.find(a => a.phase === PHASE.IDLE || a.phase === PHASE.WAITING);
-    if (free) {
-        setTimeout(() => {
-            if (!el.classList.contains('agent-built')) free.aimAtElement(el);
-        }, parseInt(el.dataset.delay || 0, 10));
-    } else {
-        el.classList.add('revealed');
-        el.classList.add('agent-built');
-    }
+    if (el.classList.contains('agent-built') || el.classList.contains('revealed') || queuedBuilds.has(el)) return;
+
+    queuedBuilds.add(el);
+    buildQueue.push({
+        el,
+        due: performance.now() + parseInt(el.dataset.delay || 0, 10)
+    });
+    processBuildQueue();
 }
 
 // Destrói o elemento — some e reseta para poder ser reconstruído
