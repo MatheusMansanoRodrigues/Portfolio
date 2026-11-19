@@ -142,6 +142,16 @@ function startPresence() {
   window.addEventListener("resize", resize, { passive: true });
 
   const remote = new Map(); // id -> { tx, ty, dx, dy, lastSeen, label, color }
+
+  // cursor do próprio visitante — desenhado igual aos remotos
+  const me = {
+    tx: -999, ty: -999, // fora da tela até o mouse mover
+    dx: -999, dy: -999,
+    label: "",
+    color: "#ffffff",
+    visible: false,
+  };
+
   let socket = null;
   let myId = null;
   let lastSent = 0;
@@ -172,21 +182,23 @@ function startPresence() {
 
     if (m.type === "hello") {
       myId = m.id;
-      // aparece pros outros imediatamente, mesmo antes de mover o mouse
+      // popula o cursor local com o nome/cor atribuídos pelo servidor
+      me.color = m.color;
+      me.label = (m.country ? flag(m.country) + " " : "") + m.name;
+      me.visible = true;
+      // posição inicial no centro até o mouse mover
+      if (lastX < 0) { me.tx = Math.round(W / 2); me.ty = Math.round(H / 2); }
       send(lastX >= 0 ? lastX : Math.round(W / 2), lastY >= 0 ? lastY : Math.round(H / 2), true);
     } else if (m.type === "cursor") {
-      if (m.id === myId) return; // ignora o próprio
+      if (m.id === myId) return; // ignora eco do próprio
       const label = (m.country ? flag(m.country) + " " : "") + m.name;
       const existing = remote.get(m.id);
       if (!existing) {
         remote.set(m.id, {
-          tx: m.x,
-          ty: m.y,
-          dx: m.x,
-          dy: m.y,
+          tx: m.x, ty: m.y,
+          dx: m.x, dy: m.y,
           lastSeen: Date.now(),
-          label,
-          color: m.color,
+          label, color: m.color,
         });
       } else {
         existing.tx = m.x;
@@ -200,12 +212,14 @@ function startPresence() {
     }
   });
 
-  // envia a posição do mouse (throttled)
+  // envia a posição do mouse (throttled) e atualiza o cursor local
   window.addEventListener(
     "mousemove",
     (e) => {
       lastX = e.clientX;
       lastY = e.clientY;
+      me.tx = e.clientX;
+      me.ty = e.clientY;
       send(e.clientX, e.clientY);
     },
     { passive: true }
@@ -221,8 +235,9 @@ function startPresence() {
   function frame() {
     ctx.clearRect(0, 0, W, H);
     const now = Date.now();
+
+    // cursores remotos
     for (const c of Array.from(remote.values())) {
-      // interpolação suave até o alvo
       c.dx += (c.tx - c.dx) * 0.32;
       c.dy += (c.ty - c.dy) * 0.32;
 
@@ -231,14 +246,19 @@ function startPresence() {
       if (age > STALE_FADE) {
         alpha = Math.max(0, 1 - (age - STALE_FADE) / (STALE_DROP - STALE_FADE));
       }
-      if (age > STALE_DROP) {
-        remote.delete(c.id);
-        continue;
-      }
+      if (age > STALE_DROP) { remote.delete(c.id); continue; }
       if (alpha <= 0.02) continue;
 
       drawRemoteCursor(ctx, c.dx, c.dy, c.label, hexToRgb(c.color), alpha);
     }
+
+    // cursor do próprio visitante (só depois de receber o hello)
+    if (me.visible && lastX >= 0) {
+      me.dx += (me.tx - me.dx) * 0.32;
+      me.dy += (me.ty - me.dy) * 0.32;
+      drawRemoteCursor(ctx, me.dx, me.dy, me.label, hexToRgb(me.color), 1);
+    }
+
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
