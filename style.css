@@ -73,32 +73,6 @@ button { font: inherit; background: none; border: none; cursor: none; color: inh
     box-shadow: 0 0 8px var(--blue);
 }
 
-/* cruz de cursor tipo Figma */
-.cursor-cross {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 22px; height: 22px;
-}
-
-.cursor-cross span {
-    position: absolute;
-    background: var(--blue);
-    border-radius: 1px;
-    opacity: .9;
-}
-
-.cursor-cross span:first-child {
-    left: 50%; top: 0;
-    width: 1px; height: 100%;
-    transform: translateX(-50%);
-}
-
-.cursor-cross span:last-child {
-    top: 50%; left: 0;
-    width: 100%; height: 1px;
-    transform: translateY(-50%);
-}
 
 .cursor-label {
     position: absolute;
@@ -120,9 +94,6 @@ body.cursor-hover .cursor-dot {
     box-shadow: 0 0 14px var(--blue);
 }
 
-body.cursor-hover .cursor-cross {
-    width: 28px; height: 28px;
-}
 
 /* ================================================================
    BACKGROUND — grid + canvas
