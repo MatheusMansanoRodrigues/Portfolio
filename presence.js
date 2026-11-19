@@ -13,7 +13,7 @@ import PartySocket from "https://esm.sh/partysocket@1.3.0";
    "mansano-presence.SEU_SUBDOMINIO.workers.dev". Cole esse valor aqui.
    Em desenvolvimento (localhost) ele usa localhost:8787 automaticamente.
 ========================================================================== */
-const PROD_HOST = "matheusportfa.pages.dev"; // <- atualizar após o deploy
+const PROD_HOST = "mansano-presence.rodriguesmath53.workers.dev";
 const LOCAL_HOST = "localhost:8787";
 
 const ROOM = "home"; // todos no mesmo room se veem
