@@ -2,30 +2,37 @@ import { routePartykitRequest, Server } from "partyserver";
 import type { Connection } from "partyserver";
 
 /*
-  Presence server — cursores ao vivo, chat flutuante, explosões e placar.
+  Presence server — cursores ao vivo, chat, explosões, escudo e placar.
 
-  Mensagens client → server:
+  client → server:
     { type: "cursor",  x, y }
-    { type: "chat",    text }          — bolha de texto no cursor, TTL 3s
-    { type: "explode", targetId }      — double-click num cursor remoto
+    { type: "chat",    text }
+    { type: "explode", targetId }
+    { type: "shield" }              — ativa escudo (botão direito)
 
-  Mensagens server → client:
+  server → client:
     { type: "hello",   id, name, color, country }
     { type: "cursor",  id, name, color, country, x, y }
     { type: "chat",    id, name, color, text }
-    { type: "explode", id, killerId, killerName }   — id = quem explodiu
-    { type: "score",   scores: { id: points }[] }   — placar atualizado
+    { type: "explode", id, killerId, killerName }   — id = vítima
+    { type: "shield",  id, until }                  — until = timestamp ms
+    { type: "score",   scores[] }
     { type: "leave",   id }
 */
 
 type Env = { Main: DurableObjectNamespace<PresenceServer> };
 
 interface ConnState {
-  name: string;
-  color: string;
-  country: string | null;
-  score: number;
+  name:        string;
+  color:       string;
+  country:     string | null;
+  score:       number;
+  shieldUntil: number;   // timestamp ms, 0 = sem escudo
+  shieldCooldownUntil: number;
 }
+
+const SHIELD_DURATION_MS  = 3000;
+const SHIELD_COOLDOWN_MS  = 8000;
 
 const COLORS = [
   "#3b82f6", "#a855f7", "#22c55e", "#f59e0b",
@@ -60,22 +67,19 @@ export class PresenceServer extends Server<Env> {
         : null;
 
     const state: ConnState = {
-      name: pick(NAMES),
-      color: pick(COLORS),
+      name:               pick(NAMES),
+      color:              pick(COLORS),
       country,
-      score: 0,
+      score:              0,
+      shieldUntil:        0,
+      shieldCooldownUntil: 0,
     };
     conn.setState(state);
 
     conn.send(JSON.stringify({
-      type: "hello",
-      id: conn.id,
-      name: state.name,
-      color: state.color,
-      country: state.country,
+      type: "hello", id: conn.id,
+      name: state.name, color: state.color, country: state.country,
     }));
-
-    // envia o placar atual para o recém-chegado
     conn.send(JSON.stringify({ type: "score", scores: this._buildScores() }));
   }
 
@@ -96,16 +100,12 @@ export class PresenceServer extends Server<Env> {
         if (x < -400 || y < -400 || x > 6000 || y > 6000) return;
 
         const now = Date.now();
-        const last = this.lastCursor.get(sender.id) ?? 0;
-        if (now - last < this.minCursorMs) return;
+        if (now - (this.lastCursor.get(sender.id) ?? 0) < this.minCursorMs) return;
         this.lastCursor.set(sender.id, now);
 
         this.broadcast(JSON.stringify({
-          type: "cursor",
-          id: sender.id,
-          name: state.name,
-          color: state.color,
-          country: state.country,
+          type: "cursor", id: sender.id,
+          name: state.name, color: state.color, country: state.country,
           x, y,
         }), [sender.id]);
         break;
@@ -115,33 +115,53 @@ export class PresenceServer extends Server<Env> {
         const raw = String(data.text ?? "").trim().slice(0, 120);
         if (!raw) return;
         this.broadcast(JSON.stringify({
-          type: "chat",
-          id: sender.id,
-          name: state.name,
-          color: state.color,
-          text: raw,
-        })); // inclui remetente — ele também vê a própria bolha
+          type: "chat", id: sender.id,
+          name: state.name, color: state.color, text: raw,
+        }));
+        break;
+      }
+
+      case "shield": {
+        const now = Date.now();
+        // respeita cooldown
+        if (now < state.shieldCooldownUntil) return;
+
+        state.shieldUntil        = now + SHIELD_DURATION_MS;
+        state.shieldCooldownUntil = now + SHIELD_COOLDOWN_MS;
+        sender.setState(state);
+
+        // broadcast para todos verem o escudo
+        this.broadcast(JSON.stringify({
+          type: "shield", id: sender.id, until: state.shieldUntil,
+        }));
         break;
       }
 
       case "explode": {
         const targetId = String(data.targetId ?? "");
-        const target = this.getConnection(targetId);
+        const target   = this.getConnection(targetId);
         if (!target) return;
 
-        // +1 ponto pra quem explodiu
+        const targetState = target.state as ConnState | undefined;
+        if (!targetState) return;
+
+        // escudo ativo? bloqueia e avisa o atacante
+        if (Date.now() < targetState.shieldUntil) {
+          sender.send(JSON.stringify({
+            type: "chat", id: targetId,
+            name: targetState.name, color: targetState.color,
+            text: "🛡️ escudo bloqueou!",
+          }));
+          return;
+        }
+
         state.score += 1;
         sender.setState(state);
 
-        // avisa a todos que o target explodiu
         this.broadcast(JSON.stringify({
-          type: "explode",
-          id: targetId,
-          killerId: sender.id,
-          killerName: state.name,
+          type: "explode", id: targetId,
+          killerId: sender.id, killerName: state.name,
         }));
-
-        // placar atualizado
         this.broadcast(JSON.stringify({ type: "score", scores: this._buildScores() }));
         break;
       }
@@ -150,8 +170,8 @@ export class PresenceServer extends Server<Env> {
 
   onClose(conn: Connection) {
     this.lastCursor.delete(conn.id);
-    this.broadcast(JSON.stringify({ type: "leave", id: conn.id }));
-    this.broadcast(JSON.stringify({ type: "score", scores: this._buildScores() }));
+    this.broadcast(JSON.stringify({ type: "leave",  id: conn.id }));
+    this.broadcast(JSON.stringify({ type: "score",  scores: this._buildScores() }));
   }
 
   onError(conn: Connection, _error: Error) {
@@ -159,7 +179,7 @@ export class PresenceServer extends Server<Env> {
     this.broadcast(JSON.stringify({ type: "leave", id: conn.id }));
   }
 
-  private _buildScores(): { id: string; name: string; color: string; score: number }[] {
+  private _buildScores() {
     return [...this.getConnections()]
       .map(c => {
         const s = c.state as ConnState | undefined;
@@ -171,7 +191,7 @@ export class PresenceServer extends Server<Env> {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    const url = new URL(request.url);
+    const url     = new URL(request.url);
     const country = (request as Request & { cf?: { country?: string } }).cf?.country;
     if (country) url.searchParams.set("country", country);
     const enriched = new Request(url.toString(), request);
