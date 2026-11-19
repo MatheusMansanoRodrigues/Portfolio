@@ -78,112 +78,213 @@ function drawCursor(ctx, x, y, label, rgb, alpha) {
   ctx.restore();
 }
 
-/* Escudo — anel pulsante ao redor do cursor */
-function drawShield(ctx, x, y, rgb, progress /* 0=cheio,1=expirou */) {
+/* Escudo — visual glassmorphism com anel de progresso e partículas */
+function drawShield(ctx, x, y, rgb, progress /* 0=cheio, 1=expirou */) {
   const [r, g, b] = rgb;
-  const alpha  = 1 - progress * 0.6;
-  const radius = 22 + Math.sin(Date.now() / 180) * 3;
+  const cx     = x + 4;
+  const cy     = y + 7;
+  const now    = Date.now();
+  const pulse  = 0.5 + 0.5 * Math.sin(now / 220);  // 0..1 pulsante
+  const radius = 26 + pulse * 3;
+  const remaining = 1 - progress;  // 1=cheio, 0=vazio
+
   ctx.save();
 
-  // arco de progresso (quanto resta do escudo)
-  const startAngle = -Math.PI / 2;
-  const endAngle   = startAngle + (1 - progress) * Math.PI * 2;
-
-  // brilho exterior
+  // ── camada 1: glow exterior suave ──────────────────────────────────────
+  const grd = ctx.createRadialGradient(cx, cy, radius * 0.4, cx, cy, radius + 10);
+  grd.addColorStop(0,   `rgba(${r},${g},${b},${0.08 * remaining})`);
+  grd.addColorStop(0.6, `rgba(${r},${g},${b},${0.14 * remaining})`);
+  grd.addColorStop(1,   `rgba(${r},${g},${b},0)`);
   ctx.beginPath();
-  ctx.arc(x + 4, y + 7, radius + 4, 0, Math.PI * 2);
-  ctx.strokeStyle = `rgba(${r},${g},${b},${alpha * 0.15})`;
-  ctx.lineWidth   = 8;
+  ctx.arc(cx, cy, radius + 10, 0, Math.PI * 2);
+  ctx.fillStyle = grd;
+  ctx.fill();
+
+  // ── camada 2: disco translúcido (glass) ────────────────────────────────
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(${r},${g},${b},${0.08 + pulse * 0.04})`;
+  ctx.fill();
+
+  // ── camada 3: anel de progresso (trilha) ───────────────────────────────
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.strokeStyle = `rgba(${r},${g},${b},0.15)`;
+  ctx.lineWidth   = 3;
   ctx.stroke();
 
-  // anel principal
-  ctx.beginPath();
-  ctx.arc(x + 4, y + 7, radius, startAngle, endAngle);
-  ctx.strokeStyle = `rgba(${r},${g},${b},${alpha})`;
-  ctx.lineWidth   = 2.5;
-  ctx.lineCap     = "round";
-  ctx.stroke();
+  // ── camada 4: arco preenchido (quanto resta) ───────────────────────────
+  if (remaining > 0.01) {
+    const start = -Math.PI / 2;
+    const end   = start + remaining * Math.PI * 2;
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, start, end);
+    ctx.strokeStyle = `rgba(${r},${g},${b},${0.7 + pulse * 0.3})`;
+    ctx.lineWidth   = 3;
+    ctx.lineCap     = "round";
+    ctx.shadowColor = `rgba(${r},${g},${b},0.8)`;
+    ctx.shadowBlur  = 8;
+    ctx.stroke();
+    ctx.shadowBlur  = 0;
+  }
 
-  // ícone 🛡️ pequeno
-  ctx.font         = "12px serif";
-  ctx.textBaseline = "middle";
-  ctx.textAlign    = "center";
-  ctx.fillText("🛡️", x + 4, y - radius - 8);
+  // ── camada 5: pontinho de brilho que gira ─────────────────────────────
+  if (remaining > 0.05) {
+    const angle = -Math.PI / 2 + remaining * Math.PI * 2;
+    const dotX  = cx + Math.cos(angle) * radius;
+    const dotY  = cy + Math.sin(angle) * radius;
+    ctx.beginPath();
+    ctx.arc(dotX, dotY, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle   = `rgba(255,255,255,${0.9 * remaining})`;
+    ctx.shadowColor = `rgba(${r},${g},${b},1)`;
+    ctx.shadowBlur  = 10;
+    ctx.fill();
+    ctx.shadowBlur  = 0;
+  }
 
   ctx.restore();
 }
 
-/* Cooldown ring — mostra quanto falta pro escudo recarregar */
-function drawShieldCooldown(ctx, x, y, rgb, progress /* 0=pronto,1=cheio cooldown */) {
-  if (progress <= 0) return;
+/* Cooldown ring — anel fino mostrando quanto falta */
+function drawShieldCooldown(ctx, x, y, rgb, progress /* 1=cheio CD, 0=pronto */) {
+  if (progress <= 0.01) return;
   const [r, g, b] = rgb;
+  const cx = x + 4, cy = y + 7;
   ctx.save();
+
+  // trilha
   ctx.beginPath();
-  ctx.arc(x + 4, y + 7, 18, -Math.PI / 2, -Math.PI / 2 + (1 - progress) * Math.PI * 2);
-  ctx.strokeStyle = `rgba(${r},${g},${b},0.35)`;
+  ctx.arc(cx, cy, 20, 0, Math.PI * 2);
+  ctx.strokeStyle = `rgba(${r},${g},${b},0.1)`;
   ctx.lineWidth   = 2;
-  ctx.lineCap     = "round";
   ctx.stroke();
+
+  // arco restante (quanto já carregou)
+  const filled = 1 - progress;
+  if (filled > 0.01) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, 20, -Math.PI / 2, -Math.PI / 2 + filled * Math.PI * 2);
+    ctx.strokeStyle = `rgba(${r},${g},${b},0.45)`;
+    ctx.lineWidth   = 2;
+    ctx.lineCap     = "round";
+    ctx.stroke();
+  }
+
   ctx.restore();
 }
 
-/* Balão de chat */
+/* Balão de chat — com quebra de linha automática */
 function drawBubble(ctx, x, y, text, rgb, alpha, isTyping) {
   ctx.save();
-  const FONT  = "500 13px Inter, system-ui, sans-serif";
-  const PAD_X = 12, PAD_Y = 8, R = 10, TAIL = 8;
-  ctx.font = FONT;
-  const display = text.length > 60 ? text.slice(0, 57) + "…" : text;
-  const tw  = Math.min(ctx.measureText(display).width, 240);
-  const bw  = tw + PAD_X * 2 + (isTyping ? 14 : 0);
-  const bh  = 20 + PAD_Y * 2;
-  const bx  = x + 4, by = y - bh - TAIL - 8;
 
-  ctx.shadowColor   = `rgba(0,0,0,${0.22 * alpha})`;
-  ctx.shadowBlur    = 10;
-  ctx.shadowOffsetY = 3;
-
+  const FONT    = "500 13px Inter, system-ui, sans-serif";
+  const PAD_X   = 12, PAD_Y = 10;
+  const MAX_W   = 200;  // largura máxima do texto antes de quebrar
+  const LINE_H  = 18;
+  const R       = 12;
+  const TAIL    = 7;
   const [r, g, b] = rgb;
 
+  ctx.font = FONT;
+
+  // ── quebra o texto em linhas ──────────────────────────────────────────
+  function wrapText(str) {
+    const words  = str.split(" ");
+    const lines  = [];
+    let   line   = "";
+    for (const word of words) {
+      const test = line ? line + " " + word : word;
+      if (ctx.measureText(test).width > MAX_W && line) {
+        lines.push(line);
+        line = word;
+      } else {
+        line = test;
+      }
+    }
+    if (line) lines.push(line);
+    return lines.length ? lines : [""];
+  }
+
+  const display = text.length > 120 ? text.slice(0, 117) + "…" : text;
+  const lines   = wrapText(display);
+  const lineCount = lines.length;
+
+  // largura do balão = linha mais longa + padding
+  const maxLineW = lines.reduce((m, l) => Math.max(m, ctx.measureText(l).width), 0);
+  const bw = Math.max(maxLineW + PAD_X * 2 + (isTyping && lineCount === 1 ? 14 : 0), 60);
+  const bh = PAD_Y * 2 + lineCount * LINE_H + (lineCount > 1 ? (lineCount - 1) * 2 : 0);
+
+  // posição: acima do cursor, ajusta pra não sair da tela
+  let bx = x + 4;
+  const by = y - bh - TAIL - 8;
+
+  // não deixa sair pela direita
+  if (typeof window !== "undefined" && bx + bw > window.innerWidth - 12) {
+    bx = window.innerWidth - bw - 12;
+  }
+  if (bx < 8) bx = 8;
+
+  // sombra
+  ctx.shadowColor   = `rgba(0,0,0,${0.25 * alpha})`;
+  ctx.shadowBlur    = 12;
+  ctx.shadowOffsetY = 4;
+
   if (isTyping) {
+    // fundo branco com borda colorida
     ctx.fillStyle = `rgba(255,255,255,${alpha})`;
     roundRect(ctx, bx, by, bw, bh, R); ctx.fill();
     ctx.shadowColor = "transparent";
-    ctx.strokeStyle = `rgba(${r},${g},${b},${alpha * 0.6})`;
+    ctx.strokeStyle = `rgba(${r},${g},${b},${alpha * 0.55})`;
     ctx.lineWidth   = 1.5;
     roundRect(ctx, bx, by, bw, bh, R); ctx.stroke();
+
     // cauda
+    const tailX = Math.min(bx + 18, bx + bw - 20);
     ctx.fillStyle = `rgba(255,255,255,${alpha})`;
     ctx.beginPath();
-    ctx.moveTo(bx + 16,          by + bh);
-    ctx.lineTo(bx + 16 + TAIL,   by + bh + TAIL);
-    ctx.lineTo(bx + 16 + TAIL*2, by + bh);
+    ctx.moveTo(tailX,          by + bh);
+    ctx.lineTo(tailX + TAIL,   by + bh + TAIL);
+    ctx.lineTo(tailX + TAIL*2, by + bh);
     ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = `rgba(${r},${g},${b},${alpha * 0.4})`;
+    ctx.strokeStyle = `rgba(${r},${g},${b},${alpha * 0.3})`;
     ctx.lineWidth = 1; ctx.stroke();
-    // texto
+
+    // linhas de texto
     ctx.fillStyle    = `rgba(10,10,15,${alpha})`;
-    ctx.textBaseline = "middle";
-    ctx.fillText(display, bx + PAD_X, by + bh / 2 + 0.5);
-    // cursor piscante
+    ctx.textBaseline = "top";
+    lines.forEach((line, i) => {
+      ctx.fillText(line, bx + PAD_X, by + PAD_Y + i * (LINE_H + 2));
+    });
+
+    // cursor piscante na última linha
     if (Math.floor(Date.now() / 530) % 2 === 0) {
-      const cx = bx + PAD_X + ctx.measureText(display).width + 3;
+      const lastLine = lines[lines.length - 1];
+      const cx = bx + PAD_X + ctx.measureText(lastLine).width + 3;
+      const cy = by + PAD_Y + (lineCount - 1) * (LINE_H + 2);
       ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
-      ctx.fillRect(cx, by + PAD_Y + 2, 1.5, bh - PAD_Y * 2 - 2);
+      ctx.fillRect(cx, cy + 2, 1.5, LINE_H - 4);
     }
+
   } else {
+    // fundo colorido
     ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
     roundRect(ctx, bx, by, bw, bh, R); ctx.fill();
     ctx.shadowColor = "transparent";
+
+    const tailX = Math.min(bx + 18, bx + bw - 20);
     ctx.beginPath();
-    ctx.moveTo(bx + 16,          by + bh);
-    ctx.lineTo(bx + 16 + TAIL,   by + bh + TAIL);
-    ctx.lineTo(bx + 16 + TAIL*2, by + bh);
+    ctx.moveTo(tailX,          by + bh);
+    ctx.lineTo(tailX + TAIL,   by + bh + TAIL);
+    ctx.lineTo(tailX + TAIL*2, by + bh);
     ctx.closePath(); ctx.fill();
+
     ctx.fillStyle    = `rgba(255,255,255,${alpha})`;
-    ctx.textBaseline = "middle";
-    ctx.fillText(display, bx + PAD_X, by + bh / 2 + 0.5);
+    ctx.textBaseline = "top";
+    lines.forEach((line, i) => {
+      ctx.fillText(line, bx + PAD_X, by + PAD_Y + i * (LINE_H + 2));
+    });
   }
+
   ctx.restore();
 }
 
@@ -346,6 +447,38 @@ function startPresence() {
 
   let typing = false, typingBuf = "";
 
+  // textarea invisível — fica focado durante o chat pra receber emoji (Win+.) e paste
+  const ghost = document.createElement("textarea");
+  Object.assign(ghost.style, {
+    position: "fixed", top: "-9999px", left: "-9999px",
+    width: "1px", height: "1px", opacity: "0",
+    pointerEvents: "none", zIndex: "-1",
+  });
+  ghost.setAttribute("autocomplete", "off");
+  ghost.setAttribute("autocorrect", "off");
+  ghost.setAttribute("spellcheck", "false");
+  document.body.appendChild(ghost);
+
+  // sincroniza o textarea → typingBuf a cada input (captura emoji, paste, IME)
+  ghost.addEventListener("input", () => {
+    if (!typing) return;
+    typingBuf = ghost.value.slice(0, 120);
+  });
+
+  function openTyping() {
+    typing    = true;
+    typingBuf = "";
+    ghost.value = "";
+    ghost.focus();
+  }
+  function closeTyping(send_) {
+    if (send_ && typingBuf.trim()) send({ type: "chat", text: typingBuf.trim().slice(0, 120) });
+    typing    = false;
+    typingBuf = "";
+    ghost.value = "";
+    ghost.blur();
+  }
+
   createScoreboard();
   createHint();
   const shieldEl = createShieldIndicator();
@@ -369,16 +502,16 @@ function startPresence() {
   window.addEventListener("keydown", e => {
     if (!typing) {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-      if (e.key === "t" || e.key === "T") { e.preventDefault(); typing = true; typingBuf = ""; }
+      if (e.key === "t" || e.key === "T") { e.preventDefault(); openTyping(); }
       return;
     }
-    e.preventDefault(); e.stopPropagation();
-    if (e.key === "Escape")    { typing = false; typingBuf = ""; }
-    else if (e.key === "Enter") {
-      if (typingBuf.trim()) send({ type: "chat", text: typingBuf.trim().slice(0, 120) });
-      typing = false; typingBuf = "";
-    } else if (e.key === "Backspace") { typingBuf = typingBuf.slice(0, -1); }
-    else if (e.key.length === 1 && typingBuf.length < 120) { typingBuf += e.key; }
+    // Escape e Enter são capturados aqui; o resto vai pro ghost naturalmente
+    if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); closeTyping(false); }
+    else if (e.key === "Enter") { e.preventDefault(); e.stopPropagation(); closeTyping(true); }
+    // Backspace: deixa o ghost processar primeiro, mas sync manual pra ser imediato no canvas
+    else if (e.key === "Backspace") {
+      // o ghost já vai disparar "input" e atualizar typingBuf, não precisa fazer nada aqui
+    }
   }, true);
 
   /* botão direito = escudo */
