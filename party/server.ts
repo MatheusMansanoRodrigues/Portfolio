@@ -28,9 +28,13 @@ const COLORS = [
   "#ec4899", "#14b8a6", "#ef4444", "#8b5cf6",
 ];
 const NAMES = [
-  "Ana", "Bruno", "Carlos", "Davi", "Elis", "Felipe",
-  "Gabriela", "Iris", "Joana", "Lucas", "Mariana", "Noah",
-  "Otavio", "Paula", "Rafael", "Sofia",
+  "Lince Brilhante",   "Macaco Dourado",    "Puma Veloz",
+  "Lobo Prateado",     "Raposa Astuta",     "Jaguar Sombrio",
+  "Falcão Certeiro",   "Coruja Sábia",      "Pantera Ágil",
+  "Urso Majestoso",    "Lêmure Curioso",    "Golfinho Lúcido",
+  "Tigre Ardente",     "Leão Audaz",        "Cobra Furtiva",
+  "Águia Imponente",   "Capivara Serena",   "Onça Feroz",
+  "Pinguim Elegante",  "Camaleão Vibrante",
 ];
 
 function pick<T>(arr: T[]): T {
