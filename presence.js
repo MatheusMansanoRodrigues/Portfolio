@@ -189,6 +189,14 @@ function startPresence() {
       // posição inicial no centro até o mouse mover
       if (lastX < 0) { me.tx = Math.round(W / 2); me.ty = Math.round(H / 2); }
       send(lastX >= 0 ? lastX : Math.round(W / 2), lastY >= 0 ? lastY : Math.round(H / 2), true);
+
+      // mostra o nome do animal no cursor existente do script.js
+      const cursorEl = document.getElementById("cursor");
+      const labelEl  = document.getElementById("cursor-label");
+      if (cursorEl && labelEl) {
+        labelEl.textContent = m.name;
+        cursorEl.classList.add("has-animal");
+      }
     } else if (m.type === "cursor") {
       if (m.id === myId) return; // ignora eco do próprio
       const label = (m.country ? flag(m.country) + " " : "") + m.name;

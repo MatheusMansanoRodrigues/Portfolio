@@ -64,13 +64,7 @@ button { font: inherit; background: none; border: none; cursor: none; color: inh
 }
 
 .cursor-dot {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 5px; height: 5px;
-    background: var(--blue);
-    border-radius: 50%;
-    box-shadow: 0 0 8px var(--blue);
+    display: none;
 }
 
 
@@ -87,12 +81,8 @@ button { font: inherit; background: none; border: none; cursor: none; color: inh
 }
 
 .cursor.has-label .cursor-label { opacity: 1; }
+.cursor.has-animal .cursor-label { opacity: 1; }
 
-/* estado hover sobre links */
-body.cursor-hover .cursor-dot {
-    width: 8px; height: 8px;
-    box-shadow: 0 0 14px var(--blue);
-}
 
 
 /* ================================================================
