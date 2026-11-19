@@ -22,7 +22,7 @@ if (isFinePtr && !reducedMotion) {
     const tickCursor = () => {
         ux += (tx - ux) * 0.22;
         uy += (ty - uy) * 0.22;
-        userCursorEl.style.transform = `translate(${ux}px,${uy}px) translate(-50%,-50%)`;
+        userCursorEl.style.transform = `translate(${ux}px,${uy}px)`;
         requestAnimationFrame(tickCursor);
     };
     tickCursor();

@@ -260,13 +260,6 @@ function startPresence() {
       drawRemoteCursor(ctx, c.dx, c.dy, c.label, hexToRgb(c.color), alpha);
     }
 
-    // cursor do próprio visitante (só depois de receber o hello)
-    if (me.visible && lastX >= 0) {
-      me.dx += (me.tx - me.dx) * 0.32;
-      me.dy += (me.ty - me.dy) * 0.32;
-      drawRemoteCursor(ctx, me.dx, me.dy, me.label, hexToRgb(me.color), 1);
-    }
-
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
